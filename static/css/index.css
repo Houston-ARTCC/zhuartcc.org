@@ -1,0 +1,589 @@
+/*
+
+d888888P                                                                dP
+   88                                                                   88
+   88    dP    dP 88d888b. .d8888b. .d8888b. 88d888b. .d8888b. 88d888b. 88d888b. dP    dP
+   88    88    88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88    88
+   88    88.  .88 88.  .88 88.  .88 88.  .88 88       88.  .88 88.  .88 88    88 88.  .88
+   dP    `8888P88 88Y888P' `88888P' `8888P88 dP       `88888P8 88Y888P' dP    dP `8888P88
+              .88 88                     .88                   88                     .88
+          d8888P  dP                 d8888P                    dP                 d8888P
+
+*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+@font-face {
+    font-family: 'Gilroy-ExtraBold';
+    src: url('../fonts/Gilroy-ExtraBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Gilroy-Bold';
+    src: url('../fonts/Gilroy-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Gilroy-Medium';
+    src: url('../fonts/Gilroy-Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Gilroy-Regular';
+    src: url('../fonts/Gilroy-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Gilroy-Light';
+    src: url('../fonts/Gilroy-Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+.bg-primary {
+    background-color: #F19941!important;
+    color: white!important;
+}
+.bg-primary a {
+    color: white;
+    transition: 400ms;
+    cursor: pointer;
+}
+.bg-secondary {
+    background-color: #efefef!important;
+    color: #181818;
+}
+.bg-secondary a,
+.link-secondary {
+    color: #181818;
+    transition: 400ms;
+    cursor: pointer;
+}
+.bg-secondary a:hover {
+    color: #181818;
+}
+.bg-primary a:hover, .bg-secondary a:hover,
+.bg-primary a.active, .bg-secondary a.active,
+.link-secondary:hover {
+    opacity: 60%;
+    transition: 400ms;
+}
+.text-primary {
+    color: #F19941!important;
+}
+.text-secondary {
+    color: #e7e7e7!important;
+}
+body {
+    font: 16px Gilroy-Regular, Helvetica, sans-serif;
+    line-height: 22px;
+}
+h1 {
+    font: 100px Gilroy-ExtraBold, Helvetica, sans-serif;
+}
+h2 {
+    font: 30px Gilroy-Light, Helvetica, sans-serif;
+}
+h3 {
+    font: 30px Gilroy-ExtraBold, Helvetica, sans-serif;
+}
+h4 {
+    font: 26px Gilroy-ExtraBold, Helvetica, sans-serif;
+}
+h5 {
+    font: 21px Gilroy-ExtraBold, Helvetica, sans-serif;
+}
+li {
+    line-height: 23px;
+    margin-bottom: 5px;
+}
+hr {
+    border-width: 3px;
+}
+a {
+    color: #4c97c1;
+    transition: 400ms;
+}
+a:hover {
+    opacity: 70%;
+    color: #6dc2ef;
+    transition: 400ms;
+    text-decoration: none;
+}
+.title, .subtitle {
+    color: white;
+}
+.title {
+    line-height: 80px;
+}
+.heading-row {
+    font: 40px Gilroy-ExtraBold, Helvetica, sans-serif;
+}
+.heading-row::before,
+.heading-row::after {
+    display: inline-block;
+    content: '';
+    border: 2px solid #F19941;
+    border-radius: 10px;
+    width: 10%;
+    margin: 0 1rem;
+    transform: translateY(-12px);
+}
+.stat {
+    color: #F19941;
+}
+
+
+/*
+
+dP
+88
+88 .d8888b. .d8888b. 88d888b. .d8888b.
+88 88'  `"" 88'  `88 88'  `88 Y8ooooo.
+88 88.  ... 88.  .88 88    88       88
+dP `88888P' `88888P' dP    dP `88888P'
+
+*/
+.icon-success::after {
+    content: url("https://img.icons8.com/cute-clipart/90/000000/checkmark.png");
+}
+.icon-error::after {
+    content: url("https://img.icons8.com/cute-clipart/90/000000/delete-sign.png");
+}
+.icon-info::after {
+    content: url("https://img.icons8.com/cute-clipart/90/000000/info.png");
+}
+
+
+/*
+
+ 88888888b
+ 88
+a88aaaa    .d8888b. 88d888b. 88d8b.d8b. .d8888b.
+ 88        88'  `88 88'  `88 88'`88'`88 Y8ooooo.
+ 88        88.  .88 88       88  88  88       88
+ dP        `88888P' dP       dP  dP  dP `88888P'
+
+*/
+.label-group {
+    margin: 25px 0;
+    flex: 0 0 100%;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    padding: 0;
+}
+input[type="text"], .file-upload, select {
+    font: 15px/24px Gilroy-Bold, Helvetica, sans-serif;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    padding: 4px 0;
+    border-bottom: 2px solid #aeaeae;
+    background-color: transparent;
+    position: relative;
+}
+input[type="file"] {
+    opacity: 0;
+    width: 100%;
+}
+input[type="text"]:focus, select:focus {
+    outline: none;
+}
+.focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #F19941;
+    transition: 500ms;
+}
+input[type="text"]:focus ~ .focus-border, input[type="text"].has-content ~ .focus-border,
+select.has-content ~ .focus-border,
+input[type="file"].has-content ~ .focus-border {
+    width: 100%;
+    transition: 500ms;
+}
+label {
+    font: 15px Gilroy-Bold, Helvetica, sans-serif;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: left;
+    top: 9px;
+    color: #aeaeae;
+    transition: 400ms;
+    pointer-events: none;
+}
+select ~ label {
+    top: 6px;
+}
+:required ~ label::after {
+    content: '✱';
+    color: #c15b5b;
+}
+:required.has-content ~ label::after {
+    content: '✱';
+    color: #F19941;
+}
+.modal label {
+    z-index: 2000;
+}
+input:read-only,
+input:read-only ~ label {
+    cursor: not-allowed;
+    color: #aeaeae!important;
+}
+input:read-only ~ .focus-border {
+    background-color: #aeaeae;
+}
+input[type="text"]:focus ~ label, input[type="text"].has-content ~ label,
+select.has-content ~ label,
+input[type="file"].has-content ~ label {
+    text-align: left;
+    top: -16px;
+    font-size: 13px;
+    color: #F19941;
+    transition: 400ms;
+}
+input[type="file"].has-content ~ label {
+    top: -11px;
+}
+.file-name {
+    pointer-events: none;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+    left: 0;
+    top: 9px;
+}
+.file-upload .focus-border {
+    bottom: -2px;
+}
+input[type="file"].has-content ~ .upload-btn {
+    background-color: #F19941;
+    color: white;
+    transition: 500ms;
+}
+.upload-btn {
+    font: 15px/38px Gilroy-Bold, Helvetica, sans-serif;
+    background-color: #aeaeae;
+    color: #181818;
+    padding: 0 5%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transition: 500ms;
+    pointer-events: none;
+}
+.radio-group {
+    display: block;
+    padding: 8px 0;
+}
+.radio-group .label-group {
+    width: 12%;
+    margin: 0;
+    display: inline-block;
+}
+.radio-group .label-group input,
+.radio-group .label-group label {
+    font: 13px/20px Gilroy-Bold, Helvetica, sans-serif!important;
+    padding: 0;
+}
+.radio-group .label-group label {
+    top: 0;
+}
+.radio-group-label {
+    position: inherit;
+    display: block;
+    padding-bottom: 9px;
+    font-size: 13px;
+    color: #F19941;
+}
+.radio-label {
+    position: inherit;
+    display: inline;
+    transition: 400ms;
+    padding-left: 5px;
+}
+input[type="radio"]:checked ~ .radio-label {
+    color: #333333;
+    transition: 400ms;
+}
+.btn {
+    font: 14px Gilroy-Bold, Helvetica, sans-serif;
+    padding: 7px 30px;
+    margin: 5px;
+    border: none;
+    border-radius: 3px;
+}
+.btn-primary {
+    background-color: #F19941;
+    color: white;
+    transition: 400ms;
+}
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+    background-color: #ffaf68!important;
+    transition: 400ms;
+}
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 175, 104, 0.5) !important;
+}
+.btn-secondary {
+    background-color: #e5e5e5;
+    color: #181818;
+    transition: 400ms;
+}
+.btn-secondary:hover, .btn-secondary:active, .btn-secondary:focus {
+    background-color: #f1f1f1!important;
+    color: #181818!important;
+    transition: 400ms;
+}
+.btn-secondary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(241, 241, 241, 0.5) !important;
+}
+
+
+/*
+
+dP                                              dP
+88                                              88
+88        .d8888b. dP    dP .d8888b. dP    dP d8888P
+88        88'  `88 88    88 88'  `88 88    88   88
+88        88.  .88 88.  .88 88.  .88 88.  .88   88
+88888888P `88888P8 `8888P88 `88888P' `88888P'   dP
+                        .88
+                    d8888P
+
+*/
+.page-wrapper {
+    height: 100vh;
+}
+.page-header {
+    height: 400px;
+}
+.page-container {
+    padding: 2% 10%;
+}
+.title-block {
+    padding-left: 10%;
+    position: absolute;
+    top: 250px;
+    mix-blend-mode: screen;
+}
+
+
+/*
+
+8888ba.88ba                 dP          dP
+88  `8b  `8b                88          88
+88   88   88 .d8888b. .d888b88 .d8888b. 88 .d8888b.
+88   88   88 88'  `88 88'  `88 88'  `88 88 Y8ooooo.
+88   88   88 88.  .88 88.  .88 88.  .88 88       88
+dP   dP   dP `88888P' `88888P8 `88888P8 dP `88888P'
+
+*/
+.modal-dialog {
+    max-width: 600px;
+}
+.modal-content {
+    border: none;
+    border-radius: 0;
+    padding: 10%;
+}
+.modal-title {
+    font: 35px Gilroy-Bold, Helvetica, sans-serif;
+    padding: 0.6em 0;
+}
+.modal.fade .modal-dialog {
+    -webkit-transform: translate(0);
+    -moz-transform: translate(0);
+    transform: translate(0);
+}
+
+
+/*
+
+ a88888b.                         dP
+d8'   `88                         88
+88        .d8888b. 88d888b. .d888b88 .d8888b.
+88        88'  `88 88'  `88 88'  `88 Y8ooooo.
+Y8.   .88 88.  .88 88       88.  .88       88
+ Y88888P' `88888P8 dP       `88888P8 `88888P'
+
+*/
+.card, .card-header, .card-body {
+    border: none!important;
+    border-radius: 0!important;
+}
+.card {
+    box-shadow: 0 0 17px #dedede;
+    margin: 4% 0;
+}
+.card-header {
+    padding: 20px 20px;
+    font: 18px Gilroy-Medium, Helvetica, sans-serif;
+}
+
+
+/*
+
+d888888P          dP       dP
+   88             88       88
+   88    .d8888b. 88d888b. 88 .d8888b. .d8888b.
+   88    88'  `88 88'  `88 88 88ooood8 Y8ooooo.
+   88    88.  .88 88.  .88 88 88.  ...       88
+   dP    `88888P8 88Y8888' dP `88888P' `88888P'
+
+*/
+th {
+    border: none!important;
+    padding: 2% 1%!important;
+    font: 15px Gilroy-ExtraBold, Helvetica, sans-serif;
+}
+td {
+    padding: 1%!important;
+    font: 15px Gilroy-Medium, Helvetica, sans-serif;
+}
+table.dataTable thead th {
+    background-image: none!important;
+}
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    position: absolute;
+    color: #F19941;
+    top: 30px;
+    right: 10px;
+    display: block;
+    font: 15px 'Font Awesome 5 Pro';
+}
+table.dataTable thead th.sorting:after {
+    content: '\f0dc';
+    padding-top: 0.10em;
+}
+table.dataTable thead th.sorting_asc:after {
+    content: '\f0de';
+}
+table.dataTable thead th.sorting_desc:after {
+    content: '\f0dd';
+}
+
+
+/*
+
+888888ba                    oo                     dP   oo
+88    `8b                                          88
+88     88 .d8888b. dP   .dP dP .d8888b. .d8888b. d8888P dP .d8888b. 88d888b.
+88     88 88'  `88 88   d8' 88 88'  `88 88'  `88   88   88 88'  `88 88'  `88
+88     88 88.  .88 88 .88'  88 88.  .88 88.  .88   88   88 88.  .88 88    88
+dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
+                                    .88
+                                d8888P
+
+*/
+.navbar {
+    padding: 2% 9%;
+    transition: 400ms;
+}
+.nav-link {
+    position: relative;
+    color: white;
+    font: 19px Gilroy-Medium, Helvetica, sans-serif;
+    transition: 500ms;
+}
+.nav-link:hover, .nav-link:active, .nav-link:focus {
+    color: white;
+    opacity: 75%;
+    transition: 400ms;
+}
+.nav-link::after {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: rgba(255, 255, 255, 0.75);
+	content: '';
+	opacity: 0;
+    transition: 400ms;
+	transform: translateY(10px);
+}
+.nav-link:hover::after, .nav-link:active::after, .nav-link:focus::after {
+	opacity: 1;
+	transform: translateY(0px);
+}
+.navbar-logo-gray, .navbar-logo-color {
+    height: 75px;
+}
+.nav-item .dropdown-menu {
+	border: none;
+    border-radius: 0;
+	background: rgba(255,255,255,0.75);
+    right: auto;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+.shrink {
+    padding: 1% 9%;
+    background-color: #f5f5f5;
+    transition: 600ms ease;
+}
+.shrink .nav-link {
+    color: #181818;
+}
+.shrink .nav-link::after {
+    background-color: rgba(12, 12, 12, 0.75);
+}
+.tabs {
+    font: 35px Gilroy-Regular, Helvetica, sans-serif;
+}
+
+
+/*
+
+dP     dP
+88     88
+88aaaaa88a .d8888b. 88d8b.d8b. .d8888b. 88d888b. .d8888b. .d8888b. .d8888b.
+88     88  88'  `88 88'`88'`88 88ooood8 88'  `88 88'  `88 88'  `88 88ooood8
+88     88  88.  .88 88  88  88 88.  ... 88.  .88 88.  .88 88.  .88 88.  ...
+dP     dP  `88888P' dP  dP  dP `88888P' 88Y888P' `88888P8 `8888P88 `88888P'
+                                        88                     .88
+                                        dP                 d8888P
+
+*/
+.home-wrapper {
+    height: 100vh;
+    background: url('../img/homepage-bg.jpg') 50% 50%/cover;
+}
+.home-container {
+    padding: 3% 10%;
+}
+.home-title-block {
+    height: 100vh;
+}
+.home-title, .home-subtitle, .scroll-arrow {
+    color: #dbdbdb;
+    mix-blend-mode: screen;
+}
+.home-title, .home-subtitle {
+    padding-left: 10%;
+}
+.home-title {
+    font: 120px Gilroy-ExtraBold, Helvetica, sans-serif;
+    padding-top: calc(100vh / 3.25);
+}
+.home-subtitle {
+    font-size: 36px;
+}
+.scroll-arrow {
+    position: absolute;
+    left: 9%;
+    bottom: 15%;
+    font: 20px Gilroy-Light, Helvetica, sans-serif;
+    transform: rotate(-90deg);
+}

@@ -1,0 +1,76 @@
+{% extends 'mainTemplate.html' %}
+{% block title %}Visiting Request{% endblock %}
+
+{% block body %}
+<form action="/visit/" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-warning">User Details</div>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row">
+                            <div class="col-md form-group">
+                                <label for="cid">VATSIM CID</label>
+                                <input type="text" class="form-control" name="cid" value="{{ request.session.vatsim_data.cid }}" readonly>
+                            </div>
+                            <div class="col-md form-group">
+                                <label for="rating">Rating</label>
+                                <input type="text" class="form-control" name="rating" value="{{ request.session.vatsim_data.rating }}" readonly>
+                            </div>
+                            <div class="col-md form-group">
+                                <label for="home_facility">Home Facility</label>
+                                <input type="text" class="form-control" name="home_facility" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md form-group">
+                                <label for="first_name">First Name</label>
+                                <input type="text" class="form-control" name="first_name" value="{{ request.session.vatsim_data.firstname }}" required>
+                            </div>
+                            <div class="col-md form-group">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" class="form-control" name="last_name" value="{{ request.session.vatsim_data.lastname }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" value="{{ request.session.vatsim_data.email }}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card card-nav-tabs" style="height:93%">
+                <div class="card-header card-header-warning">Additional Details</div>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="reason">Why would you like to visit ZHU ARTCC? </label>
+                            <textarea class="form-control" name="reason" rows="6" placeholder="Type here..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" {% if not status.eligible %}disabled{% endif %}>Submit</button>
+</form>
+{% if not status.eligible %}
+<script>
+    $(function() {
+        Swal.fire({
+            title: 'Oops!',
+            text: '{{ status.reason }}',
+            icon: 'error',
+        }).then(function() {
+            window.location = '/'
+        })
+    })
+</script>
+{% endif %}
+{% endblock %}

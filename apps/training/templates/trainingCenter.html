@@ -1,0 +1,122 @@
+{% extends 'mainTemplate.html' %}
+{% block title %}Training Center{% endblock %}
+
+{% block body %}
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-warning">My Endorsements</div>
+    <div class="card-body">
+        <div class="col-md">
+            <table class="table">
+                <thead>
+                    <th class="text-center">DEL</th>
+                    <th class="text-center">GND</th>
+                    <th class="text-center">TWR</th>
+                    <th class="text-center">APP</th>
+                    <th class="text-center">CTR</th>
+                    <th class="text-center">OCN</th>
+                </thead>
+                <tbody>
+                    <td class="text-center">
+                        {% if user.del_cert == 3 %}<div class="cert-large cert-solo">Solo - {{ user.solo_cert }}</div>
+                        {% elif user.del_cert == 2 %}<div class="cert-large cert-major">Major Endorsed</div>
+                        {% elif user.del_cert == 1 %}<div class="cert-large cert-minor">Minor Endorsed</div>
+                        {% else %}<div class="cert-large no-cert">Not Endorsed</div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if user.gnd_cert == 3 %}<div class="cert-large cert-solo">Solo - {{ user.solo_cert }}</div>
+                        {% elif user.gnd_cert == 2 %}<div class="cert-large cert-major">Major Endorsed</div>
+                        {% elif user.gnd_cert == 1 %}<div class="cert-large cert-minor">Minor Endorsed</div>
+                        {% else %}<div class="cert-large no-cert">Not Endorsed</div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if user.twr_cert == 3 %}<div class="cert-large cert-solo">Solo - {{ user.solo_cert }}</div>
+                        {% elif user.twr_cert == 2 %}<div class="cert-large cert-major">Major Endorsed</div>
+                        {% elif user.twr_cert == 1 %}<div class="cert-large cert-minor">Minor Endorsed</div>
+                        {% else %}<div class="cert-large no-cert">Not Endorsed</div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if user.app_cert == 3 %}<div class="cert-large cert-solo">Solo - {{ user.solo_cert }}</div>
+                        {% elif user.app_cert == 2 %}<div class="cert-large cert-major">Major Endorsed</div>
+                        {% elif user.app_cert == 1 %}<div class="cert-large cert-minor">Minor Endorsed</div>
+                        {% else %}<div class="cert-large no-cert">Not Endorsed</div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if user.ctr_cert == 3 %}<div class="cert-large cert-solo">Solo - {{ user.solo_cert }}</div>
+                        {% elif user.ctr_cert == 2 %}<div class="cert-large cert-major">Major Endorsed</div>
+                        {% elif user.ctr_cert == 1 %}<div class="cert-large cert-minor">Minor Endorsed</div>
+                        {% else %}<div class="cert-large no-cert">Not Endorsed</div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if user.ocn_cert == 3 %}<div class="cert-large cert-solo">Solo - {{ user.solo_cert }}</div>
+                        {% elif user.ocn_cert == 2 %}<div class="cert-large cert-major">Major Endorsed</div>
+                        {% elif user.ocn_cert == 1 %}<div class="cert-large cert-minor">Minor Endorsed</div>
+                        {% else %}<div class="cert-large no-cert">Not Endorsed</div>
+                        {% endif %}
+                    </td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-warning">Statistics</div>
+                <div class="card-body">
+                    <div class="col-md">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-warning">Scheduled Sessions</div>
+                <div class="card-body text-center">
+                    <table class="table">
+                        <thead>
+                            <th class="text-center">Date / Time</th>
+                            <th class="text-center">Position</th>
+                            <th class="text-center">Type</th>
+                            <th class="text-center">Instructor</th>
+                        </thead>
+                        <tbody>
+                            {% for session in sessions %}
+                            <tr>
+                                <td class="text-center">{{ session.datetime|date:'M d, Y @ Hi\z' }}</td>
+                                <td class="text-center">{{ session.position }}</td>
+                                <td class="text-center">{{ session.type }}</td>
+                                <td class="text-center">{{ session.instructor.return_full_name }}</td>
+                            </tr>
+                            {% empty %}
+                            <td class="text-center" colspan="5"><i>No sessions scheduled</i></td>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="schedule"><button class="btn btn-primary" type="submit">Schedule Training</button></a>
+                    <a href="history/{{ user.cid }}"><button class="btn btn-primary" type="submit">Training History</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if request.session.mentor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-warning">Mentor Panel</div>
+                <div class="card-body">
+                    <div class="col-md">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

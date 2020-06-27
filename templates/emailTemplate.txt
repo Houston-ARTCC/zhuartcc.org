@@ -1,0 +1,7 @@
+Hello {{ message.recipient_name }},
+
+{{ message.text }}
+
+Best Regards,
+{{ message.sender }}
+Houston ARTCC {{ message.sender_role }}

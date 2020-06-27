@@ -1,0 +1,38 @@
+{% extends 'mainTemplate.html' %}
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+<div class="banner admin-banner"></div>
+<div class="container py-5">
+    <div class="nav-breadcrumb p-2 text-uppercase"><a href="/">ZHU</a> <i class="fas fa-angle-right"></i> Administration</div>
+    <h1>Administration</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-nav-tabs">
+                <div class="card-header">User Management</div>
+                <div class="card-body">
+                    <a href="/admin/visit"><h6>Visiting Requests</h6></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-nav-tabs">
+                <div class="card-header">Document Management</div>
+                <div class="card-body"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-nav-tabs">
+                <div class="card-header">Event Management</div>
+                <div class="card-body"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-nav-tabs">
+                <div class="card-header">Training Management</div>
+                <div class="card-body"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -78,10 +78,17 @@
             <div class="page-header bg-primary">
                 <div class="title-block">
                     <h2 class="subtitle">Houston ARTCC</h2>
-                    <h1 class="title">{% block header %}{% endblock %}&nbsp; <span class="tabs ml-3">{% block tabs %}{% endblock %}</span></h1>
+                    <h1 class="title">{% block header %}{% endblock %}</h1>
                 </div>
             </div>
             <!-- END Header -->
+
+
+            <!-- START Nav Tabs -->
+            <div class="tab-container">
+                {% block tabs %}{% endblock %}
+            </div>
+            <!-- END Nav Tabs -->
 
 
             <!-- START Page Content -->

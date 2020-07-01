@@ -539,8 +539,22 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
 .shrink .nav-link::after {
     background-color: rgba(12, 12, 12, 0.75);
 }
-.tabs {
-    font: 35px Gilroy-Regular, Helvetica, sans-serif;
+.tab-container {
+    display: flex;
+}
+.tab {
+    background-color: #ededed;
+    text-align: center;
+    flex: 1;
+    font: 25px Gilroy-Bold, Helvetica, sans-serif;
+    padding: 25px 0;
+    cursor: pointer;
+}
+.tab.active {
+    background-color: #dedede;
+}
+.tab.active:hover {
+    opacity: 1;
 }
 
 

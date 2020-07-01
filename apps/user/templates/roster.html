@@ -4,7 +4,9 @@
 {% block header %}Roster{% endblock %}
 
 {% block tabs %}
-<a class="tab-toggle active" data-target="#home" autofocus>Home</a>&nbsp; | &nbsp;<a class="tab-toggle" data-target="#visiting">Visiting</a>&nbsp; | &nbsp;<a class="tab-toggle" data-target="#mvap">MVAP</a>
+<a class="tab active" data-target="#home">Home</a>
+<a class="tab" data-target="#visiting">Visiting</a>
+<a class="tab" data-target="#mvap">MVAP</a>
 {% endblock %}
 
 {% block body %}
@@ -293,20 +295,15 @@
 
 {% block scripts %}
 <script>
-    var showHideRunning = false
     function showHide(showEl, hideEl) {
-        if (!showHideRunning) {
-            showHideRunning = true
-            hideEl.fadeOut(125, function() {
-                showEl.fadeIn(125, function() {
-                    showHideRunning = false
-                })
+        hideEl.fadeOut(200, function() {
+            showEl.fadeIn(200, function() {
             })
-        }
+        })
     }
 
-    $('.tab-toggle').click(function() {
-        $('.tab-toggle').removeClass('active')
+    $('.tab').click(function() {
+        $('.tab').removeClass('active')
         let home = $('#home')
         let visiting = $('#visiting')
         let mvap = $('#mvap')
@@ -316,22 +313,20 @@
             } else {
                 showHide(home, mvap)
             }
-            $(this).addClass('active')
         } else if ($(this).data('target') === '#visiting') {
             if (home.is(':visible')) {
                 showHide(visiting, home)
             } else {
                 showHide(visiting, mvap)
             }
-            $(this).addClass('active')
         } else {
             if (home.is(':visible')) {
                 showHide(mvap, home)
             } else {
                 showHide(mvap, visiting)
             }
-            $(this).addClass('active')
         }
+        $(this).addClass('active')
     })
 </script>
 {% endblock %}

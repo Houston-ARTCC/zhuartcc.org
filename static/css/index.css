@@ -222,11 +222,11 @@ select ~ label {
     top: 6px;
 }
 :required ~ label::after {
-    content: '✱';
+    content: ' ✱';
     color: #c15b5b;
 }
 :required.has-content ~ label::after {
-    content: '✱';
+    content: ' ✱';
     color: #F19941;
 }
 .modal label {
@@ -263,7 +263,7 @@ input[type="file"].has-content ~ label {
 .file-upload .focus-border {
     bottom: -2px;
 }
-input[type="file"].has-content ~ .upload-btn {
+input.has-content ~ .upload-btn {
     background-color: #F19941;
     color: white;
     transition: 500ms;
@@ -310,9 +310,52 @@ input[type="file"].has-content ~ .upload-btn {
     transition: 400ms;
     padding-left: 5px;
 }
-input[type="radio"]:checked ~ .radio-label {
+input:checked ~ .radio-label {
     color: #333333;
-    transition: 400ms;
+}
+.toggle {
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+.toggle label {
+    position: initial;
+    display: initial;
+    padding-left: 10px;
+    color: #aeaeae;
+}
+.toggle input:checked ~ label {
+    color: #333333;
+}
+.toggle input {
+    position: relative;
+    -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+    top: 3px;
+    width: 40px;
+    height: 15px;
+    background-color: #efefef;
+    border-radius: 15px;
+    outline: none;
+    -webkit-transition: background 450ms ease;
+    transition: background 450ms ease;
+    box-shadow: 0 0 0 4px #efefef;
+}
+.toggle input:before, .toggle input:after {
+    position: absolute;
+    display: block;
+    content: '';
+    border-radius: 100%;
+    transition: background 450ms ease, transform 450ms ease;
+}
+.toggle input:before {
+    width: 15px;
+    height: 15px;
+    background-color: #aeaeae;
+}
+.toggle input:checked:before {
+    background-color: #F19941;
+    transform: translateX(25px);
 }
 .btn {
     font: 14px Gilroy-Bold, Helvetica, sans-serif;
@@ -546,7 +589,7 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
     background-color: #ededed;
     text-align: center;
     flex: 1;
-    font: 25px Gilroy-Bold, Helvetica, sans-serif;
+    font: 20px Gilroy-Bold, Helvetica, sans-serif;
     padding: 25px 0;
     cursor: pointer;
 }

@@ -9,15 +9,15 @@ class User(models.Model):
     cid = models.IntegerField()
     email = models.EmailField()
     oper_init = models.CharField(max_length=32)
-    home_facility = models.CharField(max_length=32, null=True)
+    home_facility = models.CharField(max_length=32, null=True, blank=True)
 
     # ARTCC Roles
     rating = models.CharField(max_length=32)
     main_role = models.CharField(max_length=32)
-    staff_role = models.CharField(max_length=32, null=True)
-    training_role = models.CharField(max_length=32, null=True)
+    staff_role = models.CharField(max_length=32, null=True, blank=True)
+    training_role = models.CharField(max_length=32, null=True, blank=True)
     status = models.IntegerField(default=0)
-    loa_until = models.DateField(null=True)
+    loa_until = models.DateField(null=True, blank=True)
 
     # Endorsements
     cert_int = models.IntegerField(default=0)
@@ -27,11 +27,11 @@ class User(models.Model):
     app_cert = models.IntegerField(default=0)
     ctr_cert = models.IntegerField(default=0)
     ocn_cert = models.IntegerField(default=0)
-    solo_cert = models.CharField(max_length=32, null=True)
+    solo_cert = models.CharField(max_length=32, null=True, blank=True)
 
     # Profile Details
-    profile_picture = models.FileField(null=True)
-    biography = models.TextField(null=True)
+    profile_picture = models.FileField(null=True, blank=True)
+    biography = models.TextField(null=True, blank=True)
 
     # Returns boolean value representing whether or not the user is staff
     def is_staff(self):

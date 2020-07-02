@@ -21,8 +21,4 @@ RESOURCE_CATEGORIES = ['VRC', 'vSTARS', 'vERAM', 'vATIS', 'SOP', 'LOA', 'MAVP', 
 
 
 # ARTCC Geography
-ARTCC_BOUNDARY = [[0, 0], [0, 0]]   # TMU Boundary JSON from VATUSA website
-
-MAP_CENTER = ['Decimal Representation of Latitude', 'Decimal Representation of Longitude']
-
 AIRFIELDS = ['IATA', 'IATA', '...']

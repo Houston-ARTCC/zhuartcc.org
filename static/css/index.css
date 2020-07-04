@@ -174,7 +174,7 @@ a88aaaa    .d8888b. 88d888b. 88d8b.d8b. .d8888b.
     width: 100%;
     padding: 0;
 }
-input[type="text"], .file-upload, select {
+input[type="text"], .file-upload, select, textarea {
     font: 15px/24px Gilroy-Bold, Helvetica, sans-serif;
     color: #333;
     width: 100%;
@@ -189,7 +189,7 @@ input[type="file"] {
     opacity: 0;
     width: 100%;
 }
-input[type="text"]:focus, select:focus {
+input[type="text"]:focus, select:focus, textarea:focus {
     outline: none;
 }
 .focus-border {
@@ -201,9 +201,13 @@ input[type="text"]:focus, select:focus {
     background-color: #F19941;
     transition: 500ms;
 }
+textarea ~ .focus-border {
+    bottom: 6px;
+}
 input[type="text"]:focus ~ .focus-border, input[type="text"].has-content ~ .focus-border,
 select.has-content ~ .focus-border,
-input[type="file"].has-content ~ .focus-border {
+input[type="file"].has-content ~ .focus-border,
+textarea:focus ~ .focus-border, textarea.has-content ~ .focus-border {
     width: 100%;
     transition: 500ms;
 }
@@ -218,16 +222,20 @@ label {
     transition: 400ms;
     pointer-events: none;
 }
+input[type="checkbox"] ~ label {
+    pointer-events: all;
+}
 select ~ label {
     top: 6px;
 }
-:required ~ label::after {
+:required ~ label::after,
+input[type="checkbox"]:required ~ label::after {
     content: ' ✱';
     color: #c15b5b;
 }
-:required.has-content ~ label::after {
-    content: ' ✱';
-    color: #F19941;
+:required.has-content ~ label::after,
+input[type="checkbox"]:required:checked ~ label::after {
+    content: '';
 }
 .modal label {
     z-index: 2000;
@@ -242,7 +250,8 @@ input:read-only ~ .focus-border {
 }
 input[type="text"]:focus ~ label, input[type="text"].has-content ~ label,
 select.has-content ~ label,
-input[type="file"].has-content ~ label {
+input[type="file"].has-content ~ label,
+textarea:focus ~ label, textarea.has-content ~ label {
     text-align: left;
     top: -16px;
     font-size: 13px;

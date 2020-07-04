@@ -7,6 +7,7 @@ from datetime import datetime
 from django.views.decorators.http import require_POST
 
 from .models import Visit
+from ..user.models import User
 from ..user.updater import assign_oper_init
 
 
@@ -27,27 +28,7 @@ def submit_visiting_request(request):
         visiting_request.save()
         return redirect('/')
 
-    # Ensures that user is eligible to visit
-    if 'vatsim_data' not in request.session:
-        status = {
-            'eligible': False,
-            'reason': 'You must be logged in to submit a request. Please log in with your VATSIM account and try again.'
-        }
-    elif User.objects.filter(cid=request.session['vatsim_data']['cid']).exists():
-        status = {
-            'eligible': False,
-            'reason': 'You are already a member of the ZHU ARTCC, go control a position silly!'
-        }
-    elif request.session['vatsim_data']['rating'] == 'OBS':
-        status = {
-            'eligible': False,
-            'reason': 'Unfortunately, you must be an S1 or above to visit the Houston ARTCC. Feel free to submit a '
-                      'request once you meet the requirements.'
-        }
-    else:
-        status = {'eligible': True}
-
-    return render(request, 'visit.html', {'status': status})
+    return render(request, 'visit.html')
 
 
 # Gets all visiting requests from local database and serves 'visitRequests.html' file

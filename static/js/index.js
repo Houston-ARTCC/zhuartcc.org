@@ -27,6 +27,13 @@ $(function() {
             $(this).removeClass('has-content')
         }
     })
+    $('textarea').change(function() {
+        if ($(this).val() !== '') {
+            $(this).addClass('has-content')
+        } else {
+            $(this).removeClass('has-content')
+        }
+    })
     $('input[type="file"]').change(function() {
         $(this).siblings().eq(1).text(($(this).val().replace(/.*([\/\\])/, '')))
     })
@@ -128,6 +135,13 @@ function bindModalEvents(modal) {
         }
     })
     $('#customModal select').change(function() {
+        if ($(this).val() !== '') {
+            $(this).addClass('has-content')
+        } else {
+            $(this).removeClass('has-content')
+        }
+    })
+    $('#customModal textarea').change(function() {
         if ($(this).val() !== '') {
             $(this).addClass('has-content')
         } else {

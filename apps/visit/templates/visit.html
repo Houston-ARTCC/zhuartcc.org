@@ -5,72 +5,87 @@
 <form action="/visit/" method="POST">
     {% csrf_token %}
     <div class="row">
-        <div class="col-md">
-            <div class="card card-nav-tabs">
-                <div class="card-header card-header-warning">User Details</div>
+        <div class="col-md-12 col-xl-5 d-flex align-items-stretch">
+            <div class="card card-nav-tabs my-4">
+                <div class="card-header">User Details</div>
                 <div class="card-body">
-                    <div class="col-md">
+                    <div class="col">
                         <div class="row">
-                            <div class="col-md form-group">
-                                <label for="cid">VATSIM CID</label>
-                                <input type="text" class="form-control" name="cid" value="{{ request.session.vatsim_data.cid }}" readonly>
+                            <div class="col-4">
+                                <div class="label-group">
+                                    <input class="has-content" name="cid" type="text" value="{{ request.session.vatsim_data.cid }}" readonly>
+                                    <label>CID</label>
+                                    <span class="focus-border"></span>
+                                </div>
                             </div>
-                            <div class="col-md form-group">
-                                <label for="rating">Rating</label>
-                                <input type="text" class="form-control" name="rating" value="{{ request.session.vatsim_data.rating }}" readonly>
+                            <div class="col-4">
+                                <div class="label-group">
+                                    <input class="has-content" name="rating" type="text" value="{{ request.session.vatsim_data.rating }}" readonly>
+                                    <label>Rating</label>
+                                    <span class="focus-border"></span>
+                                </div>
                             </div>
-                            <div class="col-md form-group">
-                                <label for="home_facility">Home Facility</label>
-                                <input type="text" class="form-control" name="home_facility" required>
+                            <div class="col-4">
+                                <div class="label-group">
+                                    <input name="home_facility" type="text" required>
+                                    <label>Home Facility</label>
+                                    <span class="focus-border"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md form-group">
-                                <label for="first_name">First Name</label>
-                                <input type="text" class="form-control" name="first_name" value="{{ request.session.vatsim_data.firstname }}" required>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input class="has-content" name="first_name" type="text" value="{{ request.session.vatsim_data.firstname }}" required>
+                                    <label>First</label>
+                                    <span class="focus-border"></span>
+                                </div>
                             </div>
-                            <div class="col-md form-group">
-                                <label for="last_name">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" value="{{ request.session.vatsim_data.lastname }}" required>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input class="has-content" name="last_name" type="text" value="{{ request.session.vatsim_data.lastname }}" required>
+                                    <label>Last Name</label>
+                                    <span class="focus-border"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" value="{{ request.session.vatsim_data.email }}" required>
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <input class="has-content" name="email" type="text" value="{{ request.session.vatsim_data.email }}" required>
+                                    <label>Email</label>
+                                    <span class="focus-border"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md">
-            <div class="card card-nav-tabs" style="height:93%">
-                <div class="card-header card-header-warning">Additional Details</div>
+        <div class="col-md-12 col-xl-7 d-flex align-items-stretch">
+            <div class="card card-nav-tabs my-4">
+                <div class="card-header">Additional Details</div>
                 <div class="card-body">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="reason">Why would you like to visit ZHU ARTCC? </label>
-                            <textarea class="form-control" name="reason" rows="6" placeholder="Type here..." required></textarea>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <textarea rows="3" required></textarea>
+                                    <label>Why would you like to visit the Houston Virtual ARTCC?</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 toggle mb-0">
+                                <input type="checkbox" required>
+                                <label>I agree to receive notification emails from Houston ARTCC.</label>
+                            </div>
+                            <div class="col-12 toggle">
+                                <input type="checkbox" required>
+                                <label>I have read and agree to the <a href="/privacy" target="_blank">Privacy Policy.</a></label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary" {% if not status.eligible %}disabled{% endif %}>Submit</button>
+    <a href="/"><button class="btn btn-secondary" type="button">Cancel</button></a>
+    <button type="submit" class="btn btn-primary">Submit Application</button>
 </form>
-{% if not status.eligible %}
-<script>
-    $(function() {
-        Swal.fire({
-            title: 'Oops!',
-            text: '{{ status.reason }}',
-            icon: 'error',
-        }).then(function() {
-            window.location = '/'
-        })
-    })
-</script>
-{% endif %}
 {% endblock %}

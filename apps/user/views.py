@@ -21,7 +21,7 @@ def view_staff(request):
         'MTR': User.objects.filter(training_role='MTR'),
     }
 
-    return render(request, 'staff.html', {'staff': staff})
+    return render(request, 'staff.html', {'page_title': 'Staff', 'staff': staff})
 
 
 # Gets all controllers by membership status from local database and serves 'roster.html' file
@@ -32,6 +32,7 @@ def view_roster(request):
     mvap_controllers = active_controllers.filter(main_role='MC').order_by('first_name')
 
     return render(request, 'roster.html', {
+        'page_title': 'Roster',
         'home': sort_controllers(home_controllers),
         'visiting': sort_controllers(visiting_controllers),
         'mvap': sort_controllers(mvap_controllers),
@@ -57,7 +58,7 @@ def sort_controllers(query_set):
 def view_user_profile(request, cid):
     user = User.objects.get(cid=cid)
 
-    return render(request, 'profile.html', {'user': user})
+    return render(request, 'profile.html', {'page_title': user.return_full_name(), 'user': user})
 
 
 # Gets specified user from local database and serves 'editUser.html' file. Overrides user info with form data on POST
@@ -83,6 +84,6 @@ def edit_user(request, cid):
             user.save()
             return redirect('/roster')
 
-        return render(request, 'editUser.html', {'user': user})
+        return render(request, 'editUser.html', {'page_title': f'Edit {user.return_full_name()}', 'user': user})
     else:
         return HttpResponse(status=401)

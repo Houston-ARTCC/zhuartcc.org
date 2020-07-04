@@ -9,7 +9,7 @@ from zhuartcc.decorators import require_staff
 
 def view_resources(request):
     resources = {category: Resource.objects.filter(category=category) for category in settings.RESOURCE_CATEGORIES}
-    return render(request, 'resources.html', {'resources': resources})
+    return render(request, 'resources.html', {'page_title': 'Resources', 'resources': resources})
 
 
 # Accepts form data and updates database entry

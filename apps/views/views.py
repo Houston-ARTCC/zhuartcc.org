@@ -6,8 +6,5 @@ def view_homepage(request):
 
 
 def view_privacy_policy(request):
-    return render(request, 'privacy.html')
+    return render(request, 'privacy.html', {'page_title': 'Privacy Policy'})
 
-
-def view_admin_panel(request):
-    return render(request, 'admin.html')

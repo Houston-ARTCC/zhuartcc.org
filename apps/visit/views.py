@@ -28,14 +28,17 @@ def submit_visiting_request(request):
         visiting_request.save()
         return redirect('/')
 
-    return render(request, 'visit.html')
+    return render(request, 'visit.html', {'page_title': 'Visit Houston'})
 
 
 # Gets all visiting requests from local database and serves 'visitRequests.html' file
 def view_visiting_requests(request):
     if 'staff' in request.session and request.session['staff']:
         visiting_requests = Visit.objects.all()
-        return render(request, 'visitRequests.html', {'visiting_requests': visiting_requests})
+        return render(request, 'visitRequests.html', {
+            'page_title': 'Visiting Requests',
+            'visiting_requests': visiting_requests
+        })
     else:
         return HttpResponse(status=401)
 

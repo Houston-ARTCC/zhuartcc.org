@@ -9,7 +9,11 @@ def view_training_center(request):
     if 'vatsim_data' in request.session:
         user = User.objects.get(cid=request.session['vatsim_data']['cid'])
         scheduled_sessions = TrainingSession.objects.filter(student_id=user.id).filter(status=0)
-        return render(request, 'trainingCenter.html', {'user': user, 'sessions': scheduled_sessions})
+        return render(request, 'trainingCenter.html', {
+            'page_title': 'Training Center',
+            'user': user,
+            'sessions': scheduled_sessions
+        })
     return HttpResponse(status=401)
 
 
@@ -18,7 +22,11 @@ def view_history(request, cid):
         user = User.objects.get(cid=cid)
         sessions = TrainingSession.objects.filter(student_id=user.id).order_by('-start')
         if request.session['mentor'] or request.session['staff'] or request.session['vatsim_data']['cid'] == user.cid:
-            return render(request, 'viewHistory.html', {'user': user, 'sessions': sessions})
+            return render(request, 'viewHistory.html', {
+                'page_title': 'Training History',
+                'user': user,
+                'sessions': sessions
+            })
     return HttpResponse(status=401)
 
 

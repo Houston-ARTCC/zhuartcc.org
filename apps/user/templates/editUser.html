@@ -1,5 +1,4 @@
 {% extends 'mainTemplate.html' %}
-{% block title %}Edit {{ user.return_full_name }}{% endblock %}
 
 {% block body %}
 <form action="/roster/{{ user.cid }}/edit/" method="POST">

@@ -1,0 +1,21 @@
+from django.db import models
+
+from ..user.models import User
+
+
+class Event(models.Model):
+    name = models.CharField(max_length=128)
+    date = models.DateTimeField()
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class EventAssignment(models.Model):
+    event = models.ForeignKey(Event, models.CASCADE, related_name='event_positions')
+    user = models.ForeignKey(User, models.SET_NULL, null=True, related_name='event_positions', blank=True)
+    position = models.CharField(max_length=16)
+
+    def __str__(self):
+        return f'{self.event.name} | {self.position}'

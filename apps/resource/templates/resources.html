@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="col-8 label-group mx-auto">
-                                <input class="has-content" name="name" type="text" value="` + $this.data('name') + `" required>
+                                <input name="name" type="text" value="` + $this.data('name') + `" required>
                                 <label>Name</label>
                                 <span class="focus-border"></span>
                             </div>
@@ -70,7 +70,7 @@
                         <div class="col-12">
                             <div class="col-8 label-group mx-auto">
                                 <div class="select-group">
-                                    <select class="has-content" name="category" type="text" required>
+                                    <select name="category" type="text" required>
                                         {% for category in resources %}
                                         <option>{{ category }}</option>
                                         {% endfor %}
@@ -135,7 +135,7 @@
                         <div class="col-12">
                             <div class="col-8 label-group mx-auto">
                                 <div class="select-group">
-                                    <select class="has-content" name="category" type="text" required>
+                                    <select name="category" type="text" required>
                                         {% for category in resources %}
                                         <option>{{ category }}</option>
                                         {% endfor %}

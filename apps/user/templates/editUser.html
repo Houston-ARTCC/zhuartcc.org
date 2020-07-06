@@ -12,42 +12,42 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="label-group">
-                                    <input class="has-content" name="cid" type="text" value="{{ user.cid }}" readonly>
+                                    <input name="cid" type="text" value="{{ user.cid }}" readonly>
                                     <label>CID</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="label-group">
-                                    <input class="has-content" name="rating" type="text" value="{{ user.rating }}" readonly>
+                                    <input name="rating" type="text" value="{{ user.rating }}" readonly>
                                     <label>Rating</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="label-group">
-                                    <input class="has-content" name="oper_init" type="text" value="{{ user.oper_init }}" required>
+                                    <input name="oper_init" type="text" value="{{ user.oper_init }}" required>
                                     <label>OI</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <input class="has-content" name="first_name" type="text" value="{{ user.first_name }}" required>
+                                    <input name="first_name" type="text" value="{{ user.first_name }}" required>
                                     <label>First</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <input class="has-content" name="last_name" type="text" value="{{ user.last_name }}" required>
+                                    <input name="last_name" type="text" value="{{ user.last_name }}" required>
                                     <label>Last Name</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="label-group">
-                                    <input class="has-content" name="email" type="text" value="{{ user.email }}" required>
+                                    <input name="email" type="text" value="{{ user.email }}" required>
                                     <label>Email</label>
                                     <span class="focus-border"></span>
                                 </div>
@@ -73,7 +73,7 @@
                                     <input type="radio" name="main_role" value="VC" {% if user.main_role == 'VC' %}checked{% endif %}>
                                     <label class="radio-label">Visting Controller from</label>
                                     <div class="label-group">
-                                        <input id="VC" name="home_facility" type="text" {% if user.main_role == 'VC' %}class="has-content" value="{{ user.home_facility }}" required{% else %}readonly{% endif %}>
+                                        <input id="VC" name="home_facility" type="text" {% if user.main_role == 'VC' %}value="{{ user.home_facility }}" required{% else %}readonly{% endif %}>
                                         <label>Fac.</label>
                                         <span class="focus-border"></span>
                                     </div>
@@ -82,7 +82,7 @@
                                     <input type="radio" name="main_role" value="MC" {% if user.main_role == 'MC' %}checked{% endif %}>
                                     <label class="radio-label">MAVP Controller from</label>
                                     <div class="label-group">
-                                        <input id="MC" name="home_facility" type="text" {% if user.main_role == 'MC' %}class="has-content" value="{{ user.home_facility }}" required{% else %}readonly{% endif %}>
+                                        <input id="MC" name="home_facility" type="text" {% if user.main_role == 'MC' %}value="{{ user.home_facility }}" required{% else %}readonly{% endif %}>
                                         <label>Fac.</label>
                                         <span class="focus-border"></span>
                                     </div>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <select {% if user.staff_role %}class="has-content"{% endif %} name="staff_role" type="text">
+                                    <select name="staff_role">
                                         <option {% if user.staff_role == '' %}selected{% endif %}></option>
                                         <option {% if user.staff_role == 'AWM' %}selected{% endif %}>AWM</option>
                                         <option {% if user.staff_role == 'WM' %}selected{% endif %}>WM</option>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <select {% if user.training_role %}class="has-content"{% endif %} name="training_role" type="text">
+                                    <select name="training_role">
                                         <option {% if user.training_role == '' %}selected{% endif %}></option>
                                         <option {% if user.training_role == 'MTR' %}selected{% endif %}>MTR</option>
                                         <option {% if user.training_role == 'INS' %}selected{% endif %}>INS</option>

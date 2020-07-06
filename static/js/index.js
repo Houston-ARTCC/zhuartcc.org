@@ -3,37 +3,17 @@ $(function() {
     $(document).scroll(function(){
         if ($(document).scrollTop() > 10) {
             $('.navbar-shrink').addClass('shrink')
-            $('.navbar-shrink .navbar-logo-gray').addClass('d-none')
-            $('.navbar-shrink .navbar-logo-color').removeClass('d-none')
+            $('.navbar-logo-gray').addClass('d-none')
+            $('.navbar-logo-color').removeClass('d-none')
         } else {
             $('.navbar-shrink').removeClass('shrink')
-            $('.navbar-shrink .navbar-logo-color').addClass('d-none')
-            $('.navbar-shrink .navbar-logo-gray').removeClass('d-none')
+            $('.navbar-logo-color').addClass('d-none')
+            $('.navbar-logo-gray').removeClass('d-none')
         }
     })
 
     // Input animation control
-    $('input').change(function() {
-        if ($(this).val() !== '') {
-            $(this).addClass('has-content')
-        } else {
-            $(this).removeClass('has-content')
-        }
-    })
-    $('select').change(function() {
-        if ($(this).val() !== '') {
-            $(this).addClass('has-content')
-        } else {
-            $(this).removeClass('has-content')
-        }
-    })
-    $('textarea').change(function() {
-        if ($(this).val() !== '') {
-            $(this).addClass('has-content')
-        } else {
-            $(this).removeClass('has-content')
-        }
-    })
+    $('input, select, textarea').change(checkValue).each(checkValue)
     $('input[type="file"]').change(function() {
         $(this).siblings().eq(1).text(($(this).val().replace(/.*([\/\\])/, '')))
     })
@@ -61,6 +41,15 @@ $(function() {
         }
     })
 })
+
+// Checks input value and adds .has-content if there is content
+function checkValue() {
+    if ($(this).val() !== '') {
+        $(this).addClass('has-content')
+    } else {
+        $(this).removeClass('has-content')
+    }
+}
 
 // Launching pre-made modals
 function launchSuccessModal(content) {
@@ -127,27 +116,7 @@ function bindModalEvents(modal) {
     $('#successModal').on('hidden.bs.modal', function() {
         location.reload()
     })
-    $('#customModal input').change(function() {
-        if ($(this).val() !== '') {
-            $(this).addClass('has-content')
-        } else {
-            $(this).removeClass('has-content')
-        }
-    })
-    $('#customModal select').change(function() {
-        if ($(this).val() !== '') {
-            $(this).addClass('has-content')
-        } else {
-            $(this).removeClass('has-content')
-        }
-    })
-    $('#customModal textarea').change(function() {
-        if ($(this).val() !== '') {
-            $(this).addClass('has-content')
-        } else {
-            $(this).removeClass('has-content')
-        }
-    })
+    $('#customModal input, #customModal select, #customModal textarea').change(checkValue).each(checkValue)
     $('#customModal input[type="file"]').change(function() {
         $(this).siblings().eq(1).text(($(this).val().replace(/.*([\/\\])/, '')))
     })

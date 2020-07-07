@@ -281,6 +281,6 @@ pip-selfcheck.json
 
 # End of https://www.gitignore.io/api/venv,django,python,pycharm,visualstudiocode
 
+zhuartcc/artcc_settings.py
 doc/
 profile/*
-!profle/placeholder.png

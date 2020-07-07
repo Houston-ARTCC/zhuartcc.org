@@ -100,4 +100,4 @@ class User(models.Model):
         self.cert_int = self.return_cert_int()
 
     def __str__(self):
-        return self.return_full_name()
+        return f'({self.main_role}) {self.return_full_name()}'

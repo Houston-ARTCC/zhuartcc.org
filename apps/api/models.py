@@ -15,9 +15,15 @@ class Controller(models.Model):
         self.online_for = datetime.utcnow() - self.online_since
         return self.online_for
 
+    def __str__(self):
+        return f'{self.user.return_full_name()} on {self.callsign}'
+
 
 class ControllerSession(models.Model):
     user = models.ForeignKey(User, models.CASCADE, related_name='controller_sessions')
     callsign = models.CharField(max_length=16)
     time_logon = models.DateTimeField()
     duration = models.DurationField()
+
+    def __str__(self):
+        return f'{self.time_logon} | {self.user.return_full_name()} on {self.callsign}'

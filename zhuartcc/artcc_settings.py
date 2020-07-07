@@ -21,4 +21,4 @@ RESOURCE_CATEGORIES = ['VRC', 'vSTARS', 'vERAM', 'vATIS', 'SOP', 'LOA', 'MAVP', 
 
 
 # ARTCC Geography
-AIRFIELDS = ['IATA', 'IATA', '...']
+POSITION_PREFIXES = {'IATA', 'IATA', '...'}

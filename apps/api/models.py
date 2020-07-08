@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.db import models
 
 from ..user.models import User
@@ -10,6 +9,9 @@ class Controller(models.Model):
     frequency = models.FloatField()
     online_since = models.DateTimeField()
     last_update = models.DateTimeField()
+
+    def return_duration(self):
+        return self.last_update - self.online_since
 
     def __str__(self):
         return f'{self.user.return_full_name()} on {self.callsign}'

@@ -75,9 +75,11 @@ d888888P                                                                dP
 .text-secondary {
     color: #e7e7e7!important;
 }
+.text-muted {
+    color: #c4c4c4 !important;
+}
 body {
-    font: 16px Gilroy-Regular, Helvetica, sans-serif;
-    line-height: 22px;
+    font: 16px/24px Gilroy-Regular, Helvetica, sans-serif;
 }
 h1 {
     font: 100px Gilroy-ExtraBold, Helvetica, sans-serif;
@@ -473,7 +475,7 @@ Y8.   .88 88.  .88 88       88.  .88       88
     border-radius: 0!important;
 }
 .card {
-    box-shadow: 0 0 17px #dedede;
+    box-shadow: 0 0 17px #e9e9e9;
     margin: 4% 0;
 }
 .card-header {
@@ -493,36 +495,13 @@ d888888P          dP       dP
 
 */
 th {
-    border: none!important;
-    padding: 2% 1%!important;
-    font: 15px Gilroy-ExtraBold, Helvetica, sans-serif;
+    border-top: none!important;
+    border-bottom: 1px #cbcbcb solid!important;
+    font: 17px Gilroy-ExtraBold, Helvetica, sans-serif;
 }
 td {
-    padding: 1%!important;
+    border: none!important;
     font: 15px Gilroy-Medium, Helvetica, sans-serif;
-}
-table.dataTable thead th {
-    background-image: none!important;
-}
-table.dataTable thead th.sorting:after,
-table.dataTable thead th.sorting_asc:after,
-table.dataTable thead th.sorting_desc:after {
-    position: absolute;
-    color: #F19941;
-    top: 30px;
-    right: 10px;
-    display: block;
-    font: 15px 'Font Awesome 5 Pro';
-}
-table.dataTable thead th.sorting:after {
-    content: '\f0dc';
-    padding-top: 0.10em;
-}
-table.dataTable thead th.sorting_asc:after {
-    content: '\f0de';
-}
-table.dataTable thead th.sorting_desc:after {
-    content: '\f0dd';
 }
 
 
@@ -625,9 +604,6 @@ dP     dP  `88888P' dP  dP  dP `88888P' 88Y888P' `88888P8 `8888P88 `88888P'
 .home-wrapper {
     height: 100vh;
     background: url('../img/homepage-bg.jpg') 50% 50%/cover;
-}
-.home-container {
-    padding: 3% 10%;
 }
 .home-title-block {
     height: 100vh;

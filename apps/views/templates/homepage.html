@@ -1,4 +1,5 @@
 {% load static %}
+{% load filters %}
 
 <!DOCTYPE HTML>
 <html lang="en">
@@ -75,11 +76,63 @@
 
 
             <!-- START Page Content -->
-            <div class="home-content">
-                <div class="home-title-block">
-                    <h1 class="home-title">Welcome to<br>Houston</h1>
-                    <h2 class="home-subtitle">From cows to space shuttles, we've got it all!</h2>
-                    <p class="scroll-arrow"><i class="far fa-sm fa-arrow-left"></i>&nbsp; Scroll</p>
+            <div class="home-title-block">
+                <h1 class="home-title">Welcome to<br>Houston</h1>
+                <h2 class="home-subtitle">From cows to space shuttles, we've got it all!</h2>
+                <p class="scroll-arrow"><i class="far fa-sm fa-arrow-left"></i>&nbsp; Scroll</p>
+            </div>
+            <div class="page-container">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>Callsign</th>
+                                    <th>Controller</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for controller in online %}
+                                <tr>
+                                    <td>{{ controller.callsign }}</td>
+                                    <td>{{ controller.user.return_full_name }}</td>
+                                    <td>{{ controller.return_duration|duration }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3">No controllers online.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>Callsign</th>
+                                    <th>Departure</th>
+                                    <th>Arrival</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pilot in pilots %}
+                                <tr>
+                                    <td>{{ pilot.callsign }}</td>
+                                    <td>{{ pilot.dep|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                    <td>{{ pilot.arr|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3">No controllers online.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <!-- END Page Content -->

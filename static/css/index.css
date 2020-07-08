@@ -204,7 +204,7 @@ input[type="text"]:focus, select:focus, textarea:focus {
     transition: 500ms;
 }
 textarea ~ .focus-border {
-    bottom: 6px;
+    bottom: 7px;
 }
 input[type="text"]:focus ~ .focus-border, input[type="text"].has-content ~ .focus-border,
 select.has-content ~ .focus-border,

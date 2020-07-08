@@ -3,6 +3,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from apps.api import views as api
 from apps.event import views as event
 from apps.resource import views as resource
 from apps.training import views as training
@@ -12,6 +13,9 @@ from apps.views import views as views
 from apps.visit import views as visit
 
 urlpatterns = [
+    # API
+    path('stats/', api.view_statistics),                                # View Statistics
+
     # Event
     path('events/', event.view_all_events),                             # View All Events
     path('events/<int:id>/', event.view_event),                         # View Event

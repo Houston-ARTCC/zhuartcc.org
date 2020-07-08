@@ -1,0 +1,31 @@
+{% extends 'mainTemplate.html' %}
+{% load filters %}
+
+{% block body %}
+<div class="row">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2>{% now "F" %} Hours</h2>
+                <h1 class="stat mb-0" style="font-size: 60px">{{ hours.month|duration }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2>{% now "Y" %} Hours</h2>
+                <h1 class="stat mb-0" style="font-size: 60px">{{ hours.year|duration }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2>Total Hours</h2>
+                <h1 class="stat mb-0" style="font-size: 60px">{{ hours.total|duration }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

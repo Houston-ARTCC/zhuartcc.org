@@ -14,9 +14,9 @@ from apps.visit import views as visit
 urlpatterns = [
     # Event
     path('events/', event.view_all_events),                             # View All Events
-    path('events/<int:id>', event.view_event),                          # View Event
-    path('events/<int:id>/edit', event.edit_event),                     # Edit Event (STAFF)
-    path('events/new', event.create_event),                             # Create Event (STAFF)
+    path('events/<int:id>/', event.view_event),                         # View Event
+    path('events/<int:id>/edit/', event.edit_event),                    # Edit Event (STAFF)
+    path('events/new/', event.create_event),                            # Create Event (STAFF)
 
     # Resource
     path('resources/', resource.view_resources),                        # View Resources

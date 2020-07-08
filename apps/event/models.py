@@ -5,11 +5,13 @@ from ..user.models import User
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    date = models.DateTimeField()
+    banner = models.URLField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.start.strftime("%b %d, %Y @ %H%Mz")} | {self.name}'
 
 
 class EventAssignment(models.Model):

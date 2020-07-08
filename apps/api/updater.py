@@ -11,7 +11,7 @@ from ..user.models import User
 def update_scheduler():
     pull_controllers()
     scheduler = BackgroundScheduler()
-    scheduler.add_job(pull_controllers, 'interval', minutes=2)
+    scheduler.add_job(pull_controllers, 'interval', minutes=1)
     scheduler.start()
 
 
@@ -22,14 +22,14 @@ def pull_controllers():
 
     for controller in Controller.objects.all():
         if controller.callsign in atc_clients:
-            controller.update_duration()
+            controller.last_update = datetime.now()
             controller.save()
         else:
             ControllerSession(
                 user=controller.user,
                 callsign=controller.callsign,
                 time_logon=controller.online_since,
-                duration=controller.update_duration(),
+                duration=controller.last_update - controller.online_since,
             ).save()
             controller.delete()
 
@@ -44,4 +44,5 @@ def pull_controllers():
                             callsign=callsign,
                             frequency=controller[4],
                             online_since=datetime.strptime(controller[36], '%Y%m%d%H%M%S'),
+                            last_update=datetime.now(),
                         ).save()

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from django.db import models
 
 from ..user.models import User
@@ -9,11 +9,7 @@ class Controller(models.Model):
     callsign = models.CharField(max_length=16)
     frequency = models.FloatField()
     online_since = models.DateTimeField()
-    online_for = models.DurationField(default=timedelta(0))
-
-    def update_duration(self):
-        self.online_for = datetime.utcnow() - self.online_since
-        return self.online_for
+    last_update = models.DateTimeField()
 
     def __str__(self):
         return f'{self.user.return_full_name()} on {self.callsign}'

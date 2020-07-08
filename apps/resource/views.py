@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views.decorators.http import require_POST
-from datetime import datetime
 
 from .models import Resource
 from zhuartcc.decorators import require_staff
@@ -21,7 +21,7 @@ def edit_resource(request):
     resource.category = request.POST['category']
     if 'file' in request.FILES:
         resource.path = request.FILES['file']
-    resource.updated = datetime.now()
+    resource.updated = timezone.now()
     resource.save()
     return redirect('/resources')
 
@@ -34,7 +34,7 @@ def add_resource(request):
         path=request.FILES['file'],
         name=request.POST['name'],
         category=request.POST['category'],
-        updated=datetime.now(),
+        updated=timezone.now(),
     )
     resource.save()
     return redirect('/resources')

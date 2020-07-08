@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.utils import timezone
 
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -22,7 +23,7 @@ def pull_controllers():
 
     for controller in Controller.objects.all():
         if controller.callsign in atc_clients:
-            controller.last_update = datetime.now()
+            controller.last_update = timezone.now()
             controller.save()
         else:
             ControllerSession(
@@ -44,5 +45,5 @@ def pull_controllers():
                             callsign=callsign,
                             frequency=controller[4],
                             online_since=datetime.strptime(controller[36], '%Y%m%d%H%M%S'),
-                            last_update=datetime.now(),
+                            last_update=timezone.now(),
                         ).save()

@@ -2,8 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from datetime import datetime
-
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .models import Visit
@@ -23,7 +22,7 @@ def submit_visiting_request(request):
             last_name=form_data['last_name'],
             email=form_data['email'],
             reason=form_data['reason'],
-            submitted=datetime.now(),
+            submitted=timezone.now(),
         )
         visiting_request.save()
         return redirect('/')

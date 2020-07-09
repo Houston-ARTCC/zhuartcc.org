@@ -44,6 +44,6 @@ def pull_controllers():
                             user=User.objects.get(cid=int(controller[1])),
                             callsign=callsign,
                             frequency=controller[4],
-                            online_since=datetime.strptime(controller[36], '%Y%m%d%H%M%S'),
+                            online_since=datetime.strptime(controller[36] + 'UTC', '%Y%m%d%H%M%S%Z'),
                             last_update=timezone.now(),
                         ).save()

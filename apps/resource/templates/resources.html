@@ -165,7 +165,7 @@
             $('#addForm').submit(function(e) {
                 e.preventDefault()
                 $.post({
-                    url: '/resources/add/',
+                    url: '/resources/new/',
                     data: new FormData(this),
                     processData: false,
                     contentType: false,

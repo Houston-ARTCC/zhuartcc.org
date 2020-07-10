@@ -24,7 +24,7 @@ urlpatterns = [
 
     # Resource
     path('resources/', resource.view_resources),                        # View Resources
-    path('resources/add/', resource.add_resource),                      # Add Resource (POST / STAFF)
+    path('resources/new/', resource.add_resource),                      # Add Resource (POST / STAFF)
     path('resources/edit/', resource.edit_resource),                    # Edit Resource (POST / STAFF)
     path('resources/delete/', resource.delete_resource),                # Delete Resource (POST / STAFF)
 

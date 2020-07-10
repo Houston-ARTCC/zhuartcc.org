@@ -10,7 +10,6 @@ d888888P                                                                dP
           d8888P  dP                 d8888P                    dP                 d8888P
 
 */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 @font-face {
     font-family: 'Gilroy-ExtraBold';
     src: url('../fonts/Gilroy-ExtraBold.woff') format('woff');
@@ -79,7 +78,7 @@ d888888P                                                                dP
     color: #c4c4c4 !important;
 }
 body {
-    font: 16px/24px Gilroy-Regular, Helvetica, sans-serif;
+    font: 17px/26px Gilroy-Regular, Helvetica, sans-serif;
 }
 h1 {
     font: 100px Gilroy-ExtraBold, Helvetica, sans-serif;
@@ -420,6 +419,9 @@ dP                                              dP
 .page-header {
     height: 400px;
 }
+.secondary-page-header {
+    padding: 10% 10% 2% 10%;
+}
 .page-container {
     padding: 2% 10%;
 }
@@ -527,10 +529,16 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
     font: 19px Gilroy-Medium, Helvetica, sans-serif;
     transition: 500ms;
 }
+.navbar-dark .nav-link {
+    color: #181818;
+}
 .nav-link:hover, .nav-link:active, .nav-link:focus {
     color: white;
     opacity: 75%;
     transition: 400ms;
+}
+.navbar-dark .nav-link:hover, .navbar-dark .nav-link:active, .navbar-dark .nav-link:focus {
+    color: #181818;
 }
 .nav-link::after {
 	position: absolute;
@@ -543,6 +551,9 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
 	opacity: 0;
     transition: 400ms;
 	transform: translateY(10px);
+}
+.navbar-dark .nav-link::after {
+	background: rgba(24, 24, 24, 0.75);
 }
 .nav-link:hover::after, .nav-link:active::after, .nav-link:focus::after {
 	opacity: 1;

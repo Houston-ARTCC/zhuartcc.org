@@ -23,8 +23,8 @@
         <div class="page-wrapper">
             <!-- START Navbar -->
             <nav class="navbar navbar-expand-md navbar-shrink fixed-top">
-                <a class="navbar-brand" href="/"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-light.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
-                <ul class="navbar-nav ml-auto">
+                <a class="navbar-brand" href="/"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-dark.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
+                <ul class="navbar-nav ml-auto navbar-dark">
                     <li class="nav-item ml-5">
                         <a class="nav-link" href="/events">Events</a>
                     </li>
@@ -75,11 +75,8 @@
 
 
             <!-- START Header -->
-            <div class="page-header bg-primary">
-                <div class="title-block">
-                    <h2 class="subtitle">Houston ARTCC</h2>
-                    <h1 class="title">{{ page_title|default:'Untitled' }}</h1>
-                </div>
+            <div class="secondary-page-header bg-secondary">
+                {% block header %}{% endblock %}
             </div>
             <!-- END Header -->
 

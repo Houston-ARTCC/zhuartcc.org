@@ -1,0 +1,58 @@
+{% extends 'secondaryTemplate.html' %}
+
+{% block header %}
+<div class="row">
+    <div class="col-8">
+        <h1 style="font-size: 65px">{{ event.name }}</h1>
+        <h2 style="font-size: 40px">{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
+    </div>
+    <div class="col-4 text-right">
+        <h1 style="font-size: 65px" id="countdown">N/A</h1>
+        <h2 style="font-size: 40px" id="countdown-sub">Until Event</h2>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-6 text-right">
+        <div class="card">
+            <div class="card-header p-0">
+                <img src="{{ event.banner }}" style="width: 100%">
+            </div>
+            <div class="card-body text-center">
+                <p>{{ event.description }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 text-right">
+        <div class="card">
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function updateTimer() {
+		let event_start = new Date("{{ event.start|date:'M d, Y H:i \U\T\C' }}")
+        let time_now = new Date()
+        let time_until = event_start - time_now
+
+        if (time_until > 0) {
+            let seconds = Math.floor((time_until % (1000 * 60)) / 1000)
+            let minutes = Math.floor((time_until % (1000 * 60 * 60)) / (1000 * 60))
+            let hours = Math.floor((time_until % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+            let days = Math.floor(time_until / (1000 * 60 * 60 * 24))
+            $('#countdown').text(`${days}d ${hours}h ${minutes}m ${seconds}s`)
+        } else if (time_until <= 0) {
+            $('#countdown').text(`Event Has Begun`)
+            $('#countdown-sub').remove()
+        }
+	}
+	updateTimer()
+	setInterval(function() { updateTimer() }, 1000)
+</script>
+{% endblock %}

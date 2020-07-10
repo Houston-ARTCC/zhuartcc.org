@@ -14,7 +14,7 @@ class Event(models.Model):
         return f'{self.start.strftime("%b %d, %Y @ %H%Mz")} | {self.name}'
 
 
-class EventAssignment(models.Model):
+class EventPosition(models.Model):
     event = models.ForeignKey(Event, models.CASCADE, related_name='event_positions')
     user = models.ForeignKey(User, models.SET_NULL, null=True, related_name='event_positions', blank=True)
     position = models.CharField(max_length=16)

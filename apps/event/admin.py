@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, EventAssignment
+from .models import Event, EventPosition
 
 admin.site.register(Event)
-admin.site.register(EventAssignment)
+admin.site.register(EventPosition)

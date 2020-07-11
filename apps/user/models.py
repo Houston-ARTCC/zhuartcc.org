@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 
 
@@ -18,6 +20,7 @@ class User(models.Model):
     training_role = models.CharField(max_length=32, null=True, blank=True)
     status = models.IntegerField(default=0)
     loa_until = models.DateField(null=True, blank=True)
+    activity_exempt = models.BooleanField(default=False)
 
     # Endorsements
     cert_int = models.IntegerField(default=0)

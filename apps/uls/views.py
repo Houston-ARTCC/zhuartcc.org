@@ -34,8 +34,10 @@ def login(request):
             data = requests.get(f'https://login.vatusa.net/uls/v2/info?token={token[1]}').json()
             
             request.session['vatsim_data'] = data
-            
-            if User.objects.filter(cid=data['cid']).exists():
+
+            user_query = User.objects.filter(cid=data['cid'])
+
+            if user_query.exists() and user_query[0].status != 2:
                 user = User.objects.get(cid=data['cid'])
                 request.session['guest'] = False
                 request.session['staff'] = user.is_staff()

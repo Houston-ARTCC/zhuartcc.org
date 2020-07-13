@@ -13,15 +13,15 @@ from ..user.updater import assign_oper_init
 # Serves 'visit.html' file. Saves request from form data on POST
 def submit_visiting_request(request):
     if request.method == 'POST':
-        form_data = request.POST
+        post = request.POST
         visiting_request = Visit(
-            cid=form_data['cid'],
-            rating=form_data['rating'],
-            home_facility=form_data['home_facility'],
-            first_name=form_data['first_name'],
-            last_name=form_data['last_name'],
-            email=form_data['email'],
-            reason=form_data['reason'],
+            cid=int(post['cid']),
+            rating=post['rating'],
+            home_facility=post['home_facility'],
+            first_name=post['first_name'],
+            last_name=post['last_name'],
+            email=post['email'],
+            reason=post['reason'],
             submitted=timezone.now(),
         )
         visiting_request.save()

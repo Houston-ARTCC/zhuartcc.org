@@ -43,6 +43,7 @@ urlpatterns = [
     path('roster/', user.view_roster),                                  # View Roster
     path('roster/<int:cid>/', user.view_user_profile),                  # View User Profile
     path('roster/<int:cid>/edit/', user.edit_user),                     # Edit User (STAFF)
+    path('roster/update/status/', user.update_status),                  # Change User Status (POST / STAFF)
 
     # Views
     path('', views.view_homepage),                                      # View Homepage

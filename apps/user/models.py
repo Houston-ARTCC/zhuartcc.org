@@ -33,7 +33,7 @@ class User(models.Model):
     solo_cert = models.CharField(max_length=32, null=True, blank=True)
 
     # Profile Details
-    profile_picture = models.FileField(null=True, blank=True)
+    profile_picture = models.ImageField(null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
 
     # Returns boolean value representing whether or not the user is staff

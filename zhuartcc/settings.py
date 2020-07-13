@@ -136,3 +136,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+STAFF_ROLES = ['ATM', 'DATM', 'TA', 'ATA', 'EC', 'AEC', 'FE', 'AFE', 'WM', 'AWM']
+
+TRAINING_ROLES = ['MTR', 'INS']

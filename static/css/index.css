@@ -72,13 +72,13 @@ d888888P                                                                dP
     color: #F19941!important;
 }
 .text-secondary {
-    color: #e7e7e7!important;
+    color: #d7d7d7 !important;
 }
 .text-muted {
-    color: #c4c4c4 !important;
+    color: #c4c4c4!important;
 }
 body {
-    font: 17px/26px Gilroy-Regular, Helvetica, sans-serif;
+    font: 16px/26px Gilroy-Regular, Helvetica, sans-serif;
 }
 h1 {
     font: 100px Gilroy-ExtraBold, Helvetica, sans-serif;
@@ -93,7 +93,7 @@ h4 {
     font: 26px Gilroy-ExtraBold, Helvetica, sans-serif;
 }
 h5 {
-    font: 21px Gilroy-ExtraBold, Helvetica, sans-serif;
+    font: 21px Gilroy-Bold, Helvetica, sans-serif;
 }
 li {
     line-height: 23px;
@@ -133,6 +133,14 @@ a:hover {
 }
 .stat {
     color: #F19941;
+}
+.badge {
+    font: 16px Gilroy-Bold, Helvetica, sans-serif;
+}
+.avatar {
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
 }
 
 
@@ -202,8 +210,11 @@ input[type="text"]:focus, select:focus, textarea:focus {
     background-color: #F19941;
     transition: 500ms;
 }
+textarea {
+    resize: none;
+}
 textarea ~ .focus-border {
-    bottom: 7px;
+    bottom: 8px;
 }
 input[type="text"]:focus ~ .focus-border, input[type="text"].has-content ~ .focus-border,
 select.has-content ~ .focus-border,
@@ -218,16 +229,13 @@ label {
     left: 0;
     width: 100%;
     text-align: left;
-    top: 9px;
+    top: 7px;
     color: #aeaeae;
     transition: 400ms;
     pointer-events: none;
 }
 input[type="checkbox"] ~ label {
     pointer-events: all;
-}
-select ~ label {
-    top: 6px;
 }
 :required ~ label::after,
 input[type="checkbox"]:required ~ label::after {
@@ -305,7 +313,11 @@ input.has-content ~ .upload-btn {
     padding: 0;
 }
 .radio-group .label-group label {
-    top: 0;
+    top: 3px;
+}
+.radio-group .label-group input[type="text"]:focus ~ label,
+.radio-group .label-group input[type="text"].has-content ~ label {
+    top: -12px;
 }
 .radio-group-label {
     position: inherit;
@@ -367,6 +379,50 @@ input:checked ~ .radio-label {
     background-color: #F19941;
     transform: translateX(25px);
 }
+.datepicker {
+   display: inline-block;
+   margin: 0 auto;
+}
+.datepicker-days table {
+    width: 100%;
+}
+.upload-avatar, .change-avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    opacity: 0;
+}
+.change-avatar {
+    color: white;
+    font: 16px Gilroy-Bold, Helvetica, sans-serif;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    transition: 200ms;
+    pointer-events: none;
+}
+.upload-avatar:hover ~ .change-avatar {
+    opacity: 1;
+    cursor: pointer;
+    transition: 200ms;
+}
+
+
+/*
+
+ 888888ba             dP     dP
+ 88    `8b            88     88
+a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
+ 88   `8b. 88    88   88     88   88'  `88 88'  `88
+ 88    .88 88.  .88   88     88   88.  .88 88    88
+ 88888888P `88888P'   dP     dP   `88888P' dP    dP
+
+*/
 .btn {
     font: 14px Gilroy-Bold, Helvetica, sans-serif;
     padding: 7px 30px;
@@ -377,6 +433,29 @@ input:checked ~ .radio-label {
 .btn-primary {
     background-color: #F19941;
     color: white;
+    transition: 400ms;
+}
+.btn-outline-primary {
+    background-color: white;
+    color: #F19941;
+    border: 2px #F19941 solid;
+    transition: 400ms;
+}
+.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
+    background-color: #F19941!important;
+    color: white;
+    border: 2px #F19941 solid!important;
+    transition: 400ms;
+}
+.btn-outline-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(241, 153, 65, 0.5) !important;
+}
+.btn-outline-danger {
+    border: 2px #dc3545 solid;
+    transition: 400ms;
+}
+.btn-outline-success {
+    border: 2px #28a745 solid;
     transition: 400ms;
 }
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
@@ -443,6 +522,9 @@ dP                                              dP
 dP   dP   dP `88888P' `88888P8 `88888P8 dP `88888P'
 
 */
+img {
+    max-width: 100%;
+}
 .modal-dialog {
     max-width: 600px;
 }
@@ -496,14 +578,25 @@ d888888P          dP       dP
    dP    `88888P8 88Y8888' dP `88888P' `88888P'
 
 */
+.table-responsive {
+    overflow: visible;
+}
 th {
     border-top: none!important;
-    border-bottom: 1px #cbcbcb solid!important;
+    border-bottom: 2px #d6d6d6 solid!important;
+    padding: 1.25%!important;
     font: 17px Gilroy-ExtraBold, Helvetica, sans-serif;
 }
 td {
     border: none!important;
+    padding: 1.25%!important;
     font: 15px Gilroy-Medium, Helvetica, sans-serif;
+}
+.border-left {
+    border-left: 2px #d6d6d6 solid!important;
+}
+.border-right {
+    border-right: 2px #d6d6d6 solid!important;
 }
 
 

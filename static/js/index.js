@@ -1,4 +1,6 @@
 $(function() {
+    $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
+
     // Sticky navbar
     $(document).scroll(function(){
         if ($(document).scrollTop() > 10) {
@@ -120,5 +122,7 @@ function bindModalEvents(modal) {
     $('#customModal input[type="file"]').change(function() {
         $(this).siblings().eq(1).text(($(this).val().replace(/.*([\/\\])/, '')))
     })
+    $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
+    modal.modal({backdrop: 'static'})
     modal.modal('show')
 }

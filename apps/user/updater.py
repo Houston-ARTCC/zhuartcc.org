@@ -27,10 +27,9 @@ def update_roster():
             new_user = User(
                 first_name=user_details['fname'].capitalize(),
                 last_name=user_details['lname'].capitalize(),
-                cid=user_details['cid'],
+                cid=int(user_details['cid']),
                 email=user_details['email'],
                 oper_init=assign_oper_init(user_details['fname'][0], user_details['lname'][0]),
-                home_facility='',
                 rating=user_details['rating_short'],
                 main_role='HC',
             )

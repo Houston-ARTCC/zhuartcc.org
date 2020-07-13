@@ -1,7 +1,13 @@
+import pytz
+from datetime import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.conf import settings
+from django.views.decorators.http import require_POST
 
 from .models import User
+from zhuartcc.decorators import require_staff
 
 
 # Gets all staff members from local database and serves 'staff.html' file
@@ -62,28 +68,47 @@ def view_user_profile(request, cid):
 
 
 # Gets specified user from local database and serves 'editUser.html' file. Overrides user info with form data on POST
+@require_staff
 def edit_user(request, cid):
-    if 'staff' in request.session and request.session['staff']:
-        user = User.objects.get(cid=cid)
+    user = User.objects.get(cid=cid)
 
-        if request.method == 'POST':
-            user.oper_init = request.POST['oper_init']
-            user.first_name = request.POST['first_name']
-            user.last_name = request.POST['last_name']
-            user.email = request.POST['email']
-            user.staff_role = request.POST['staff_role']
-            user.main_role = request.POST['main_role']
-            user.home_facility = request.POST['home_facility']
-            user.training_role = request.POST['training_role']
-            user.del_cert = request.POST['del_cert']
-            user.gnd_cert = request.POST['gnd_cert']
-            user.twr_cert = request.POST['twr_cert']
-            user.app_cert = request.POST['app_cert']
-            user.ctr_cert = request.POST['ctr_cert']
-            user.ocn_cert = request.POST['ocn_cert']
-            user.save()
-            return redirect('/roster')
+    if request.method == 'POST':
+        post = request.POST
+        user.oper_init = post['oper_init']
+        user.first_name = post['first_name']
+        user.last_name = post['last_name']
+        user.email = post['email']
+        user.main_role = post['main_role']
+        user.home_facility = post['home_facility'] if 'home_facility' in post else None
+        user.staff_role = post['staff_role'] if post['staff_role'] in settings.STAFF_ROLES else None
+        user.training_role = post['training_role'] if post['training_role'] in settings.TRAINING_ROLES else None
+        user.activity_exempt = True if 'activity_exempt' in post else False
+        user.biography = post['biography'] if 'biography' in post else ''
+        user.del_cert = int(post['del_cert'])
+        user.gnd_cert = int(post['gnd_cert'])
+        user.twr_cert = int(post['twr_cert'])
+        user.app_cert = int(post['app_cert'])
+        user.ctr_cert = int(post['ctr_cert'])
+        user.ocn_cert = int(post['ocn_cert'])
+        user.cert_int = user.return_cert_int()
+        user.save()
+        return redirect('/roster')
 
-        return render(request, 'editUser.html', {'page_title': f'Edit {user.return_full_name()}', 'user': user})
-    else:
-        return HttpResponse(status=401)
+    return render(request, 'editUser.html', {'page_title': f'Editing {user.return_full_name()}', 'user': user})
+
+
+@require_staff
+@require_POST
+def update_status(request):
+    try:
+        user = User.objects.get(id=request.POST['id'])
+        user.status = int(request.POST['status'])
+        if request.POST['status'] == '1':
+            user.loa_until = pytz.utc.localize(datetime.strptime(request.POST['loa_until'], '%Y-%m-%d'))
+        else:
+            user.loa_until = None
+        user.save()
+
+        return HttpResponse(status=200)
+    finally:
+        return HttpResponse(status=400)

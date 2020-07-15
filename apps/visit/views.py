@@ -13,19 +13,22 @@ from ..user.updater import assign_oper_init
 # Serves 'visit.html' file. Saves request from form data on POST
 def submit_visiting_request(request):
     if request.method == 'POST':
-        post = request.POST
-        visiting_request = Visit(
-            cid=int(post['cid']),
-            rating=post['rating'],
-            home_facility=post['home_facility'],
-            first_name=post['first_name'],
-            last_name=post['last_name'],
-            email=post['email'],
-            reason=post['reason'],
-            submitted=timezone.now(),
-        )
-        visiting_request.save()
-        return redirect('/')
+        try:
+            post = request.POST
+            visiting_request = Visit(
+                cid=int(post['cid']),
+                rating=post['rating'],
+                home_facility=post['home_facility'],
+                first_name=post['first_name'],
+                last_name=post['last_name'],
+                email=post['email'],
+                reason=post['reason'],
+                submitted=timezone.now(),
+            )
+            visiting_request.save()
+            return redirect('/')
+        except:
+            return HttpResponse('Something was wrong your request!', status=400)
 
     return render(request, 'visit.html', {'page_title': 'Visit Houston'})
 

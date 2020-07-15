@@ -110,5 +110,5 @@ def update_status(request):
         user.save()
 
         return HttpResponse(status=200)
-    finally:
-        return HttpResponse(status=400)
+    except:
+        return HttpResponse('Something was wrong your request!', status=400)

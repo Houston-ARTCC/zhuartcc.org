@@ -31,17 +31,19 @@ def edit_event(request, id):
 
 
 @require_staff
-@require_POST
 def add_event(request):
-    event = Event(
-        name=request.POST['name'],
-        banner=request.POST['banner'],
-        start=request.POST['start'],
-        end=request.POST['end'],
-        description=request.POST['description'],
-    )
-    event.save()
-    return redirect(f'/events/{event.id}')
+    if request.method == 'POST':
+        event = Event(
+            name=request.POST['name'],
+            banner=request.POST['banner'],
+            start=request.POST['start'],
+            end=request.POST['end'],
+            description=request.POST['description'],
+        )
+        event.save()
+        return redirect(f'/events/{event.id}')
+    else:
+        return render(request, 'new_event.html', {'page_title': 'New Event'})
 
 
 @require_staff

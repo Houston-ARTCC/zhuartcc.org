@@ -1,19 +1,24 @@
 {% extends 'mainTemplate.html' %}
 
 {% block body %}
-<div class="row">
-    {% for event in events %}
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header bg-secondary">
-                <h4 style="font-size: 40px"><a href="/events/{{ event.id }}/">{{ event.name }}</a></h4>
-                <h2>{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
-            </div>
-            <div class="card-body p-0">
-                <img src="{{ event.banner }}" style="width: 100%">
-            </div>
+    {% if request.session.staff %}
+        <div class="text-center mt-3">
+            <a href="/events/new"><button class="btn btn-primary"><i class="far fa-plus"></i> Create New Event</button></a>
         </div>
+    {% endif %}
+    <div class="row">
+        {% for event in events %}
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header bg-secondary">
+                        <h4 style="font-size: 40px"><a href="/events/{{ event.id }}/">{{ event.name }}</a></h4>
+                        <h2>{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
+                    </div>
+                    <div class="card-body p-0">
+                        <img src="{{ event.banner }}" style="width: 100%">
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endblock %}

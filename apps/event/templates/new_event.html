@@ -1,0 +1,68 @@
+{% extends 'mainTemplate.html' %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.css">
+{% endblock %}
+
+
+{% block body %}
+    <div id="calendar-menu" class="text-center">
+        <button class="btn" data-action="prev" style="font-size: 20px">
+            <i class="fas fa-angle-left"></i>
+        </button>
+        <button class="btn" data-action="today" style="font-size: 20px">Today</button>
+        <button class="btn" data-action="next" style="font-size: 20px">
+            <i class="fas fa-angle-right"></i>
+        </button>
+    </div>
+
+    <div id="calendar" style="height: 800px"></div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
+    <script src="http://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
+    <script>
+    const cal = $('#calendar')
+    cal.tuiCalendar({
+        defaultView: 'week',
+        taskView: false,
+        scheduleView: ['time'],
+        useCreationPopup: false,
+        useDetailPopup: false,
+        timezones: [{
+            timezoneOffset: -new Date().getTimezoneOffset(),
+            displayLabel: 'Local',
+            tooltip: 'Local'
+        }, {
+            timezoneOffset: 0,
+            displayLabel: 'UTC',
+            tooltip: 'UTC'
+        }]
+    })
+    $(function() {
+        $('#calendar-menu button').click(function() {
+            switch ($(this).data('action')) {
+                case 'prev':
+                    cal.prev()
+                    break
+                case 'today':
+                    cal.today()
+                    break
+                case 'next':
+                    cal.next()
+                    break
+            }
+            calendar.clear();
+            calendar.render();
+        })
+    })
+    </script>
+{% endblock %}

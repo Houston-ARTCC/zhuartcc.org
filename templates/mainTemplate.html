@@ -1,9 +1,19 @@
+{% load static %}
+
 <!DOCTYPE HTML>
 <html lang="en">
-    {% include 'partials/head.html' %}
+    <head>
+        {% include 'partials/head.html' %}
+        {% block stylesheets %}{% endblock %}
+    </head>
     <body>
         <div class="page-wrapper">
-            {% include 'partials/navbar.html' %}
+            <nav class="navbar navbar-expand-md navbar-shrink fixed-top">
+                <a class="navbar-brand" href="/"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-light.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
+                <ul class="navbar-nav ml-auto">
+                    {% include 'partials/navbar.html' %}
+                </ul>
+            </nav>
 
 
             <!-- START Header -->

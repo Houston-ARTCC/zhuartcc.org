@@ -1,7 +1,7 @@
-Hello {{ message.recipient_name }},
+Houston Virtual ARTCC
+=====================
 
-{{ message.text }}
+{% block message %}{% endblock %}
 
-Best Regards,
-{{ message.sender }}
-Houston ARTCC {{ message.sender_role }}
+
+{% block footer %}{% endblock %}

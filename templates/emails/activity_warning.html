@@ -1,0 +1,20 @@
+{% extends 'emailTemplate.html' %}
+
+
+{% block message %}
+    <p><b>Hello {{ user.first_name }},</b></p>
+    <p>You are receiving this email to notify you that you have not fulfilled your required controlling hours for <b>{% now 'F Y' %}</b>!</p>
+    {% if user.is_staff %}
+        <p>You have fulfilled <b>{{ hours }} of your required {% if user.is_staff %}5 controlling hours{% else %}2 controlling hours{% endif %}</b>. Because you hold a staff role, you are exempt from being automatically removed from the Houston ARTCC. However, that does not exempt you from monthly activity requirements!</p>
+    {% elif user.status == 1 or user.user_obj.loa_last_month %}
+        <p>You have fulfilled <b>{{ hours }} of your required {% if user.is_staff %}5 controlling hours{% else %}2 controlling hours{% endif %}</b>. Because you were on a leave of absence during the month of {% now 'F' %}, you are exempt from being automatically removed from the Houston ARTCC. However, that does not exempt you from monthly activity requirements!</p>
+    {% else %}
+        <p>You have fulfilled <b>{{ hours }} of your required {% if user.is_staff %}5 controlling hours{% else %}2 controlling hours{% endif %}</b> and you will have until <b>{{ deadline }}</b> to fulfill the remaining hours. If the requirements are not met by that date, you will be automatically removed from the Houston ARTCC.</p>
+    {% endif %}
+    <p>If you believe there has been an error, please contact <a href="mailto:atm@zhuartcc.org">atm@zhuartcc.org</a> or <a href="mailto:datm@zhuartcc.org">datm@zhuartcc.org</a> immediately!</p>
+{% endblock %}
+
+
+{% block footer %}
+    This message was sent automatically from <a href="https://zhuartcc.org" target="_blank">zhuartcc.org</a> on {% now 'M d, Y \a\t H:i\z' %}.
+{% endblock %}

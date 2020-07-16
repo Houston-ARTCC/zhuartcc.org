@@ -1,0 +1,20 @@
+{% extends 'emailTemplate.txt' %}
+
+{% block message %}
+Hello {{ user.first_name }},
+
+You are receiving this email to notify you that you have not fulfilled your required controlling hours for {% now 'F Y' %}!
+{% if user.is_staff %}
+You have fulfilled {{ hours }} of your required {% if user.is_staff %}5 controlling hours{% else %}2 controlling hours{% endif %}. Because you hold a staff role, you are exempt from being automatically removed from the Houston ARTCC. However, that does not exempt you from monthly activity requirements!
+{% elif user.status == 1 or user.user_obj.loa_last_month %}
+You have fulfilled {{ hours }} of your required {% if user.is_staff %}5 controlling hours{% else %}2 controlling hours{% endif %}. Because you were on a leave of absence during the month of {% now 'F' %}, you are exempt from being automatically removed from the Houston ARTCC. However, that does not exempt you from monthly activity requirements!
+{% else %}
+You have fulfilled {{ hours }} of your required {% if user.is_staff %}5 controlling hours{% else %}2 controlling hours{% endif %} and you will have until {{ deadline }} to fulfill the remaining hours. If the requirements are not met by that date, you will be automatically removed from the Houston ARTCC.
+{% endif %}
+If you believe there has been an error, please contact atm@zhuartcc.org or datm@zhuartcc.org immediately!
+{% endblock %}
+
+
+{% block footer %}
+This message was sent automatically from zhuartcc.org on {% now 'M d, Y \a\t H:i\z' %}.
+{% endblock %}

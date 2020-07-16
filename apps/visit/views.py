@@ -51,18 +51,30 @@ def accept_visiting_request(request):
     if 'staff' in request.session and request.session['staff']:
         visiting_request = Visit.objects.get(cid=request.POST['cid'])
 
-        new_user = User(
-            first_name=visiting_request.first_name.capitalize(),
-            last_name=visiting_request.last_name.capitalize(),
-            cid=visiting_request.cid,
-            email=visiting_request.email,
-            oper_init=assign_oper_init(visiting_request.first_name[0], visiting_request.last_name[0]),
-            home_facility=visiting_request.home_facility,
-            rating=visiting_request.rating,
-            main_role='VC',
-        )
-        new_user.assign_initial_cert()
-        new_user.save()
+        # If user is visiting the ARTCC after being marked inactive
+        if User.objects.filter(cid=visiting_request.cid).exists():
+            edit_user = User.objects.get(cid=visiting_request.cid)
+            if edit_user.status == 2:
+                edit_user.status = 1
+                edit_user.email = visiting_request.email,
+                edit_user.oper_init = assign_oper_init(visiting_request.first_name[0], visiting_request.first_name[0]),
+                edit_user.rating = visiting_request.rating,
+                edit_user.main_role = 'VC'
+                edit_user.assign_initial_cert()
+                edit_user.save()
+        else:
+            new_user = User(
+                first_name=visiting_request.first_name.capitalize(),
+                last_name=visiting_request.last_name.capitalize(),
+                cid=visiting_request.cid,
+                email=visiting_request.email,
+                oper_init=assign_oper_init(visiting_request.first_name[0], visiting_request.last_name[0]),
+                home_facility=visiting_request.home_facility,
+                rating=visiting_request.rating,
+                main_role='VC',
+            )
+            new_user.assign_initial_cert()
+            new_user.save()
 
         message = {
             'recipient_name': visiting_request.first_name,

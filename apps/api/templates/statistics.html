@@ -2,80 +2,82 @@
 {% load api_filters %}
 
 {% block body %}
-<div class="row">
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body text-center">
-                <h2>{% now "F" %} Hours</h2>
-                <h1 class="stat mb-0" style="font-size: 60px">{{ main_stats.month|duration }}</h1>
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2>{% now "F" %} Hours</h2>
+                    <h1 class="stat mb-0" style="font-size: 60px">{{ main_stats.month|duration }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2>{% now "Y" %} Hours</h2>
+                    <h1 class="stat mb-0" style="font-size: 60px">{{ main_stats.year|duration }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2>Total Hours</h2>
+                    <h1 class="stat mb-0" style="font-size: 60px">{{ main_stats.total|duration }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-5">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="border-0">Name</th>
+                                <th class="border-0 text-center">CID</th>
+                                <th class="border-0 text-center">Rating</th>
+                                {% for month in months %}
+                                    <th class="border-0 text-center" colspan="2">{{ month }} Hours</th>
+                                {% endfor %}
+                                <th class="border-0 text-center" colspan="2">Training Hours</th>
+                                <th class="border-0 text-center">Exempt</th>
+                            </tr>
+                        </thead>
+                        {% for user in main_users %}
+                            <tr>
+                                <td>{{ user.user_obj.return_full_name }} {% if user.user_obj.main_role == 'VC' %}<b>(Visitor)</b>{% endif %}</td>
+                                <td class="text-center">{{ user.user_obj.cid }}</td>
+                                <td class="text-center">{{ user.user_obj.rating }}</td>
+                                <td class="text-right pr-0 border-left" style="width: 2%">
+                                    <i class="far fa-lg fa-check text-success{% if not user.previous1_status %} d-none{% endif %}"></i>
+                                </td>
+                                <td>{{ user.hours.previous1|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                <td class="text-right pr-0" style="width: 2%">
+                                    <i class="far fa-lg fa-check text-success{% if not user.previous_status %} d-none{% endif %}"></i>
+                                </td>
+                                <td>{{ user.hours.previous|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                <td class="text-right pr-0" style="width: 2%">
+                                    <i class="far fa-lg fa-check text-success{% if not user.current_status %} d-none{% endif %}"></i>
+                                </td>
+                                <td>{{ user.hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                <td class="text-right pr-0 border-left" style="width: 2%">
+                                    <i class="far fa-lg fa-check text-success{% if not user.training_status %} d-none{% endif %}"></i>
+                                </td>
+                                <td class="border-right"><span class="text-muted">N/A</span></td>
+                                <td>
+                                    {% if user.user_obj.is_staff %}
+                                        <i class="far fa-lg fa-check text-success"></i>&nbsp; Staff
+                                    {% elif user.user_obj.activity_exempt %}
+                                        <i class="far fa-lg fa-check text-success"></i>&nbsp; Exempt
+                                    {% elif user.user_obj.status == 1 or user.user_obj.loa_last_month %}
+                                        <i class="far fa-lg fa-check text-success"></i>&nbsp; LOA
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body text-center">
-                <h2>{% now "Y" %} Hours</h2>
-                <h1 class="stat mb-0" style="font-size: 60px">{{ main_stats.year|duration }}</h1>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body text-center">
-                <h2>Total Hours</h2>
-                <h1 class="stat mb-0" style="font-size: 60px">{{ main_stats.total|duration }}</h1>
-            </div>
-        </div>
-    </div>
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body p-5">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th class="border-0">Name</th>
-                            <th class="border-0">CID</th>
-                            <th class="border-0">Rating</th>
-                            {% for month in months %}
-                            <th class="border-0 text-center" colspan="2">{{ month }} Hours</th>
-                            {% endfor %}
-                            <th class="border-0 text-center" colspan="2">Training Hours</th>
-                            <th class="border-0">Exempt</th>
-                        </tr>
-                    </thead>
-                    {% for user in main_users %}
-                        <tr>
-                            <td>{{ user.user_obj.return_full_name }} {% if user.user_obj.main_role == 'VC' %}<b>(Visitor)</b>{% endif %}</td>
-                            <td>{{ user.user_obj.cid }}</td>
-                            <td>{{ user.user_obj.rating }}</td>
-                            <td class="text-right border-left" style="width: 2%">
-                                <i class="far fa-lg fa-check text-success{% if not user.previous1_status %} d-none{% endif %}"></i>
-                            </td>
-                            <td>{{ user.hours.previous1|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                            <td class="text-right" style="width: 2%">
-                                <i class="far fa-lg fa-check text-success{% if not user.previous_status %} d-none{% endif %}"></i>
-                            </td>
-                            <td>{{ user.hours.previous|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                            <td class="text-right" style="width: 2%">
-                                <i class="far fa-lg fa-check text-success{% if not user.current_status %} d-none{% endif %}"></i>
-                            </td>
-                            <td>{{ user.hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                            <td class="text-right border-left" style="width: 2%">
-                                <i class="far fa-lg fa-check text-success"></i>
-                            </td>
-                            <td class="border-right"><span class="text-muted">N/A</span></td>
-                            <td>
-                                {% if user.user_obj.is_staff %}
-                                    <i class="far fa-lg fa-check text-success"></i> Staff
-                                {% elif user.user_obj.activity_exempt %}
-                                    <i class="far fa-lg fa-check text-success"></i> Exempt
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}

@@ -12,15 +12,12 @@ class User(models.Model):
     email = models.EmailField()
     oper_init = models.CharField(max_length=32)
     home_facility = models.CharField(max_length=32, null=True, blank=True)
+    rating = models.CharField(max_length=32)
 
     # ARTCC Roles
-    rating = models.CharField(max_length=32)
     main_role = models.CharField(max_length=32)
     staff_role = models.CharField(max_length=32, null=True, blank=True)
     training_role = models.CharField(max_length=32, null=True, blank=True)
-    status = models.IntegerField(default=0)
-    loa_until = models.DateField(null=True, blank=True)
-    activity_exempt = models.BooleanField(default=False)
 
     # Endorsements
     cert_int = models.IntegerField(default=0)
@@ -35,6 +32,12 @@ class User(models.Model):
     # Profile Details
     profile_picture = models.ImageField(null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
+
+    # Status
+    status = models.IntegerField(default=0)
+    loa_until = models.DateField(null=True, blank=True)
+    activity_exempt = models.BooleanField(default=False)
+    loa_last_month = models.BooleanField(default=False)
 
     # Returns boolean value representing whether or not the user is staff
     def is_staff(self):

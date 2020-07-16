@@ -2,6 +2,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import requests
 
 from .models import User
+from django.utils import timezone
 from django.conf import settings
 
 
@@ -10,6 +11,7 @@ def update_scheduler():
     update_roster()
     scheduler = BackgroundScheduler()
     scheduler.add_job(update_roster, 'interval', minutes=30)
+    scheduler.add_job(update_loa, 'cron', hour=0)
     scheduler.start()
 
 
@@ -65,6 +67,13 @@ def update_roster():
         ).json()
         edit_user.rating = user_details['rating_short']
         edit_user.save()
+
+
+def update_loa():
+    for user in User.objects.filter(status=1):
+        if user.loa_until <= timezone.now().date():
+            user.status = 0
+            user.loa_last_month = True
 
 
 # Decodes a string into a base 26 (A -> Z) integer

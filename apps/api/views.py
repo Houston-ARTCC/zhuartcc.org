@@ -44,6 +44,7 @@ def return_hour_aggregate(user):
     elif aggregate['user_obj'].return_cert_int() > 0:
         requirement = timedelta(hours=2)
     else:
+        aggregate['training_status'] = False
         return aggregate
 
     hours = aggregate['hours']

@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="label-group">
                                     <select name="staff_role">
                                         <option {% if user.staff_role == '' %}selected{% endif %}></option>
@@ -119,7 +119,7 @@
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="label-group">
                                     <select name="training_role">
                                         <option {% if user.training_role == '' %}selected{% endif %}></option>
@@ -127,6 +127,19 @@
                                         <option {% if user.training_role == 'INS' %}selected{% endif %}>INS</option>
                                     </select>
                                     <label>Training Role</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="label-group">
+                                    <select name="mentor_level">
+                                        <option {% if user.mentor_level == '' %}selected{% endif %}></option>
+                                        <option {% if user.mentor_level == 'Tower' %}selected{% endif %}>Tower</option>
+                                        <option {% if user.mentor_level == 'Approach' %}selected{% endif %}>Approach</option>
+                                        <option {% if user.mentor_level == 'Center' %}selected{% endif %}>Center</option>
+                                        <option {% if user.mentor_level == 'Oceanic' %}selected{% endif %}>Oceanic</option>
+                                    </select>
+                                    <label>Mentor Level</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>

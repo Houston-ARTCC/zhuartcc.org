@@ -106,7 +106,7 @@
             <div class="card-header bg-secondary">Mentors <a class="float-right" href="mailto:mentor@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
                 {% for mentor in staff.MTR %}
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ mentor.return_full_name }}</h4>
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ mentor.return_full_name }} <span class="badge badge-info">{{ mentor.mentor_level }}</span></h4>
                 {% empty %}
                 <h4>No Mentors</h4>
                 {% endfor %}

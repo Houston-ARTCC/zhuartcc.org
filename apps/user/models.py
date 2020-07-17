@@ -18,6 +18,7 @@ class User(models.Model):
     main_role = models.CharField(max_length=32)
     staff_role = models.CharField(max_length=32, null=True, blank=True)
     training_role = models.CharField(max_length=32, null=True, blank=True)
+    mentor_level = models.CharField(max_length=32, null=True, blank=True)
 
     # Endorsements
     cert_int = models.IntegerField(default=0)

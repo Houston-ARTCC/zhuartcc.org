@@ -88,6 +88,7 @@ def edit_user(request, cid):
         user.home_facility = post['home_facility'] if 'home_facility' in post else None
         user.staff_role = post['staff_role'] if post['staff_role'] in settings.STAFF_ROLES else None
         user.training_role = post['training_role'] if post['training_role'] in settings.TRAINING_ROLES else None
+        user.mentor_level = post['mentor_level']
         user.activity_exempt = True if 'activity_exempt' in post else False
         user.biography = post['biography'] if 'biography' in post else ''
         user.del_cert = int(post['del_cert'])

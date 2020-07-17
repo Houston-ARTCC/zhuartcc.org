@@ -8,7 +8,9 @@
         <div class="card">
             <div class="card-header bg-secondary">Air Traffic Manager <a class="float-right" href="mailto:atm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.ATM.return_full_name|default:'Vacant' }}</h4>
+                {% for ATM in staff.ATM %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ ATM.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
                 <p>The ATM is responsible for the macro-management of the ARTCC. They oversee day-to-day operations and ensure the ARTCC runs smoothly.</p>
             </div>
         </div>
@@ -17,7 +19,9 @@
         <div class="card">
             <div class="card-header bg-secondary">Deputy Air Traffic Manager <a class="float-right" href="mailto:datm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.DATM.return_full_name|default:'Vacant' }}</h4>
+                {% for DATM in staff.DATM %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ DATM.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
                 <p>The DATM assists the ATM with the management of the ARTCC. The DATM acts as the ATM when necessary.</p>
             </div>
         </div>
@@ -30,13 +34,17 @@
         <div class="card">
             <div class="card-header bg-secondary">Training Administrator <a class="float-right" href="mailto:ta@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.TA.return_full_name|default:'Vacant' }}</h4>
+                {% for TA in staff.TA %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ TA.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
                 <p>The TA works with the ATM and DATM to build training programs, establish training procedures, and recommend instructors and mentors.</p>
             </div>
             {% if staff.ATA %}
             <div class="card-header bg-secondary">Assistant Training Administrator <a class="float-right" href="mailto:ata@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.ATA.return_full_name|default:'Vacant' }}</h4>
+                {% for ATA in staff.ATA %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ ATA.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
             </div>
             {% endif %}
         </div>
@@ -45,13 +53,17 @@
         <div class="card">
             <div class="card-header bg-secondary">Events Coordinator <a class="float-right" href="mailto:ec@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.EC.return_full_name|default:'Vacant' }}</h4>
+                {% for EC in staff.EC %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ EC.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
                 <p>The EC is responsible for the creation, planning, advertising, and coordination of events with neighboring facilities, virtual airlines, VATUSA, and VATSIM.</p>
             </div>
             {% if staff.AEC %}
             <div class="card-header bg-secondary">Assistant Events Coordinator <a class="float-right" href="mailto:aec@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.AEC.return_full_name|default:'Vacant' }}</h4>
+                {% for AEC in staff.AEC %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ AEC.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
             </div>
             {% endif %}
         </div>
@@ -60,13 +72,17 @@
         <div class="card">
             <div class="card-header bg-secondary">Facility Engineer <a class="float-right" href="mailto:fe@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.FE.return_full_name|default:'Vacant' }}</h4>
+                {% for FE in staff.FE %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ FE.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
                 <p>The FE is responsible for the creation of sector files, radar client files, training scenarios, written documents, and other ARTCC resources as directed by the ATM.</p>
             </div>
             {% if staff.AFE %}
             <div class="card-header bg-secondary">Assistant Facility Engineer <a class="float-right" href="mailto:afe@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.AFE.return_full_name|default:'Vacant' }}</h4>
+                {% for AFE in staff.AFE %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ AFE.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
             </div>
             {% endif %}
         </div>
@@ -75,13 +91,17 @@
         <div class="card">
             <div class="card-header bg-secondary">Webmaster <a class="float-right" href="mailto:wm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.WM.return_full_name|default:'Vacant' }}</h4>
+                {% for WM in staff.WM %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ WM.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
                 <p>The WM is responsible for the operation and maintenance of ARTCC IT services such as the website, Teamspeak server, and other tasks as required.</p>
             </div>
             {% if staff.AWM %}
             <div class="card-header bg-secondary">Assistant Webmaster <a class="float-right" href="mailto:awm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
             <div class="card-body">
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ staff.AWM.return_full_name|default:'Vacant' }}</h4>
+                {% for AWM in staff.AWM %}
+                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ AWM.return_full_name|default:'Vacant' }}</h4>
+                {% endfor %}
             </div>
             {% endif %}
         </div>

@@ -19,16 +19,16 @@ from zhuartcc.decorators import require_staff
 # Gets all staff members from local database and serves 'staff.html' file
 def view_staff(request):
     staff = {
-        'ATM': User.objects.filter(staff_role='ATM').first(),
-        'DATM': User.objects.filter(staff_role='DATM').first(),
-        'TA': User.objects.filter(staff_role='TA').first(),
-        'ATA': User.objects.filter(staff_role='ATA').first(),
-        'FE': User.objects.filter(staff_role='FE').first(),
-        'AFE': User.objects.filter(staff_role='AFE').first(),
-        'EC': User.objects.filter(staff_role='EC').first(),
-        'AEC': User.objects.filter(staff_role='AEC').first(),
-        'WM': User.objects.filter(staff_role='WM').first(),
-        'AWM': User.objects.filter(staff_role='AWM').first(),
+        'ATM': User.objects.filter(staff_role='ATM'),
+        'DATM': User.objects.filter(staff_role='DATM'),
+        'TA': User.objects.filter(staff_role='TA'),
+        'ATA': User.objects.filter(staff_role='ATA'),
+        'FE': User.objects.filter(staff_role='FE'),
+        'AFE': User.objects.filter(staff_role='AFE'),
+        'EC': User.objects.filter(staff_role='EC'),
+        'AEC': User.objects.filter(staff_role='AEC'),
+        'WM': User.objects.filter(staff_role='WM'),
+        'AWM': User.objects.filter(staff_role='AWM'),
         'INS': User.objects.filter(training_role='INS'),
         'MTR': User.objects.filter(training_role='MTR'),
     }

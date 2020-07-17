@@ -1,12 +1,18 @@
+import calendar
+import requests
 import pytz
 from datetime import datetime
 
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .models import User
+from ..api.views import return_inactive_users
 from zhuartcc.decorators import require_staff
 
 
@@ -112,3 +118,36 @@ def update_status(request):
         return HttpResponse(status=200)
     except:
         return HttpResponse('Something was wrong your request!', status=400)
+
+
+@require_staff
+def view_inactive_users(request):
+    now = timezone.now()
+    months = [calendar.month_name[now.month - 2], calendar.month_name[now.month - 1], calendar.month_name[now.month]]
+    return render(request, 'roster_tidy.html', {
+        'page_title': 'Roster Tidy',
+        'months': months,
+        'users': return_inactive_users(),
+    })
+
+
+@require_staff
+@require_POST
+def remove_users(request):
+    for id in request.POST.keys():
+        try:
+            user = User.objects.get(id=id)
+            requests.delete(f'https://api.vatusa.net/v2/facility/ZHU/roster/{user.cid}')
+            user.status = 2
+            user.save()
+            send_mail(
+                'Roster Removal Notification',
+                render_to_string('emails/roster_removal.txt', {'user': user}),
+                'no-reply@zhuartcc.org',
+                [user.email],
+                html_message=render_to_string('emails/roster_removal.html', {'user': user}),
+            )
+        except:
+            continue
+
+    return HttpResponse(status=200)

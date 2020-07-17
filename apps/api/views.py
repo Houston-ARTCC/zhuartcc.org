@@ -52,3 +52,12 @@ def return_hour_aggregate(user):
     aggregate['previous_status'] = hours['previous'] >= requirement if hours['previous'] is not None else False
     aggregate['previous1_status'] = hours['previous1'] >= requirement if hours['previous1'] is not None else False
     return aggregate
+
+
+def return_inactive_users():
+    inactive_users = []
+    for user_status in [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC')]:
+        if 'current_status' in user_status and not user_status['current_status']:
+            inactive_users.append(user_status)
+
+    return inactive_users

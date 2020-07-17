@@ -1,0 +1,93 @@
+{% extends 'mainTemplate.html' %}
+{% load api_filters %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-5">
+                    <form id="tidyForm" method="POST">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="border-0 text-center"><input type="checkbox" id="select-all"></th>
+                                    <th class="border-0 pl-0">Name</th>
+                                    <th class="border-0 text-center">CID</th>
+                                    <th class="border-0 text-center">Rating</th>
+                                    {% for month in months %}
+                                        <th class="border-0">{{ month }} Hours</th>
+                                    {% endfor %}
+                                    <th class="border-0">Training Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    {% if not user.user_obj.is_staff and not user.user_obj.activity_exempt and not user.user_obj.status == 1 and not user.user_obj.loa_last_month %}
+                                        <tr>
+                                            <td style="width: 4%" class="text-center px-0"><input type="checkbox" name="{{ user.user_obj.id }}"></td>
+                                            <td class="pl-0">{{ user.user_obj.return_full_name }} {% if user.user_obj.main_role == 'VC' %}<b>(Visitor)</b>{% endif %}</td>
+                                            <td class="text-center">{{ user.user_obj.cid }}</td>
+                                            <td class="text-center">{{ user.user_obj.rating }}</td>
+                                            <td class="border-left">{{ user.hours.previous1|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <td>{{ user.hours.previous|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <td class="border-right">{{ user.hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <td><span class="text-muted">N/A</span></td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <a href="/roster"><button class="btn btn-secondary" type="button">Cancel</button></a>
+                        <button class="btn btn-primary" type="submit">Remove Selected Users</button>
+                        <p class="mt-3"><b>Warning!</b> Removal of controllers is irreversible and all selected controllers will be automatically removed from the Houston ARTCC active roster. Please verify your actions before submitting!</p>
+                        <p><b>Note:</b> This action is restricted to the ZHU ATM, ZHU DATM, and members of VATUSA staff. The VATUSA API will simply deny any requests coming from users not belonging to one of those categories.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $('#select-all').click(function() {
+                $('tbody input[type="checkbox"]').each(function() {
+                    $(this).prop('checked', $('#select-all').prop('checked'))
+                })
+            })
+            $('tbody input[type="checkbox"]').click(function() {
+                $('#select-all').prop('checked', $('tbody input[type="checkbox"]:checked').length === $('tbody input[type="checkbox"]').length)
+            })
+            $('#tidyForm').submit(function(e) {
+                e.preventDefault()
+                launchCustomModal(
+                    'info',
+                    'Are you sure?',
+                    `<p>Are you sure would like to do this? This action is irreversible and will automatically remove all selected controllers from the Houston ARTCC active roster.<br><b>This is your final chance to abort!</b></p>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="button" onclick="postRemovals()">Confirm</button>`
+                )
+            })
+        })
+
+        function postRemovals() {
+            $.post({
+                url: '/roster/remove/',
+                data: new FormData(document.getElementById('tidyForm')),
+                processData: false,
+                contentType: false,
+            })
+            .done(function () {
+                $('#customModal').modal('hide')
+                launchSuccessModal('')
+            })
+            .fail(function (error) {
+                $('#customModal').modal('hide')
+                console.log(error)
+                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        }
+    </script>
+{% endblock %}

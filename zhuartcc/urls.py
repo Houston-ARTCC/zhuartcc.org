@@ -44,6 +44,8 @@ urlpatterns = [
     path('roster/<int:cid>/', user.view_user_profile),                  # View User Profile
     path('roster/<int:cid>/edit/', user.edit_user),                     # Edit User (STAFF)
     path('roster/update/status/', user.update_status),                  # Change User Status (POST / STAFF)
+    path('roster/tidy/', user.view_inactive_users),                     # Roster Tody (STAFF)
+    path('roster/remove/', user.remove_users),                          # Remove Users (POST / STAFF)
 
     # Views
     path('', views.view_homepage),                                      # View Homepage

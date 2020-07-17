@@ -36,8 +36,8 @@ class User(models.Model):
     # Status
     status = models.IntegerField(default=0)
     loa_until = models.DateField(null=True, blank=True)
-    activity_exempt = models.BooleanField(default=False)
     loa_last_month = models.BooleanField(default=False)
+    activity_exempt = models.BooleanField(default=False)
 
     # Returns boolean value representing whether or not the user is staff
     def is_staff(self):

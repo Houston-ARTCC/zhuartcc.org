@@ -1,4 +1,165 @@
-{% extends 'mainTemplate.html' %}
+{% extends 'secondaryTemplate.html' %}
+{% load static %}
+{% load api_filters %}
+
+{% block header %}
+    <div class="d-flex align-items-center">
+        <img class="rounded-circle mb-2" src="{% static 'img/placeholder-profile.png' %}" height="130px">
+        <div class="ml-4">
+            <h1 style="font-size: 65px">{{ user.return_full_name }}</h1>
+            <h2 style="font-size: 40px">
+                {% if user.main_role == 'HC' %}
+                    Home Controller
+                {% elif user.main_role == 'MC' %}
+                    MVAP Controller from {{ user.home_facility }}
+                {% else %}
+                    Visiting Controller from {{ user.home_facility }}
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">User Details</div>
+                <div class="card-body px-5 d-flex justify-content-between">
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">CID</h2>
+                        <h1 style="font-size: 35px">{{ user.cid }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">Initials</h2>
+                        <h1 style="font-size: 35px">{{ user.oper_init }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">Rating</h2>
+                        <h1 style="font-size: 35px">{{ user.rating }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">Biography</div>
+                <div class="card-body">
+                    {{ user.biography|default:'No biography set' }}
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">Endorsements</div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 16.7%" class="text-center">
+                                {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                                {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                                {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                                {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                                {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                                {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">Statistics</div>
+                <div class="card-body px-5 d-flex justify-content-between">
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">{% now 'F' %} Hours</h2>
+                        <h1 style="font-size: 35px">{{ stats.month|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">{% now 'Y' %} Hours</h2>
+                        <h1 style="font-size: 35px">{{ stats.year|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">Total Hours</h2>
+                        <h1 style="font-size: 35px">{{ stats.total|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">Last 5 Connections</div>
+                <div class="card-body text-center">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="border-0" style="width: 33.3%">Date / Time</th>
+                                <th class="border-0" style="width: 33.3%">Callsign</th>
+                                <th class="border-0" style="width: 33.3%">Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for connection in connections %}
+                                <tr>
+                                    <td style="width: 33.3%">{{ connection.time_logon|date:'M d, Y @ Hi\z' }}</td>
+                                    <td style="width: 33.3%">{{ connection.callsign }}</td>
+                                    <td style="width: 33.3%">{{ connection.duration|duration }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3"><i>No connections found...</i></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="/stats/{{ user.cid }}"><button class="btn btn-secondary">View all connections.</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

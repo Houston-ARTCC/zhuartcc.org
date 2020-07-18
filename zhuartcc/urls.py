@@ -15,6 +15,7 @@ from apps.visit import views as visit
 urlpatterns = [
     # API
     path('stats/', api.view_statistics),                                # View Statistics
+    path('stats/<int:cid>/', api.view_connections),                     # View Connections
 
     # Event
     path('events/', event.view_all_events),                             # View All Events
@@ -41,7 +42,7 @@ urlpatterns = [
     # User
     path('staff/', user.view_staff),                                    # View Staff
     path('roster/', user.view_roster),                                  # View Roster
-    path('roster/<int:cid>/', user.view_user_profile),                  # View User Profile
+    path('roster/<int:cid>/', user.view_profile),                       # View User Profile
     path('roster/<int:cid>/edit/', user.edit_user),                     # Edit User (STAFF)
     path('roster/update/status/', user.update_status),                  # Change User Status (POST / STAFF)
     path('roster/tidy/', user.view_inactive_users),                     # Roster Tody (STAFF)

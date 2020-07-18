@@ -4,6 +4,7 @@ import pytz
 from datetime import datetime
 
 from django.core.mail import send_mail
+from django.db.models import Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -12,6 +13,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .models import User
+from ..api.models import ControllerSession
 from ..api.views import return_inactive_users
 from zhuartcc.decorators import require_staff
 
@@ -67,10 +69,22 @@ def sort_controllers(query_set):
 
 
 # Gets specified user from local database and serves 'profile.html' file
-def view_user_profile(request, cid):
+def view_profile(request, cid):
     user = User.objects.get(cid=cid)
+    connections = ControllerSession.objects.filter(user=user).order_by('-time_logon')
+    now = timezone.now()
+    stats = connections.aggregate(
+        month=Sum('duration', filter=Q(time_logon__month=now.month)),
+        year=Sum('duration', filter=Q(time_logon__year=now.year)),
+        total=Sum('duration'),
+    )
 
-    return render(request, 'profile.html', {'page_title': user.return_full_name(), 'user': user})
+    return render(request, 'profile.html', {
+        'page_title': user.return_full_name(),
+        'user': user,
+        'stats': stats,
+        'connections': connections[:5],
+    })
 
 
 # Gets specified user from local database and serves 'editUser.html' file. Overrides user info with form data on POST

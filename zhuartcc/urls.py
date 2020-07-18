@@ -52,8 +52,10 @@ urlpatterns = [
     path('privacy/', views.view_privacy_policy),                        # View Privacy Policy
 
     # Visit
-    path('visit/', visit.submit_visiting_request),                      # Submit Visiting Request
-    path('requests/', visit.view_visiting_requests),                    # View All Visiting Requests
+    path('visit/', visit.submit_visiting_request),                      # Submit Visiting Request (LOGGED IN)
+    path('requests/', visit.view_visiting_requests),                    # View All Visiting Requests (STAFF)
+    path('requests/accept/', visit.accept_visiting_request),            # Accept Visiting Request (POST / STAFF)
+    path('requests/reject/', visit.reject_visiting_request),            # Reject Visiting Request (POST / STAFF)
 
     path('django/', admin.site.urls),                                   # django Admin Panel
 ]

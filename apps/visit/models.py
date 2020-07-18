@@ -10,7 +10,7 @@ class Visit(models.Model):
     home_facility = models.CharField(max_length=32)
     rating = models.CharField(max_length=32)
     reason = models.TextField()
-    submitted = models.DateTimeField()
+    submitted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

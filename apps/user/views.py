@@ -83,7 +83,7 @@ def view_profile(request, cid):
         'page_title': user.return_full_name(),
         'user': user,
         'stats': stats,
-        'connections': connections[:5],
+        'connections': connections,
     })
 
 

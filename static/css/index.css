@@ -478,6 +478,21 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
 .btn-secondary:focus {
     box-shadow: 0 0 0 0.2rem rgba(241, 241, 241, 0.5) !important;
 }
+.btn-link {
+    padding: 0;
+    font: 22px Gilroy-Bold, Helvetica, sans-serif;
+    color: inherit;
+    text-decoration: inherit;
+    transition: 400ms;
+}
+.btn-link:hover {
+    opacity: 75%;
+    transition: 400ms;
+}
+.btn-link:hover, .btn-link:active, .btn-link:focus {
+    color: inherit;
+    text-decoration: inherit;
+}
 
 
 /*
@@ -597,6 +612,49 @@ td {
 }
 .border-right {
     border-right: 2px #d6d6d6 solid!important;
+}
+.dataTables_filter label {
+    text-align: right!important;
+    position: relative;
+    pointer-events: initial;
+}
+.form-control:focus {
+    border-color: #f19941!important;
+    box-shadow: 0 0 0 0.2rem rgba(241, 153, 65, 0.25)!important;
+}
+.sorting:before,
+.sorting_asc:before,
+.sorting_desc:before {
+    right: 1.3em!important;
+}
+table.dataTable.no-footer {
+    border: none;
+}
+.dataTables_info,
+.dataTables_paginate,
+.dataTables_filter label {
+    text-align: left;
+    font: 14px Gilroy-Bold, Helvetica, sans-serif;
+    color: #333333;
+}
+.paginate_button a{
+    margin-top: 5px;
+    border: #e5e5e5!important;
+    background-color: #e5e5e5;
+    color: #181818;
+    transition: 400ms;
+}
+.paginate_button a:hover, .paginate_button a:active, .paginate_button a:focus {
+    border: #e5e5e5!important;
+    background-color: #f5f5f5 !important;
+    color: #181818!important;
+    transition: 400ms;
+    box-shadow: none;
+}
+.paginate_button a:focus, .page-item.active .page-link {
+    background-color: #F19941!important;
+    color: white !important;
+    transition: 400ms;
 }
 
 

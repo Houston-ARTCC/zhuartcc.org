@@ -15,7 +15,6 @@ from apps.visit import views as visit
 urlpatterns = [
     # API
     path('stats/', api.view_statistics),                                # View Statistics
-    path('stats/<int:cid>/', api.view_connections),                     # View Connections
 
     # Event
     path('events/', event.view_all_events),                             # View All Events

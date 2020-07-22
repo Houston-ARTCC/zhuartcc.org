@@ -133,9 +133,9 @@
         </div>
         <div class="col-6">
             <div class="card">
-                <div class="card-header">Last 5 Connections</div>
-                <div class="card-body text-center">
-                    <table class="table table-striped">
+                <div class="card-header">Controller Connections</div>
+                <div class="card-body text-center pt-1">
+                    <table class="table table-striped" id="connections">
                         <thead>
                             <tr>
                                 <th class="border-0" style="width: 33.3%">Date / Time</th>
@@ -157,9 +157,20 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <a href="/stats/{{ user.cid }}"><button class="btn btn-secondary">View all connections.</button></a>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $('#connections').DataTable({
+                pageLength: 5,
+                lengthChange: false,
+                order: [[ 0, "desc" ]]
+            })
+        })
+    </script>
 {% endblock %}

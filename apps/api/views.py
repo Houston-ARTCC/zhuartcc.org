@@ -29,24 +29,6 @@ def view_statistics(request):
     })
 
 
-def view_connections(request, cid):
-    user = User.objects.get(cid=cid)
-    connections = ControllerSession.objects.filter(user=user).order_by('-time_logon')
-    now = timezone.now()
-    stats = connections.aggregate(
-        month=Sum('duration', filter=Q(time_logon__month=now.month)),
-        year=Sum('duration', filter=Q(time_logon__year=now.year)),
-        total=Sum('duration'),
-    )
-
-    return render(request, 'connections.html', {
-        'page_title': f'{user.return_full_name()}\'s Connections',
-        'user': user,
-        'stats': stats,
-        'all_connections': connections,
-    })
-
-
 def return_hour_aggregate(user):
     now = timezone.now()
     aggregate = {

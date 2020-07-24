@@ -13,3 +13,8 @@ def duration(timedelta):
         return f'{hours}h {minutes}m'
     else:
         return None
+
+
+@register.filter
+def as_range(int):
+    return range(int)

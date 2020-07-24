@@ -1,0 +1,107 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+<form action="/feedback/new/" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-12 col-xl-5">
+            <div class="card card-nav-tabs">
+                <div class="card-header">Controller & Pilot Details</div>
+                <div class="card-body">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <select name="controller" required>
+                                            <option selected></option>
+                                        {% for controller in controllers %}
+                                            <option value="{{ controller.cid }}">{{ controller.return_full_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label>Controller</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="controller_callsign" type="text" required>
+                                    <label>Controller's Callsign</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="flight_time" type="datetime-local">
+                                    <label>Flight Time</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="flight_callsign" type="text">
+                                    <label>Flight Callsign</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="pilot_name" type="text">
+                                    <label>Your Name</label>
+                                    <span class="focus-border"></span>
+                                    <div class="input-hint">Leave blank to remain anonymous</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="pilot_email" type="text">
+                                    <label>Your Email</label>
+                                    <span class="focus-border"></span>
+                                    <div class="input-hint">Leave blank to remain anonymous</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-7">
+            <div class="card card-nav-tabs my-4">
+                <div class="card-header">Comments</div>
+                <div class="card-body">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-12 mb-2" id="stars">
+                                <input name="rating" type="text" hidden required>
+                                <label class="standalone">Rate your experience with Houston ARTCC!</label>
+                                <i class="fas fa-2x fa-star p-1 text-secondary" data-count="1"></i><i class="fas fa-2x fa-star p-1 text-secondary" data-count="2"></i><i class="fas fa-2x fa-star p-1 text-secondary" data-count="3"></i><i class="fas fa-2x fa-star p-1 text-secondary" data-count="4"></i><i class="fas fa-2x fa-star p-1 text-secondary" data-count="5"></i>
+                            </div>
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <textarea name="comments" rows="4" required></textarea>
+                                    <label>Please put any comments you have here.</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="/"><button class="btn btn-secondary" type="button">Cancel</button></a>
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $('#stars i').click(function() {
+                $('#stars i').removeClass('text-warning').removeClass('text-secondary')
+                $('#stars i:lt(' + $(this).data('count') + ')').addClass('text-warning')
+                $('#stars i:gt(' + ($(this).data('count') - 1) + ')').addClass('text-secondary')
+                $('input[name="rating"]').attr('value', $(this).data('count')).addClass('has-content')
+            })
+        })
+    </script>
+{% endblock %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'apps.api.apps.ApiConfig',
     'apps.event',
+    'apps.feedback',
     'apps.resource',
     'apps.training',
     'apps.uls',

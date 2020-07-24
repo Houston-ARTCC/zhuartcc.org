@@ -183,7 +183,7 @@ a88aaaa    .d8888b. 88d888b. 88d8b.d8b. .d8888b.
     width: 100%;
     padding: 0;
 }
-input[type="text"], .file-upload, select, textarea {
+input[type="text"], input[type="datetime-local"], .file-upload, select, textarea {
     font: 15px/24px Gilroy-Bold, Helvetica, sans-serif;
     color: #333;
     width: 100%;
@@ -198,8 +198,13 @@ input[type="file"] {
     opacity: 0;
     width: 100%;
 }
-input[type="text"]:focus, select:focus, textarea:focus {
+input[type="text"]:focus, input[type="datetime-local"]:focus, select:focus, textarea:focus {
     outline: none;
+}
+.input-hint {
+    font: 13px/25px Gilroy-Medium, Helvetica, sans-serif;
+    color: #aeaeae;
+    position: absolute;
 }
 .focus-border {
     position: absolute;
@@ -217,6 +222,7 @@ textarea ~ .focus-border {
     bottom: 8px;
 }
 input[type="text"]:focus ~ .focus-border, input[type="text"].has-content ~ .focus-border,
+input[type="datetime-local"]:focus ~ .focus-border, input[type="datetime-local"].has-content ~ .focus-border,
 select.has-content ~ .focus-border,
 input[type="file"].has-content ~ .focus-border,
 textarea:focus ~ .focus-border, textarea.has-content ~ .focus-border {
@@ -233,6 +239,11 @@ label {
     color: #aeaeae;
     transition: 400ms;
     pointer-events: none;
+}
+.standalone {
+    position: relative;
+    top: 0!important;
+    font: 15px Gilroy-Bold, Helvetica, sans-serif!important;
 }
 input[type="checkbox"] ~ label {
     pointer-events: all;
@@ -258,12 +269,12 @@ input:read-only ~ .focus-border {
     background-color: #aeaeae;
 }
 input[type="text"]:focus ~ label, input[type="text"].has-content ~ label,
+input[type="datetime-local"]:focus ~ label, input[type="datetime-local"].has-content ~ label,
 select.has-content ~ label,
 input[type="file"].has-content ~ label,
 textarea:focus ~ label, textarea.has-content ~ label {
     text-align: left;
     top: -16px;
-    font-size: 13px;
     color: #F19941;
     transition: 400ms;
 }
@@ -411,6 +422,12 @@ input:checked ~ .radio-label {
     cursor: pointer;
     transition: 200ms;
 }
+input[type="datetime-local"] {
+     color: transparent;
+}
+input[type="datetime-local"]:focus, input[type="datetime-local"].has-content {
+     color: initial;
+}
 
 
 /*
@@ -429,6 +446,10 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
     margin: 5px;
     border: none;
     border-radius: 3px;
+}
+.btn-lg {
+    font: 18px Gilroy-Bold, Helvetica, sans-serif;
+    padding: 10px 45px;
 }
 .btn-primary {
     background-color: #F19941;

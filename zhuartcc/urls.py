@@ -5,6 +5,7 @@ from django.conf import settings
 
 from apps.api import views as api
 from apps.event import views as event
+from apps.feedback import views as feedback
 from apps.resource import views as resource
 from apps.training import views as training
 from apps.uls import views as uls
@@ -22,6 +23,10 @@ urlpatterns = [
     path('events/<int:id>/edit/', event.edit_event),                    # Edit Event (POST / STAFF)
     path('events/<int:id>/delete/', event.delete_event),                # Delete Event (POST / STAFF)
     path('events/new/', event.add_event),                               # Add Event (POST / STAFF)
+
+    # Feedback
+    path('feedback/', feedback.view_all_feedback),                      # View All Feedback
+    path('feedback/new/', feedback.add_feedback),                        # Add New Feedback
 
     # Resource
     path('resources/', resource.view_resources),                        # View Resources

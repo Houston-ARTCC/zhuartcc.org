@@ -1,0 +1,52 @@
+{% extends 'mainTemplate.html' %}
+{% load filters %}
+
+{% block body %}
+    <div class="text-center">
+        <a href="/feedback/new"><button class="btn btn-lg btn-primary"><i class="far fa-star"></i> Submit feedback!</button></a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-5">
+                    <table class="table table-striped" id="feedback">
+                        <thead>
+                            <tr>
+                                <th class="border-0 text-center">Date / Time</th>
+                                <th class="border-0 text-center">Controller</th>
+                                <th class="border-0 text-center">Callsign</th>
+                                <th class="border-0 text-center">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for feedback in all_feedback %}
+                                <tr>
+                                    <td class="text-center">{{ feedback.submitted|date:'M d, Y @ Hi\z' }}</td>
+                                    <td class="text-center">{{ feedback.controller.return_full_name }}</td>
+                                    <td class="text-center">{{ feedback.controller_callsign }}</td>
+                                    <td class="text-center text-warning">{% for i in feedback.rating|as_range  %}<i class="fas fa-star mr-1"></i>{% endfor %}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4"><i>No feedback found...</i></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $('#feedback').DataTable({
+                pageLength: 20,
+                lengthChange: false,
+                order: [[ 0, "desc" ]]
+            })
+        })
+    </script>
+{% endblock %}

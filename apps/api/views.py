@@ -35,8 +35,8 @@ def return_hour_aggregate(user):
         'user_obj': user,
         'hours': ControllerSession.objects.filter(user=user).aggregate(
             current=Sum('duration', filter=Q(time_logon__month=now.month)),
-            previous=Sum('duration', filter=Q(time_logon__year=now.month - 1)),
-            previous1=Sum('duration', filter=Q(time_logon__year=now.month - 2)),
+            previous=Sum('duration', filter=Q(time_logon__month=now.month - 1)),
+            previous1=Sum('duration', filter=Q(time_logon__month=now.month - 2)),
         )
     }
     if aggregate['user_obj'].is_staff():

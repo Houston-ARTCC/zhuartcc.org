@@ -35,8 +35,8 @@ def update_roster():
                 rating=user_details['rating_short'],
                 main_role='HC',
             )
-            new_user.assign_initial_cert()
             new_user.save()
+            new_user.assign_initial_cert()
         else:
             edit_user = User.objects.get(cid=user_details['cid'])
             edit_user.rating = user_details['rating_short']
@@ -46,11 +46,12 @@ def update_roster():
                 edit_user.status = 1
                 edit_user.email = user_details['email'],
                 edit_user.oper_init = assign_oper_init(user_details['fname'][0], user_details['lname'][0]),
-                edit_user.rating = user_details['rating_short'],
                 edit_user.main_role = 'HC'
+                edit_user.save()
                 edit_user.assign_initial_cert()
 
             edit_user.save()
+
 
     # Removes people if they are no longer on the VATUSA roster
     cids = [roster[user]['cid'] for user in roster]

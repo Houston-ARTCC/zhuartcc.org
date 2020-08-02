@@ -26,7 +26,7 @@ urlpatterns = [
 
     # Feedback
     path('feedback/', feedback.view_all_feedback),                      # View All Feedback
-    path('feedback/new/', feedback.add_feedback),                        # Add New Feedback
+    path('feedback/new/', feedback.add_feedback),                       # Add New Feedback
 
     # Resource
     path('resources/', resource.view_resources),                        # View Resources
@@ -51,6 +51,8 @@ urlpatterns = [
     path('roster/update/status/', user.update_status),                  # Change User Status (POST / STAFF)
     path('roster/tidy/', user.view_inactive_users),                     # Roster Tody (STAFF)
     path('roster/remove/', user.remove_users),                          # Remove Users (POST / STAFF)
+    path('roster/<int:cid>/addcomment/', user.add_comment),            # Add Staff Comment (POST / STAFF)
+    path('roster/<int:cid>/removecomment/', user.remove_comment),      # Remove Staff Comment (POST / STAFF)
 
     # Views
     path('', views.view_homepage),                                      # View Homepage

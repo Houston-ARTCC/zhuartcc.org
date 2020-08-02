@@ -166,3 +166,31 @@ def remove_users(request):
             continue
 
     return HttpResponse(status=200)
+
+
+@require_staff
+@require_POST
+def add_comment(request, cid):
+    try:
+        user = User.objects.get(cid=cid)
+        user.staff_comment = request.POST['comment']
+        user.staff_comment_author = User.objects.get(cid=request.session['vatsim_data']['cid'])
+        user.save()
+
+        return HttpResponse(status=200)
+    except:
+        return HttpResponse('Something was wrong your request!', status=400)
+
+
+@require_staff
+@require_POST
+def remove_comment(request, cid):
+    try:
+        user = User.objects.get(cid=cid)
+        user.staff_comment = None
+        user.staff_comment_author = None
+        user.save()
+
+        return HttpResponse(status=200)
+    except:
+        return HttpResponse('Something was wrong your request!', status=400)

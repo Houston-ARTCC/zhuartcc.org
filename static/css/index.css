@@ -115,6 +115,10 @@ a:hover {
     transition: 400ms;
     text-decoration: none;
 }
+.blockquote-footer {
+    color: inherit;
+    font-size: 15px;
+}
 .title, .subtitle {
     color: white;
 }

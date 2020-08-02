@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.db import models
 
 
@@ -33,6 +31,8 @@ class User(models.Model):
     # Profile Details
     profile_picture = models.ImageField(null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
+    staff_comment = models.TextField(null=True, blank=True)
+    staff_comment_author = models.ForeignKey('self', models.SET_NULL, null=True, blank=True)
 
     # Status
     status = models.IntegerField(default=0)

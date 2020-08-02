@@ -29,7 +29,7 @@
         {% if request.session.guest %}
         <a class="dropdown-item" href="/visit">Become a Visitor</a>
         {% else %}
-        <a class="dropdown-item" href="#">My Profile</a>
+        <a class="dropdown-item" href="/roster/{{ request.session.vatsim_data.cid }}">My Profile</a>
         <a class="dropdown-item" href="/training">Training Center</a>
         {% if request.session.staff %}
         <a class="dropdown-item" href="/admin">Administration Panel</a>

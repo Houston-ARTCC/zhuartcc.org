@@ -3,6 +3,17 @@ from django.db import models
 
 # Defines the User model which is created for all home and visiting controllers
 class User(models.Model):
+    STATUSES = (
+        (0, 'Active'),
+        (1, 'LOA'),
+        (2, 'Inactive'),
+    )
+    ENDORSEMENTS = (
+        (0, 'No Endorsement'),
+        (1, 'Minor Endorsement'),
+        (2, 'Major Endorsement'),
+        (3, 'Solo Endorsement'),
+    )
     # User Details
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
@@ -19,13 +30,13 @@ class User(models.Model):
     mentor_level = models.CharField(max_length=32, null=True, blank=True)
 
     # Endorsements
-    cert_int = models.IntegerField(default=0)
-    del_cert = models.IntegerField(default=0)
-    gnd_cert = models.IntegerField(default=0)
-    twr_cert = models.IntegerField(default=0)
-    app_cert = models.IntegerField(default=0)
-    ctr_cert = models.IntegerField(default=0)
-    ocn_cert = models.IntegerField(default=0)
+    cert_int = models.IntegerField(default=0, choices=ENDORSEMENTS)
+    del_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
+    gnd_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
+    twr_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
+    app_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
+    ctr_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
+    ocn_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
     solo_cert = models.CharField(max_length=32, null=True, blank=True)
 
     # Profile Details
@@ -35,7 +46,7 @@ class User(models.Model):
     staff_comment_author = models.ForeignKey('self', models.SET_NULL, null=True, blank=True)
 
     # Status
-    status = models.IntegerField(default=0)
+    status = models.IntegerField(default=0, choices=STATUSES)
     loa_until = models.DateField(null=True, blank=True)
     loa_last_month = models.BooleanField(default=False)
     activity_exempt = models.BooleanField(default=False)

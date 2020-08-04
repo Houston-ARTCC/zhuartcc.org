@@ -23,17 +23,17 @@
                                 <th class="border-0 text-center">Controller</th>
                                 <th class="border-0 text-center">Callsign</th>
                                 <th class="border-0 text-center">Rating</th>
-                                <th class="border-0 text-center">Comments</th>
+                                <th class="border-0 text-center">Info</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for feedback in all_feedback %}
                                 <tr>
-                                    <td class="text-center">{{ feedback.submitted|date:'M d, Y @ Hi\z' }}</td>
+                                    <td class="text-center"><span class="d-none">{{ feedback.submitted|date:'m/d/Y' }}</span>{{ feedback.submitted|date:'M d, Y @ Hi\z' }}</td>
                                     <td class="text-center">{{ feedback.controller.return_full_name }}</td>
                                     <td class="text-center">{{ feedback.controller_callsign }}</td>
                                     <td class="text-center text-warning">{% for i in feedback.rating|as_range  %}<i class="fas fa-star mr-1"></i>{% endfor %}</td>
-                                    <td class="text-center"><a data-action="info" data-comments="{{ feedback.comments }}"><i class="far fa-lg fa-eye text-dark"></i></a></td>
+                                    <td class="text-center"><a data-action="info" data-comments="{{ feedback.comments }}" data-callsign="{{ feedback.flight_callsign|default:'' }}" data-time="{{ feedback.flight_time|date:'M d, Y @ Hi\z' }}"><i class="far fa-lg fa-eye text-dark"></i></a></td>
                                 </tr>
                             {% empty %}
                                 <tr>
@@ -65,11 +65,16 @@
             })
         })
         $('[data-action="info"]').click(function() {
+            let callsign = $(this).data('callsign')
+            let time = $(this).data('time')
+            let comments = $(this).data('comments')
             launchCustomModal(
                 'info',
-                'Comments',
-                $(this).data('comments') +
-                '<div class="mt-3"><button class="btn btn-primary" data-dismiss="modal">Close</button></div>'
+                'Info',
+                (callsign ? '<h5>Pilot Callsign</h5><p>' : '') + callsign + (callsign ? '</p>' : '') +
+                (time ? '<h5>Flight Time</h5><p>' : '') + time + (time ? '</p>' : '') +
+                '<h5>Comments</h5><p>' + comments + '</p>' +
+                '<div class="mt-3"><button class="btn btn-secondary" data-dismiss="modal">Close</button></div>'
             )
         })
     </script>

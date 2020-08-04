@@ -28,8 +28,8 @@
             <p class="mb-0">{{ user.staff_comment }}</p>
             <footer class="blockquote-footer">{{ user.staff_comment_author.return_full_name }}</footer>
         </div>
+        <a href="edit"><button class="btn btn-secondary">Edit User</button></a><button class="btn btn-secondary" onclick="addComment()">Add Staff Comment</button>
     {% endif %}
-    <a href="edit"><button class="btn btn-secondary">Edit User</button></a><button class="btn btn-secondary" onclick="addComment()">Add Staff Comment</button>
     <div class="row">
         <div class="col-4">
             <div class="card">

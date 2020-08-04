@@ -6,7 +6,7 @@ from django.http import HttpResponse
 def require_staff(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if request.session['staff']:
+        if 'staff' in request.session and request.session['staff']:
             return function(request, *args, **kwargs)
         else:
             return HttpResponse('You must be a staff member to complete this action!', status=401)
@@ -17,7 +17,7 @@ def require_staff(function):
 def require_mentor(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if request.session['mentor']:
+        if 'mentor' in request.session and request.session['mentor']:
             return function(request, *args, **kwargs)
         else:
             return HttpResponse('You must be a training staff member to complete this action!', status=401)

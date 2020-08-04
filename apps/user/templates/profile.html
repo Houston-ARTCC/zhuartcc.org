@@ -21,13 +21,15 @@
 {% endblock %}
 
 {% block body %}
-    {% if user.staff_comment and request.session.staff %}
-        <div class="alert alert-primary">
-            <a href="#" class="alert-link" data-action="remove-comment"><div class="float-right">Remove <i class="far fa-times"></i></div></a>
-            <h4 class="alert-heading">Staff Comment</h4>
-            <p class="mb-0">{{ user.staff_comment }}</p>
-            <footer class="blockquote-footer">{{ user.staff_comment_author.return_full_name }}</footer>
-        </div>
+    {% if request.session.staff %}
+        {% if user.staff_comment %}
+            <div class="alert alert-primary">
+                <a href="#" class="alert-link" data-action="remove-comment"><div class="float-right">Remove <i class="far fa-times"></i></div></a>
+                <h4 class="alert-heading">Staff Comment</h4>
+                <p class="mb-0">{{ user.staff_comment }}</p>
+                <footer class="blockquote-footer">{{ user.staff_comment_author.return_full_name }}</footer>
+            </div>
+        {% endif %}
         <a href="edit"><button class="btn btn-secondary">Edit User</button></a><button class="btn btn-secondary" onclick="addComment()">Add Staff Comment</button>
     {% endif %}
     <div class="row">

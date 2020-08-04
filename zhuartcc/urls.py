@@ -36,8 +36,6 @@ urlpatterns = [
 
     # Training
     path('training/', training.view_training_center),                   # View Training Center Home
-    path('training/schedule/', training.schedule),                      # View Session Details
-    path('training/history/<int:cid>/', training.view_history),         # View Session Details
 
     # ULS (Auth)
     path('login/', uls.login),                                          # Login via VATUSA ULS

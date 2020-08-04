@@ -664,6 +664,9 @@ td {
 .border-right {
     border-right: 2px #d6d6d6 solid!important;
 }
+.table-hover tr[data-type="href"]:hover {
+    cursor: pointer;
+}
 .dataTables_filter label {
     text-align: right!important;
     position: relative;

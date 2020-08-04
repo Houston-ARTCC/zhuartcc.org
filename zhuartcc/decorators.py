@@ -39,7 +39,7 @@ def require_logged_in(function):
 def require_member(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if not request.session['guest']:
+        if 'guest' in request.session and not request.session['guest']:
             return function(request, *args, **kwargs)
         else:
             return HttpResponse('You must be a member to complete this action!', status=401)

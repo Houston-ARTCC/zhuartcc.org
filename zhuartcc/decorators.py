@@ -6,10 +6,13 @@ from django.http import HttpResponse
 def require_staff(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if 'staff' in request.session and request.session['staff']:
-            return function(request, *args, **kwargs)
+        if 'vatsim_data' in request.session:
+            if 'staff' in request.session and request.session['staff']:
+                return function(request, *args, **kwargs)
+            else:
+                return HttpResponse('You must be a staff member to complete this action!', status=401)
         else:
-            return HttpResponse('You must be a staff member to complete this action!', status=401)
+            return HttpResponse('You must be logged in to complete this action!', status=401)
     return wrap
 
 
@@ -17,10 +20,13 @@ def require_staff(function):
 def require_mentor(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if 'mentor' in request.session and request.session['mentor']:
-            return function(request, *args, **kwargs)
+        if 'vatsim_data' in request.session:
+            if 'mentor' in request.session and request.session['mentor']:
+                return function(request, *args, **kwargs)
+            else:
+                return HttpResponse('You must be a training staff member to complete this action!', status=401)
         else:
-            return HttpResponse('You must be a training staff member to complete this action!', status=401)
+            return HttpResponse('You must be logged in to complete this action!', status=401)
     return wrap
 
 
@@ -39,8 +45,11 @@ def require_logged_in(function):
 def require_member(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if 'guest' in request.session and not request.session['guest']:
-            return function(request, *args, **kwargs)
+        if 'vatsim_data' in request.session:
+            if 'guest' in request.session and not request.session['guest']:
+                return function(request, *args, **kwargs)
+            else:
+                return HttpResponse('You must be a member to complete this action!', status=401)
         else:
-            return HttpResponse('You must be a member to complete this action!', status=401)
+            return HttpResponse('You must be logged in to complete this action!', status=401)
     return wrap

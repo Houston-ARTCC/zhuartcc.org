@@ -1,0 +1,58 @@
+{% extends 'secondaryTemplate.html' %}
+{% load filters %}
+
+{% block header %}
+    <h1 style="font-size: 65px">{{ exam.name }}</h1>
+    <h2 style="font-size: 40px">Taken {{ exam.expiration|date:'M d, Y @ Hi\z' }}</h2>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-3">
+            <div class="sticky-scrollspy list-group">
+                {% for question in exam.questions.all %}
+                    <a href="#question_{{ forloop.counter }}" class="list-group-item list-group-item-action">Question {{ forloop.counter }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-9">
+            {% csrf_token %}
+            {% for question in exam.questions.all %}
+                <div class="card" id="question_{{ forloop.counter }}">
+                    <div class="card-header bg-secondary"><b>{{ forloop.counter }}.</b> {{ question.question }}</div>
+                    <div class="card-body">
+                        {% if question.image %}
+                            <div class="text-center">
+                                <img src="{{ question.image.url }}">
+                            </div>
+                        {% endif %}
+                        <a class="exam-answer"><span class="exam-letter">A</span> &nbsp; {{ question.choice_1 }}</a>
+                        <a class="exam-answer"><span class="exam-letter">B</span> &nbsp; {{ question.choice_2 }}</a>
+                        {% if question.choice_3 %}
+                            <a class="exam-answer"><span class="exam-letter">C</span> &nbsp; {{ question.choice_3 }}</a>
+                        {% endif %}
+                        {% if question.choice_4 %}
+                            <a class="exam-answer"><span class="exam-letter">D</span> &nbsp; {{ question.choice_4 }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $('body').scrollspy({
+                target: '.sticky-scrollspy',
+                offset: 180,
+            })
+        })
+        $('.list-group-item-action').click(function() {
+            setTimeout(function() {
+                window.scrollTo(window.scrollX, window.scrollY - 150)
+            }, 1)
+        })
+    </script>
+{% endblock %}

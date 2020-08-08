@@ -174,7 +174,7 @@ def add_comment(request, cid):
     try:
         user = User.objects.get(cid=cid)
         user.staff_comment = request.POST['comment']
-        user.staff_comment_author = User.objects.get(cid=request.session['vatsim_data']['cid'])
+        user.staff_comment_author = User.objects.get(cid=request.session['cid'])
         user.save()
 
         return HttpResponse(status=200)

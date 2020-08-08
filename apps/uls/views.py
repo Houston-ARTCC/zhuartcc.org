@@ -36,6 +36,7 @@ def login(request):
             request.session['vatsim_data'] = data
 
             user_query = User.objects.filter(cid=data['cid'])
+            request.session['cid'] = data['cid']
 
             if user_query.exists() and user_query[0].status != 2:
                 user = User.objects.get(cid=data['cid'])

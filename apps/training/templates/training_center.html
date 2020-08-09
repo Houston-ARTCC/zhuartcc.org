@@ -70,7 +70,7 @@
                 <div class="card-body px-5 d-flex justify-content-between">
                     <div class="text-center">
                         <h2 style="font-size: 25px">Sessions</h2>
-                        <h1 style="font-size: 35px">{{ sessions|length }}</h1>
+                        <h1 style="font-size: 35px">{{ sessions|length|default:'<span class="text-muted">N/A</span>' }}</h1>
                     </div>
                     <div class="text-center">
                         <h2 style="font-size: 25px">Avg. Exam Score</h2>
@@ -122,7 +122,7 @@
                                     ">{{ session.get_status_display }}</span></td>
                                 </tr>
                             {% empty %}
-                                <td class="text-center" colspan="5"><i>You have not has a session yet, why not schedule one?</i></td>
+                                <td class="text-center" colspan="5"><i>You have not had a session yet, why not schedule one?</i></td>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -152,15 +152,19 @@
                                 <tr data-type="href" data-exam="{{ exam.id }}">
                                     <td class="text-center"><span class="d-none">{{ session.start|date:'m/d/Y Hi' }}</span>{{ exam.assigned|date:'M d, Y' }}</td>
                                     <td class="text-center">{{ exam.name }}</td>
-                                    <td class="text-center"><span class="badge
-                                        {% if exam.score >= 90 %}badge-success
-                                        {% elif exam.score >= 65 %}badge-warning
-                                        {% elif exam.score < 65 %}badge-danger
-                                        {% endif %}
-                                    ">{{ exam.score|default:'<span class="badge badge-muted">N/A</span>' }}</span></td>
+                                    {% if exam.completed %}
+                                        <td class="text-center"><span class="badge
+                                            {% if exam.score >= 90 %}badge-success
+                                            {% elif exam.score >= 65 %}badge-warning
+                                            {% elif exam.score < 65 %}badge-danger
+                                            {% endif %}
+                                        ">{{ exam.score }}%</span></td>
+                                    {% else %}
+                                        <td class="text-center"><span class="badge badge-muted">N/A</span></td>
+                                    {% endif %}
                                 </tr>
                             {% empty %}
-                                <td class="text-center" colspan="3"><i>You have not taken an exam yet</i></td>
+                                <td class="text-center" colspan="3"><i>You do not have any exams on record...</i></td>
                             {% endfor %}
                         </tbody>
                     </table>

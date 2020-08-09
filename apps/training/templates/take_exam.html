@@ -1,0 +1,106 @@
+{% extends 'secondaryTemplate.html' %}
+{% load filters %}
+
+{% block header %}
+    <h1 style="font-size: 65px">{{ exam.name }}</h1>
+    <h2 style="font-size: 40px">Expires {{ exam.expiration|date:'M d, Y @ Hi\z' }}</h2>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-3">
+            <div class="sticky-scrollspy list-group">
+                {% for question in exam.questions.all %}
+                    <a href="#question_{{ forloop.counter }}" class="list-group-item list-group-item-action">Question {{ forloop.counter }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-9">
+            <form id="exam" novalidate>
+                {% csrf_token %}
+                {% for question in exam.questions.all %}
+                    <div class="card" id="question_{{ forloop.counter }}">
+                        <div class="card-header bg-secondary"><b>{{ forloop.counter }}.</b> {{ question.question }}</div>
+                        <div class="card-body">
+                            {% if question.image %}
+                                <div class="text-center">
+                                    <img src="{{ question.image.url }}">
+                                </div>
+                            {% endif %}
+                            <a data-action="answer" data-choice="A" class="exam-answer"><span class="exam-letter">A</span> &nbsp; {{ question.choice_1 }}</a>
+                            <a data-action="answer" data-choice="B" class="exam-answer"><span class="exam-letter">B</span> &nbsp; {{ question.choice_2 }}</a>
+                            {% if question.choice_3 %}
+                                <a data-action="answer" data-choice="C" class="exam-answer"><span class="exam-letter">C</span> &nbsp; {{ question.choice_3 }}</a>
+                            {% endif %}
+                            {% if question.choice_4 %}
+                                <a data-action="answer" data-choice="D" class="exam-answer"><span class="exam-letter">D</span> &nbsp; {{ question.choice_4 }}</a>
+                            {% endif %}
+                            <input name="question_{{ question.id }}" required hidden>
+                        </div>
+                    </div>
+                {% endfor %}
+                <button class="btn btn-primary">Submit Exam</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $('body').scrollspy({
+                target: '.sticky-scrollspy',
+                offset: 180,
+            })
+        })
+        $('.list-group-item-action').click(function() {
+            setTimeout(function() {
+                window.scrollTo(window.scrollX, window.scrollY - 150)
+            }, 1)
+        })
+        $('[data-action="answer"]').click(function() {
+            let $this = $(this)
+            let card = $this.parent()
+            card.find('input').val($this.data('choice'))
+            card.find('a').removeClass('selected')
+            $this.addClass('selected')
+        })
+        $('#exam').submit(function(event) {
+            event.preventDefault()
+            let valid = true
+            $($(this).find('input').each(function() {
+                let $this = $(this)
+                let href = $(`a[href="#${$this.attr('name')}"]`)
+                href.find('.invalid').remove()
+                if (!$this.val()) {
+                    href.append('<span class="invalid text-danger"> &nbsp;<i class="fas fa-exclamation-triangle"></i> Answer Required!</span>')
+                    valid = false
+                }
+            }))
+            if (valid) {
+                launchCustomModal(
+                    'info',
+                    'Confirm Exam Submission',
+                    `<p>Are you sure you would like to submit your exam? After this you will not be able to change your answers!</p>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="exam-confirm" class="btn btn-primary">Confirm</button>`
+                )
+                $('#exam-confirm').click(function() {
+                    $('#customModal').modal('hide')
+                    $.post({
+                        url: '',
+                        data: new FormData($('#exam')[0]),
+                        processData: false,
+                        contentType: false,
+                    })
+                    .done(function() {
+                        window.location.href = '/training/'
+                    })
+                    .fail(function(error) {
+                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                    })
+                })
+            }
+        })
+    </script>
+{% endblock %}

@@ -158,6 +158,10 @@ a:hover {
 .badge {
     font: 16px Gilroy-Bold, Helvetica, sans-serif;
 }
+.badge-lg {
+    font-size: 40px;
+    border-radius: 10px;
+}
 .badge-success {
     background-color: #50cb4a!important;
 }
@@ -544,6 +548,69 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
     color: inherit;
     text-decoration: inherit;
 }
+.exam-answer {
+    font: 14px Gilroy-Bold, Helvetica, sans-serif;
+    background-color: #f3f3f3;
+    width: 100%;
+    display: block;
+    text-align: left;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    transition: 300ms;
+    cursor: pointer;
+}
+.exam-correct {
+    background-color: #c0ffb1;
+}
+.exam-correct:hover {
+    background-color: #c0ffb1!important;
+    transition: 300ms;
+}
+.exam-correct .exam-letter {
+    background-color: white;
+    color: #c0ffb1;
+    transition: 300ms;
+}
+.exam-incorrect {
+    background-color: #ffd1d1;
+}
+.exam-incorrect:hover {
+    background-color: #ffd1d1!important;
+    transition: 300ms;
+}
+.exam-incorrect .exam-letter {
+    background-color: white;
+    color: #ffd1d1;
+    transition: 300ms;
+}
+.exam-answer:hover {
+    background-color: #eaeaea;
+    transition: 300ms;
+}
+.exam-answer.selected {
+    background: #2d45a2;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(45, 69, 162, 0.5)!important;
+    transition: 300ms;
+}
+.exam-answer.selected:hover {
+    color: white;
+    transition: 300ms;
+}
+.exam-letter {
+    padding: 5px 9px;
+    background-color: #2d45a2;
+    color: white;
+    border-radius: 20px;
+    transition: 300ms;
+}
+.exam-answer.selected .exam-letter {
+    background-color: white;
+    color: #2d45a2;
+    transition: 300ms;
+}
+
 
 
 /*
@@ -621,7 +688,7 @@ Y8.   .88 88.  .88 88       88.  .88       88
 */
 .card {
     box-shadow: 0 0 17px #e9e9e9;
-    margin: 25px 0;
+    margin-bottom: 30px;
 }
 .card, .card-header, .card-body {
     border: none!important;
@@ -802,6 +869,23 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
 }
 .tab.active:hover {
     opacity: 1;
+}
+.sticky-scrollspy {
+    position: sticky;
+    top: 150px;
+}
+.list-group-item {
+    font: 18px Gilroy-Bold, Helvetica, sans-serif;
+    transition: 300ms ease;
+    border: none;
+}
+.list-group-item.active {
+    background-color: #2d45a2;
+    transition: 200ms;
+    border: none;
+}
+.list-group-item.active * {
+    color: white!important;
 }
 
 

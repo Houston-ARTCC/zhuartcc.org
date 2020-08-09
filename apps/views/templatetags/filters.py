@@ -18,3 +18,8 @@ def duration(timedelta):
 @register.filter
 def as_range(int):
     return range(int)
+
+
+@register.filter
+def get_value_from_dict(dict, key):
+    return dict[str(key)]

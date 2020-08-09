@@ -1,0 +1,25 @@
+{% extends 'secondaryTemplate.html' %}
+{% load filters %}
+
+{% block header %}
+    <h1 style="font-size: 65px">{{ session.student.return_full_name }}</h1>
+    <h2 style="font-size: 40px">{{ session.start|date:'M d, Y @ Hi\z' }}
+    <span class="badge
+        {% if session.status == 0 %}badge-info
+        {% elif session.status == 1 %}badge-success
+        {% elif session.status == 2 %}badge-danger
+        {% elif session.status == 3 %}badge-warning
+        {% endif %}
+    ">{{ session.get_status_display }}</span></h2>
+{% endblock %}
+
+{% block body %}
+    <h3>Position</h3>
+    <p>{{ session.position }}</p>
+    <h3>Type</h3>
+    <p>{{ session.get_type_display }}</p>
+    <h3>Instructor</h3>
+    <p>{{ session.instructor.return_full_name }}</p>
+    <h3>Duration</h3>
+    <p>{{ session.duration|duration }}</p>
+{% endblock %}

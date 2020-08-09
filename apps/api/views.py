@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from .models import ControllerSession
+from ..training.models import TrainingSession
 from ..user.models import User
 
 
@@ -37,6 +38,9 @@ def return_hour_aggregate(user):
             current=Sum('duration', filter=Q(time_logon__month=now.month)),
             previous=Sum('duration', filter=Q(time_logon__month=now.month - 1)),
             previous1=Sum('duration', filter=Q(time_logon__month=now.month - 2)),
+        ),
+        'training_hours': TrainingSession.objects.filter(student=user).filter(status=1).aggregate(
+            current=Sum('duration', filter=Q(start__month=now.month))
         )
     }
     if aggregate['user_obj'].is_staff():
@@ -44,7 +48,8 @@ def return_hour_aggregate(user):
     elif aggregate['user_obj'].return_cert_int() > 0:
         requirement = timedelta(hours=2)
     else:
-        aggregate['training_status'] = False
+        training_hours = aggregate['training_hours']['current']
+        aggregate['training_status'] = training_hours >= timedelta(hours=1) if training_hours is not None else False
         return aggregate
 
     hours = aggregate['hours']

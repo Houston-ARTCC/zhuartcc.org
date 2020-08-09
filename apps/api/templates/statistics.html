@@ -88,7 +88,7 @@
                                     <td class="text-right pr-0 border-left" style="width: 2%">
                                         <i class="far fa-lg fa-check text-success{% if not user.training_status %} d-none{% endif %}"></i>
                                     </td>
-                                    <td class="border-right"><span class="text-muted">N/A</span></td>
+                                    <td class="border-right">{{ user.training_hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
                                     <td>
                                         {% if user.user_obj.is_staff %}
                                             <i class="far fa-lg fa-check text-success"></i>&nbsp; Staff

@@ -42,7 +42,7 @@ def pull_controllers():
             controller.delete()
 
     for callsign, controller in atc_clients.items():
-        if User.objects.filter(cid=controller[1]).exists():
+        if controller[1] and User.objects.filter(cid=controller[1]).exists():
             split = callsign.split('_')
             if split[0] in settings.POSITION_PREFIXES:
                 if split[-1] != 'ATIS' and split[-1] != 'OBS' and split[-1] != 'SUP':

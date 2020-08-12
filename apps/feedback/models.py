@@ -15,4 +15,4 @@ class Feedback(models.Model):
     submitted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.submitted.strftime("%b %d, %Y @ %H%Mz")} | ({self.controller.main_role}) {self.controller.return_full_name()}'
+        return f'{self.submitted.strftime("%b %d, %Y @ %H%Mz")} | {self.controller.return_full_name()}'

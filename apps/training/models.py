@@ -11,6 +11,16 @@ class TrainingSession(models.Model):
         (2, 'Online'),
         (3, 'OTS'),
     )
+    LEVELS = (
+        (0, 'Minor Ground'),
+        (1, 'Major Ground'),
+        (2, 'Minor Tower'),
+        (3, 'Major Tower'),
+        (4, 'Minor Approach'),
+        (5, 'Major Approach'),
+        (6, 'Center'),
+        (7, 'Oceanic'),
+    )
     STATUSES = (
         (0, 'Scheduled'),
         (1, 'Completed'),
@@ -23,6 +33,7 @@ class TrainingSession(models.Model):
     duration = models.DurationField(default=timedelta(hours=1))
     position = models.CharField(max_length=16, null=True, blank=True)
     type = models.IntegerField(choices=TYPES)
+    level = models.IntegerField(choices=LEVELS)
     status = models.IntegerField(default=0, choices=STATUSES)
     session_notes = models.FileField(upload_to='training/', null=True, blank=True)
 

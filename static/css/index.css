@@ -63,7 +63,6 @@ d888888P                                                                dP
     color: #181818;
 }
 .bg-primary a:hover, .bg-secondary a:hover,
-.bg-primary a.active, .bg-secondary a.active,
 .link-secondary:hover {
     opacity: 60%;
     transition: 400ms;
@@ -115,12 +114,12 @@ hr {
     border-width: 3px;
 }
 a {
-    color: #4c97c1;
+    color: #5ec2fa;
     transition: 400ms;
 }
 a:hover {
     opacity: 70%;
-    color: #6dc2ef;
+    color: #5ec2fa;
     transition: 400ms;
     text-decoration: none;
 }
@@ -477,7 +476,7 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
 .btn {
     font: 14px Gilroy-Bold, Helvetica, sans-serif;
     padding: 7px 30px;
-    margin-right: 10px;
+    margin: 5px 10px 5px 0;
     border: none;
     border-radius: 3px;
 }
@@ -634,7 +633,7 @@ dP                                              dP
 .secondary-page-header {
     padding: 11% 10% 2% 10%;
 }
-.page-container {
+.page-container, footer {
     padding: 2% 10%;
 }
 .title-block {

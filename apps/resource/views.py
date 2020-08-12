@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .models import Resource
+from ..administration.models import ActionLog
+from ..user.models import User
 from zhuartcc.decorators import require_staff
 
 
@@ -22,6 +24,10 @@ def edit_resource(request):
     if 'file' in request.FILES:
         resource.path = request.FILES['file']
     resource.updated = timezone.now()
+
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Resource "{resource.name}" edited by {user.return_full_name()}.').save()
+    
     resource.save()
     return redirect('/resources')
 
@@ -37,6 +43,8 @@ def add_resource(request):
         updated=timezone.now(),
     )
     resource.save()
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Resource "{resource.name}" created by {user.return_full_name()}.').save()
     return redirect('/resources')
 
 
@@ -44,5 +52,8 @@ def add_resource(request):
 @require_staff
 @require_POST
 def delete_resource(request):
-    Resource.objects.get(id=request.POST['id']).delete()
+    resource = Resource.objects.get(id=request.POST['id'])
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Resource "{resource.name}" deleted by {user.return_full_name()}.').save()
+    resource.delete()
     return redirect('/resources')

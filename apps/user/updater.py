@@ -5,6 +5,8 @@ from .models import User
 from django.utils import timezone
 from django.conf import settings
 
+from ..administration.models import ActionLog
+
 
 # Schedules a task to update the roster every 30 minutes
 def update_scheduler():
@@ -37,6 +39,7 @@ def update_roster():
             )
             new_user.save()
             new_user.assign_initial_cert()
+            ActionLog(action=f'User {new_user.return_full_name()} created by system.').save()
         else:
             edit_user = User.objects.get(cid=user_details['cid'])
             edit_user.rating = user_details['rating_short']
@@ -49,9 +52,9 @@ def update_roster():
                 edit_user.main_role = 'HC'
                 edit_user.save()
                 edit_user.assign_initial_cert()
+                ActionLog(action=f'User {new_user.return_full_name()} set as active by system.').save()
 
             edit_user.save()
-
 
     # Removes people if they are no longer on the VATUSA roster
     cids = [roster[user]['cid'] for user in roster]
@@ -59,6 +62,7 @@ def update_roster():
         if user.cid not in cids:
             user.status = 2
             user.save()
+            ActionLog(action=f'User {new_user.return_full_name()} set as inactive by system.').save()
 
     # Cycles through visiting controllers separately since they are not on main roster
     for edit_user in User.objects.filter(main_role='VC'):

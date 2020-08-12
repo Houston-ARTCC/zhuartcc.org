@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .models import User
+from ..administration.models import ActionLog
 from ..api.models import ControllerSession
 from ..api.views import return_inactive_users
 from zhuartcc.decorators import require_staff
@@ -113,6 +114,9 @@ def edit_user(request, cid):
         user.ocn_cert = int(post['ocn_cert'])
         user.cert_int = user.return_cert_int()
         user.save()
+
+        admin = User.objects.get(cid=request.session['cid'])
+        ActionLog(action=f'User {user.return_full_name()} updated by {admin.return_full_name()}.').save()
         return redirect('/roster')
 
     return render(request, 'editUser.html', {'page_title': f'Editing {user.return_full_name()}', 'user': user})
@@ -126,9 +130,16 @@ def update_status(request):
         user.status = int(request.POST['status'])
         if request.POST['status'] == '1':
             user.loa_until = pytz.utc.localize(datetime.strptime(request.POST['loa_until'], '%Y-%m-%d'))
+            status = 'LOA until ' + request.POST['loa_until']
+        if request.POST['status'] == '2':
+            status = 'inactive'
         else:
+            status = 'active'
             user.loa_until = None
         user.save()
+
+        admin = User.objects.get(cid=request.session['cid'])
+        ActionLog(action=f'User {user.return_full_name()} set as {status} by {admin.return_full_name()}.').save()
 
         return HttpResponse(status=200)
     except:
@@ -162,6 +173,9 @@ def remove_users(request):
                 [user.email],
                 html_message=render_to_string('emails/roster_removal.html', {'user': user}),
             )
+
+            admin = User.objects.get(cid=request.session['cid'])
+            ActionLog(action=f'User {user.return_full_name()} set to inactive by {admin.return_full_name()}.').save()
         except:
             continue
 
@@ -177,6 +191,9 @@ def add_comment(request, cid):
         user.staff_comment_author = User.objects.get(cid=request.session['cid'])
         user.save()
 
+        admin = User.objects.get(cid=request.session['cid'])
+        ActionLog(action=f'Staff comment added for {user.return_full_name()} by {admin.return_full_name()}.').save()
+
         return HttpResponse(status=200)
     except:
         return HttpResponse('Something was wrong your request!', status=400)
@@ -190,6 +207,9 @@ def remove_comment(request, cid):
         user.staff_comment = None
         user.staff_comment_author = None
         user.save()
+
+        admin = User.objects.get(cid=request.session['cid'])
+        ActionLog(action=f'Staff comment removed for {user.return_full_name()} by {admin.return_full_name()}.').save()
 
         return HttpResponse(status=200)
     except:

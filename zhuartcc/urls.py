@@ -51,13 +51,13 @@ urlpatterns = [
     path('roster/update/status/', user.update_status),                  # Change User Status (POST / STAFF)
     path('roster/tidy/', user.view_inactive_users),                     # Roster Tody (STAFF)
     path('roster/remove/', user.remove_users),                          # Remove Users (POST / STAFF)
-    path('roster/<int:cid>/addcomment/', user.add_comment),            # Add Staff Comment (POST / STAFF)
-    path('roster/<int:cid>/removecomment/', user.remove_comment),      # Remove Staff Comment (POST / STAFF)
+    path('roster/<int:cid>/addcomment/', user.add_comment),             # Add Staff Comment (POST / STAFF)
+    path('roster/<int:cid>/removecomment/', user.remove_comment),       # Remove Staff Comment (POST / STAFF)
 
     # Views
     path('', views.view_homepage),                                      # View Homepage
     path('privacy/', views.view_privacy_policy),                        # View Privacy Policy
-    path('map/', views.view_artcc_map),
+    path('map/', views.view_artcc_map),                                 # View ARTCC Map
 
     # Visit
     path('visit/', visit.submit_visiting_request),                      # Submit Visiting Request (LOGGED IN)

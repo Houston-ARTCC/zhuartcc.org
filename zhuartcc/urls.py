@@ -57,6 +57,7 @@ urlpatterns = [
     # Views
     path('', views.view_homepage),                                      # View Homepage
     path('privacy/', views.view_privacy_policy),                        # View Privacy Policy
+    path('map/', views.view_artcc_map),
 
     # Visit
     path('visit/', visit.submit_visiting_request),                      # Submit Visiting Request (LOGGED IN)

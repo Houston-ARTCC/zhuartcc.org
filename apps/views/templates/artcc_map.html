@@ -1,0 +1,78 @@
+{% extends 'mainTemplate.html' %}
+
+{% block stylesheets %}
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+{% endblock %}
+
+{% block body %}
+    <div id='map' style='width: 100%; height: 804px;'></div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWlrZXJvbWEiLCJhIjoiY2szbWI1YWJxMGVudjNjbGp1OGJ5ank4MyJ9.3jZUs_nQCehwmixhAZmKqA';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mikeroma/ckdmiombs1c291jmv6lduqxu1',
+            center: [-95, 29.4],
+            zoom: 5
+        })
+        var name_popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        })
+        var full_popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        })
+        var all_metars = null
+        map.on('load', function() {
+            let airports = map.querySourceFeatures('composite', {
+                'sourceLayer': 'Houston_ARTCC_-_Airports'
+            })
+            let url = 'https://api.checkwx.com/metar/'
+            airports.forEach(function(airport) {
+                url += airport.properties.ICAO + ','
+            })
+            $.get({
+                url: url,
+                headers: {'X-API-Key': '0de40c9e7c14e8c18e5fc50f0d'}
+            })
+            .done(function(data) {
+                all_metars = data
+            })
+        })
+        map.on('mouseenter', 'houston-artcc-airports', function(e) {
+            let coordinates = e.features[0].geometry.coordinates.slice()
+            let html = `<div class="mapboxgl-popup-header"><span class="mb-1 badge badge-sm badge-light">${e.features[0].properties.ICAO}</span><br>
+                        ${e.features[0].properties.Name}<br><span style="font-size: 13px; font-family: Gilroy-Light;">Click for more info</span></div>`
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) { coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360 }
+            map.getCanvas().style.cursor = 'pointer';
+            full_popup.remove()
+            name_popup.setLngLat(coordinates).setHTML(html).addTo(map)
+        })
+        map.on('mouseleave', 'houston-artcc-airports', function() {
+            map.getCanvas().style.cursor = ''
+            name_popup.remove()
+        })
+        map.on('click', function() {
+            full_popup.remove()
+        })
+        map.on('click', 'houston-artcc-airports', function(e) {
+            let icao = e.features[0].properties.ICAO
+            let clicked_metar = all_metars.data.find(metar => metar.includes(icao))
+            let coordinates = e.features[0].geometry.coordinates.slice()
+            let html = `<div class="mapboxgl-popup-header"><span class="mb-1 badge badge-sm badge-light">${icao}</span><br>
+                        ${e.features[0].properties.Name}</div>
+                        <div class="mapboxgl-popup-body">
+                        <h5>Metar</h5>
+                        <p>${clicked_metar}</p>
+                        <a href="https://simcharts.info/?search=${icao}" target="_blank"><button class="btn btn-secondary">View Charts</button></a></div>`
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) { coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360 }
+            map.getCanvas().style.cursor = 'pointer';
+            name_popup.remove()
+            full_popup.setLngLat(coordinates).setHTML(html).addTo(map)
+        })
+    </script>
+{% endblock %}

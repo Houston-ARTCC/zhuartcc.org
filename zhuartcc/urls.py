@@ -32,6 +32,9 @@ urlpatterns = [
     # Pilots
     path('map/', pilots.view_artcc_map),                                # View ARTCC Map
     path('scenery/', pilots.view_scenery),                              # View Scenery
+    path('scenery/new/', pilots.add_scenery),                           # Add Scenery (POST / STAFF)
+    path('scenery/edit/', pilots.edit_scenery),                         # Edit Scenery (POST / STAFF)
+    path('scenery/delete/', pilots.delete_scenery),                     # Delete Scenery (POST / STAFF)
 
     # Resource
     path('resources/', resource.view_resources),                        # View Resources

@@ -1,0 +1,201 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+    {% if request.session.staff %}
+        <div class="text-center mb-4">
+            <button class="btn btn-lg btn-primary" data-action="add-scenery"><i class="far fa-plus"></i> Add Scenery</button>
+        </div>
+    {% endif %}
+    <div class="row">
+        {% for simulator, list in sceneries.items %}
+            <div class="col-md-12 col-xl-6 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-secondary">
+                        <h5>{{ simulator }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover" style="width: 100%">
+                            <colgroup>
+                                <col style="width: 5%">
+                                <col style="width: 80%">
+                                <col style="width: 15%">
+                            </colgroup>
+                            <thead>
+                                {% if request.session.staff %}
+                                    <th></th>
+                                {% endif %}
+                                <th>Name</th>
+                                <th class="text-center">Type</th>
+                            </thead>
+                            <tbody>
+                                {% for scenery in list %}
+                                    <tr>
+                                        {% if request.session.staff %}
+                                            <td class="text-center"><a class="link-secondary" data-action="edit-scenery" data-id="{{ scenery.id }}" data-name="{{ scenery.name }}" data-simulator="{{ scenery.get_simulator_display }}" data-link="{{ scenery.link }}" data-payware="{{ scenery.payware|lower }}"><i class="fas fa-pencil-ruler"></i></a></td>
+                                        {% endif %}
+                                        <td><a href="{{ scenery.link }}" target="_blank">{{ scenery.name }}</a></td>
+                                        <td class="text-center">
+                                            {% if scenery.payware %}
+                                                <span class="badge badge-sm badge-info">Payware</span>
+                                            {% else %}
+                                                <span class="badge badge-sm badge-success">Freeware</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% if request.session.staff %}
+        <script>
+            $(function() {
+                $('[data-action="edit-scenery"]').click(function() {
+                    const $this = $(this)
+                    $('#customModal select[name="simulator"]').val($this.data('simulator'))
+                    launchCustomModal(
+                        'info',
+                        'Editing Scenery',
+                        `<form id="editForm" action="/resources/edit/" method="POST">
+                            {% csrf_token %}
+                            <input name="id" value="` + $this.data('id') + `" hidden>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <input name="name" type="text" value="` + $this.data('name') + `" required>
+                                        <label>Name</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <div class="select-group">
+                                            <select name="simulator" type="text" required>
+                                                {% for simulator in simulators %}
+                                                    <option>{{ simulator.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Simulator</label>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <input name="link" type="text" value="` + $this.data('link') + `" required>
+                                        <label>Link</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="text-left col-12 mb-3 toggle">
+                                    <input name="payware" type="checkbox" ` + ($this.data('payware') ? 'checked' : '') + `>
+                                    <label>Payware Scenery</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary">Save Changes</button>
+                        </form>
+                        <hr>
+                        <button class="btn btn-danger" onClick="deleteScenery(` + $this.data('id') + `)"><i class="far fa-trash-alt"></i> Delete</button>`
+                    )
+                    $('#editForm').submit(function(e) {
+                        e.preventDefault()
+                        $.post({
+                            url: 'edit/',
+                            data: new FormData(this),
+                            processData: false,
+                            contentType: false,
+                        })
+                        .done(function() {
+                            location.reload()
+                        })
+                        .fail(function(error) {
+                            $('#customModal').modal('hide')
+                            launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                        })
+                    })
+                })
+                $('[data-action="add-scenery"]').click(function() {
+                    launchCustomModal(
+                        'info',
+                        'Adding Scenery',
+                        `<form id="addForm">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <input name="name" type="text" required>
+                                        <label>Name</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <div class="select-group">
+                                            <select name="simulator" type="text" required>
+                                                {% for simulator in simulators %}
+                                                    <option>{{ simulator.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Simulator</label>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <input name="link" type="text" required>
+                                        <label>Link</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="text-left col-12 mb-3 toggle">
+                                    <input name="payware" type="checkbox">
+                                    <label>Payware Scenery</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary">Save Changes</button>
+                        </form>`
+                    )
+                    $('#addForm').submit(function(e) {
+                        e.preventDefault()
+                        $.post({
+                            url: 'new/',
+                            data: new FormData(this),
+                            processData: false,
+                            contentType: false,
+                        })
+                        .done(function() {
+                            location.reload()
+                        })
+                        .fail(function(error) {
+                            $('#customModal').modal('hide')
+                            launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                        })
+                    })
+                })
+            })
+
+            function deleteScenery(id) {
+                $.post({
+                    url: 'delete/',
+                    data: {'id': id}
+                })
+                .done(function() {
+                    location.reload()
+                })
+                .fail(function(error) {
+                    $('#customModal').modal('hide')
+                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                })
+            }
+        </script>
+    {% endif %}
+{% endblock %}

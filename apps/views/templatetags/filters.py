@@ -22,4 +22,4 @@ def as_range(int):
 
 @register.filter
 def get_value_from_dict(dict, key):
-    return dict[str(key)]
+    return dict[str(key)] if str(key) in dict else None

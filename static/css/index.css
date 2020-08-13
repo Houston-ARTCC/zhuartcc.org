@@ -158,8 +158,16 @@ a:hover {
 .badge {
     font: 16px Gilroy-Bold, Helvetica, sans-serif;
 }
+.badge-sm {
+    font-size: 15px;
+    border-radius: 5px;
+}
+.badge-md {
+    font-size: 28px;
+    border-radius: 8px;
+}
 .badge-lg {
-    font-size: 40px;
+    font-size: 45px;
     border-radius: 10px;
 }
 .badge-success {
@@ -175,6 +183,10 @@ a:hover {
 .badge-muted {
     background-color: #c4c4c4!important;
     color: white!important;
+}
+.badge-light {
+    background-color: white!important;
+    color: #2d45a2!important;
 }
 
 

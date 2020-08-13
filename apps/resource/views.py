@@ -14,7 +14,12 @@ from zhuartcc.decorators import require_staff
 def view_resources(request):
     resources = Resource.objects.all().order_by('category')
     resources_sorted = {k: list(g) for k, g in groupby(resources, key=lambda resource: resource.category)}
-    return render(request, 'resources.html', {'page_title': 'Resources', 'resources': resources_sorted})
+    categories = Resource._meta.get_field('category').choices
+    return render(request, 'resources.html', {
+        'page_title': 'Resources',
+        'resources': resources_sorted,
+        'categories': categories
+    })
 
 
 # Accepts form data and updates database entry

@@ -1,4 +1,5 @@
 {% extends 'mainTemplate.html' %}
+{% load filters %}
 
 {% block body %}
     {% if request.session.staff %}
@@ -7,15 +8,15 @@
         </div>
     {% endif %}
     <div class="row">
-        {% for category, list in resources.items %}
+        {% for category in categories %}
             <div class="col-lg-6 col-xl-4 mx-auto">
                 <div class="card">
                     <div class="card-header bg-secondary">
-                        <a class="float-right mt-3" data-toggle="collapse" href="#collapse-{{ category }}"><i class="far fa-lg fa-plus"></i></a>
-                        <h5 class="mb-0">{{ category }}</h5>
-                        <p class="mb-0">{{ list|length }} Resource{{ list|length|pluralize }}</p>
+                        <a class="float-right mt-3" data-toggle="collapse" href="#collapse-{{ category.0 }}"><i class="far fa-lg fa-plus"></i></a>
+                        <h5 class="mb-0">{{ category.0 }}</h5>
+                        <p class="mb-0">{{ resources|get_value_from_dict:category.0|length }} Resource{{ resources|get_value_from_dict:category.0|length|pluralize }}</p>
                     </div>
-                    <div class="collapse" id="collapse-{{ category }}">
+                    <div class="collapse" id="collapse-{{ category.0 }}">
                         <div class="card-body">
                             <table class="table table-hover" style="width: 100%">
                                 <thead>
@@ -26,10 +27,10 @@
                                     <th style="width: 70%">File</th>
                                 </thead>
                                 <tbody>
-                                    {% for resource in list %}
+                                    {% for resource in resources|get_value_from_dict:category.0 %}
                                         <tr style="height: 20px">
                                             {% if request.session.staff %}
-                                            <td><a class="link-secondary" data-action="edit-resource" data-id="{{ resource.id }}" data-name="{{ resource.name }}" data-category="{{ resource.category }}" data-description="{{ resource.description }}"><i class="fas fa-pencil-ruler"></i></a></td>
+                                                <td><a class="link-secondary" data-action="edit-resource" data-id="{{ resource.id }}" data-name="{{ resource.name }}" data-category="{{ resource.category }}" data-description="{{ resource.description }}"><i class="fas fa-pencil-ruler"></i></a></td>
                                             {% endif %}
                                             <td>{{ resource.updated|date:'Y-m-d' }}</td>
                                             <td><a href="{{ resource.path.url }}" target="_blank">{{ resource.name }}</a></td>
@@ -93,7 +94,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button class="btn btn-primary" function="deleteDoc">Save Changes</button>
+                            <button class="btn btn-primary">Save Changes</button>
                         </form>
                         <hr>
                         <button class="btn btn-danger" onClick="deleteResource(` + $this.data('id') + `)"><i class="far fa-trash-alt"></i> Delete</button>`
@@ -102,7 +103,7 @@
                     $('#editForm').submit(function(e) {
                         e.preventDefault()
                         $.post({
-                            url: '/resources/edit/',
+                            url: 'edit/',
                             data: new FormData(this),
                             processData: false,
                             contentType: false,

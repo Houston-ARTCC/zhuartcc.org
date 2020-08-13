@@ -1,3 +1,5 @@
+from itertools import groupby
+
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -10,8 +12,9 @@ from zhuartcc.decorators import require_staff
 
 
 def view_resources(request):
-    resources = {category: Resource.objects.filter(category=category) for category in settings.RESOURCE_CATEGORIES}
-    return render(request, 'resources.html', {'page_title': 'Resources', 'resources': resources})
+    resources = Resource.objects.all().order_by('category')
+    resources_sorted = {k: list(g) for k, g in groupby(resources, key=lambda resource: resource.category)}
+    return render(request, 'resources.html', {'page_title': 'Resources', 'resources': resources_sorted})
 
 
 # Accepts form data and updates database entry
@@ -27,7 +30,7 @@ def edit_resource(request):
 
     user = User.objects.get(cid=request.session['cid'])
     ActionLog(action=f'Resource "{resource.name}" edited by {user.return_full_name()}.').save()
-    
+
     resource.save()
     return redirect('/resources')
 

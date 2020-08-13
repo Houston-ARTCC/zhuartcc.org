@@ -2,13 +2,13 @@
 
 {% block body %}
 <div class="row">
-    {% for category, resources in resources.items %}
+    {% for category, list in resources.items %}
     <div class="col-lg-6 col-xl-4 mx-auto">
         <div class="card">
             <div class="card-header bg-secondary">
                 <a class="float-right mt-3" data-toggle="collapse" href="#collapse-{{ category }}"><i class="far fa-lg fa-plus"></i></a>
                 <h5 class="mb-0">{{ category }}</h5>
-                <p class="mb-0">{{ resources.count }} Resource{{ resources.count|pluralize }}</p>
+                <p class="mb-0">{{ list|length }} Resource{{ list|length|pluralize }}</p>
             </div>
             <div class="collapse" id="collapse-{{ category }}">
                 <div class="card-body">
@@ -21,7 +21,7 @@
                             <th style="width: 70%">File</th>
                         </thead>
                         <tbody>
-                            {% for resource in resources %}
+                            {% for resource in list %}
                             <tr style="height: 20px">
                                 {% if request.session.staff %}
                                 <td><a class="link-secondary edit" data-id="{{ resource.id }}" data-name="{{ resource.name }}" data-category="{{ resource.category }}" data-description="{{ resource.description }}"><i class="fas fa-pencil-ruler"></i></a></td>

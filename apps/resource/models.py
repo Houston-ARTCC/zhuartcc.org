@@ -15,7 +15,7 @@ class Resource(models.Model):
     name = models.CharField(max_length=128)
     category = models.CharField(max_length=64, choices=CATEGORIES)
     path = models.FileField(upload_to='doc/')
-    updated = models.DateTimeField()
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name

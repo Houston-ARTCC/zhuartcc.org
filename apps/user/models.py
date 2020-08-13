@@ -30,7 +30,6 @@ class User(models.Model):
     mentor_level = models.CharField(max_length=32, null=True, blank=True)
 
     # Endorsements
-    cert_int = models.IntegerField(default=0, choices=ENDORSEMENTS)
     del_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
     gnd_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
     twr_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)
@@ -52,19 +51,23 @@ class User(models.Model):
     activity_exempt = models.BooleanField(default=False)
 
     # Returns boolean value representing whether or not the user is staff
+    @property
     def is_staff(self):
         return self.staff_role is not None and self.staff_role != ''
 
     # Returns boolean value representing whether or not the user is a mentor or instructor
+    @property
     def is_mentor(self):
         return self.training_role is not None and self.training_role != ''
 
     # Returns a string of the user's full name
-    def return_full_name(self):
+    @property
+    def full_name(self):
         return f'{self.first_name} {self.last_name}'
 
     # Returns an enumerated integer based on the user's endorsement level
-    def return_cert_int(self):
+    @property
+    def cert_int(self):
         if self.ocn_cert == 2:
             return 8
         elif self.ctr_cert == 2:
@@ -85,7 +88,8 @@ class User(models.Model):
             return 0
 
     # Returns an enumerated integer based on the user's rating
-    def return_rating_int(self):
+    @property
+    def rating_int(self):
         if self.rating == 'OBS':
             return 0
         elif self.rating == 'S1':
@@ -109,13 +113,12 @@ class User(models.Model):
 
     # Awards minor DEL, GND, TWR, and APP endorsement to S2+ controllers
     def assign_initial_cert(self):
-        if self.return_rating_int() > 1:
+        if self.rating_int > 1:
             self.del_cert = 1
             self.gnd_cert = 1
             self.twr_cert = 1
-        if self.return_rating_int() > 2:
+        if self.rating_int > 2:
             self.app_cert = 1
-        self.cert_int = self.return_cert_int()
 
     def __str__(self):
-        return f'({self.main_role}) {self.return_full_name()}'
+        return self.full_name

@@ -112,7 +112,7 @@
                                     <td class="text-center"><span class="d-none">{{ session.start|date:'m/d/Y Hi' }}</span>{{ session.start|date:'M d, Y @ Hi\z' }}</td>
                                     <td class="text-center">{{ session.get_level_display }}</td>
                                     <td class="text-center">{{ session.get_type_display }}</td>
-                                    <td class="text-center">{{ session.instructor.return_full_name }}</td>
+                                    <td class="text-center">{{ session.instructor.full_name }}</td>
                                     <td class="text-center"><span class="badge
                                         {% if session.status == 0 %}badge-info
                                         {% elif session.status == 1 %}badge-success

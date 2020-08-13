@@ -19,7 +19,7 @@
     <h3>Type</h3>
     <p>{{ session.get_type_display }}</p>
     <h3>Instructor</h3>
-    <p>{{ session.instructor.return_full_name }}</p>
+    <p>{{ session.instructor.full_name }}</p>
     <h3>Duration</h3>
     <p>{{ session.duration|duration }}</p>
 {% endblock %}

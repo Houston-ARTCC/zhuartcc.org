@@ -96,8 +96,8 @@
                                 {% for controller in online %}
                                 <tr>
                                     <td>{{ controller.callsign }}</td>
-                                    <td>{{ controller.user.return_full_name }}</td>
-                                    <td>{{ controller.return_duration|duration }}</td>
+                                    <td>{{ controller.user.full_name }}</td>
+                                    <td>{{ controller.duration|duration }}</td>
                                 </tr>
                                 {% empty %}
                                 <tr>

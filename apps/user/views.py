@@ -1,4 +1,6 @@
 import calendar
+from itertools import groupby
+
 import requests
 import pytz
 from datetime import datetime
@@ -41,7 +43,7 @@ def view_staff(request):
 
 # Gets all controllers by membership status from local database and serves 'roster.html' file
 def view_roster(request):
-    active_controllers = User.objects.all().exclude(status=2)
+    active_controllers = User.objects.exclude(status=2)
     home_controllers = active_controllers.filter(main_role='HC').order_by('first_name')
     visiting_controllers = active_controllers.filter(main_role='VC').order_by('first_name')
     mvap_controllers = active_controllers.filter(main_role='MC').order_by('first_name')
@@ -56,16 +58,21 @@ def view_roster(request):
 
 # Sorts controllers by certification level
 def sort_controllers(query_set):
+    controllers = sorted(query_set, key=lambda controller: controller.cert_int)
+    controllers_ordered = {k: list(g) for k, g in groupby(controllers, key=lambda controller: controller.cert_int)}
+    for i in range(9):
+        if i not in controllers_ordered:
+            controllers_ordered[i] = []
     return {
-        'Oceanic': query_set.filter(cert_int=8),
-        'Center': query_set.filter(cert_int=7),
-        'Major Approach': query_set.filter(cert_int=6),
-        'Minor Approach': query_set.filter(cert_int=5),
-        'Major Tower': query_set.filter(cert_int=4),
-        'Minor Tower': query_set.filter(cert_int=3),
-        'Major Ground': query_set.filter(cert_int=2),
-        'Minor Ground': query_set.filter(cert_int=1),
-        'Observer': query_set.filter(cert_int=0),
+        'Oceanic': controllers_ordered[8],
+        'Center': controllers_ordered[7],
+        'Major Approach': controllers_ordered[6],
+        'Minor Approach': controllers_ordered[5],
+        'Major Tower': controllers_ordered[4],
+        'Minor Tower': controllers_ordered[3],
+        'Major Ground': controllers_ordered[2],
+        'Minor Ground': controllers_ordered[1],
+        'Observer': controllers_ordered[0],
     }
 
 
@@ -81,7 +88,7 @@ def view_profile(request, cid):
     )
 
     return render(request, 'profile.html', {
-        'page_title': user.return_full_name(),
+        'page_title': user.full_name,
         'user': user,
         'stats': stats,
         'connections': connections,
@@ -112,14 +119,13 @@ def edit_user(request, cid):
         user.app_cert = int(post['app_cert'])
         user.ctr_cert = int(post['ctr_cert'])
         user.ocn_cert = int(post['ocn_cert'])
-        user.cert_int = user.return_cert_int()
         user.save()
 
         admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'User {user.return_full_name()} updated by {admin.return_full_name()}.').save()
+        ActionLog(action=f'User {user.full_name} updated by {admin.full_name}.').save()
         return redirect('/roster')
 
-    return render(request, 'editUser.html', {'page_title': f'Editing {user.return_full_name()}', 'user': user})
+    return render(request, 'editUser.html', {'page_title': f'Editing {user.full_name}', 'user': user})
 
 
 @require_staff
@@ -139,7 +145,7 @@ def update_status(request):
         user.save()
 
         admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'User {user.return_full_name()} set as {status} by {admin.return_full_name()}.').save()
+        ActionLog(action=f'User {user.full_name} set as {status} by {admin.full_name}.').save()
 
         return HttpResponse(status=200)
     except:
@@ -175,7 +181,7 @@ def remove_users(request):
             )
 
             admin = User.objects.get(cid=request.session['cid'])
-            ActionLog(action=f'User {user.return_full_name()} set to inactive by {admin.return_full_name()}.').save()
+            ActionLog(action=f'User {user.full_name} set to inactive by {admin.full_name}.').save()
         except:
             continue
 
@@ -192,7 +198,7 @@ def add_comment(request, cid):
         user.save()
 
         admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Staff comment added for {user.return_full_name()} by {admin.return_full_name()}.').save()
+        ActionLog(action=f'Staff comment added for {user.full_name} by {admin.full_name}.').save()
 
         return HttpResponse(status=200)
     except:
@@ -209,7 +215,7 @@ def remove_comment(request, cid):
         user.save()
 
         admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Staff comment removed for {user.return_full_name()} by {admin.return_full_name()}.').save()
+        ActionLog(action=f'Staff comment removed for {user.full_name} by {admin.full_name}.').save()
 
         return HttpResponse(status=200)
     except:

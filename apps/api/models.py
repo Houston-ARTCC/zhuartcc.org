@@ -10,11 +10,12 @@ class Controller(models.Model):
     online_since = models.DateTimeField()
     last_update = models.DateTimeField()
 
-    def return_duration(self):
+    @property
+    def duration(self):
         return self.last_update - self.online_since
 
     def __str__(self):
-        return f'{self.user.return_full_name()} on {self.callsign}'
+        return f'{self.user.full_name} on {self.callsign}'
 
 
 class ControllerSession(models.Model):
@@ -24,4 +25,4 @@ class ControllerSession(models.Model):
     duration = models.DurationField()
 
     def __str__(self):
-        return f'{self.time_logon} | {self.user.return_full_name()} on {self.callsign}'
+        return f'{self.time_logon} | {self.user.full_name} on {self.callsign}'

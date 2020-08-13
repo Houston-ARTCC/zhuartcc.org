@@ -41,8 +41,8 @@ def login(request):
             if user_query.exists() and user_query[0].status != 2:
                 user = User.objects.get(cid=data['cid'])
                 request.session['guest'] = False
-                request.session['staff'] = user.is_staff()
-                request.session['mentor'] = user.is_mentor()
+                request.session['staff'] = user.is_staff
+                request.session['mentor'] = user.is_mentor
             else:
                 request.session['guest'] = True
                 request.session['staff'] = False

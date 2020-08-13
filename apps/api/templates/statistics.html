@@ -70,7 +70,7 @@
                         <tbody>
                             {% for user in main_users %}
                                 <tr>
-                                    <td>{{ user.user_obj.return_full_name }} {% if user.user_obj.main_role == 'VC' %}<b>(Visitor)</b>{% endif %}</td>
+                                    <td>{{ user.user_obj.full_name }} {% if user.user_obj.main_role == 'VC' %}<b>(Visitor)</b>{% endif %}</td>
                                     <td class="text-center">{{ user.user_obj.cid }}</td>
                                     <td class="text-center">{{ user.user_obj.rating }}</td>
                                     <td class="text-right pr-0 border-left" style="width: 2%">

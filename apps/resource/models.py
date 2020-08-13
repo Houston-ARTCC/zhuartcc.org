@@ -10,7 +10,7 @@ class Resource(models.Model):
         ('SOP', 'SOP'),
         ('LOA', 'LOA'),
         ('MAVP', 'MAVP'),
-        ('Misc','Misc')
+        ('Misc', 'Misc')
     )
     name = models.CharField(max_length=128)
     category = models.CharField(max_length=64, choices=CATEGORIES)

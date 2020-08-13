@@ -38,7 +38,7 @@ class TrainingSession(models.Model):
     session_notes = models.FileField(upload_to='training/', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.start} | {self.student.return_full_name()} with {self.instructor.return_full_name()}'
+        return f'{self.start} | {self.student.full_name} with {self.instructor.full_name}'
 
 
 class Question(models.Model):
@@ -85,4 +85,4 @@ class Exam(models.Model):
         self.save()
 
     def __str__(self):
-        return f'{self.assigned} | {self.student.return_full_name()} - {self.name}'
+        return f'{self.assigned} | {self.student.full_name} - {self.name}'

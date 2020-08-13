@@ -43,9 +43,9 @@ def return_hour_aggregate(user):
             current=Sum('duration', filter=Q(start__month=now.month))
         )
     }
-    if aggregate['user_obj'].is_staff():
+    if aggregate['user_obj'].is_staff:
         requirement = timedelta(hours=5)
-    elif aggregate['user_obj'].return_cert_int() > 0:
+    elif aggregate['user_obj'].cert_int > 0:
         requirement = timedelta(hours=2)
     else:
         training_hours = aggregate['training_hours']['current']

@@ -29,7 +29,7 @@ def edit_resource(request):
     resource.updated = timezone.now()
 
     user = User.objects.get(cid=request.session['cid'])
-    ActionLog(action=f'Resource "{resource.name}" edited by {user.return_full_name()}.').save()
+    ActionLog(action=f'Resource "{resource.name}" edited by {user.full_name}.').save()
 
     resource.save()
     return redirect('/resources')
@@ -47,7 +47,7 @@ def add_resource(request):
     )
     resource.save()
     user = User.objects.get(cid=request.session['cid'])
-    ActionLog(action=f'Resource "{resource.name}" created by {user.return_full_name()}.').save()
+    ActionLog(action=f'Resource "{resource.name}" created by {user.full_name}.').save()
     return redirect('/resources')
 
 
@@ -57,6 +57,6 @@ def add_resource(request):
 def delete_resource(request):
     resource = Resource.objects.get(id=request.POST['id'])
     user = User.objects.get(cid=request.session['cid'])
-    ActionLog(action=f'Resource "{resource.name}" deleted by {user.return_full_name()}.').save()
+    ActionLog(action=f'Resource "{resource.name}" deleted by {user.full_name}.').save()
     resource.delete()
     return redirect('/resources')

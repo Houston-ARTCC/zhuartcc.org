@@ -13,7 +13,3 @@ def view_homepage(request):
 
 def view_privacy_policy(request):
     return render(request, 'privacy.html', {'page_title': 'Privacy Policy'})
-
-
-def view_artcc_map(request):
-    return render(request, 'artcc_map.html', {'page_title': 'ARTCC Map'})

@@ -6,6 +6,7 @@ from django.conf import settings
 from apps.api import views as api
 from apps.event import views as event
 from apps.feedback import views as feedback
+from apps.pilots import views as pilots
 from apps.resource import views as resource
 from apps.training import views as training
 from apps.uls import views as uls
@@ -27,6 +28,10 @@ urlpatterns = [
     # Feedback
     path('feedback/', feedback.view_all_feedback),                      # View All Feedback
     path('feedback/new/', feedback.add_feedback),                       # Add New Feedback
+
+    # Pilots
+    path('map/', pilots.view_artcc_map),                                # View ARTCC Map
+    path('scenery/', pilots.view_scenery),                              # View Scenery
 
     # Resource
     path('resources/', resource.view_resources),                        # View Resources
@@ -57,7 +62,6 @@ urlpatterns = [
     # Views
     path('', views.view_homepage),                                      # View Homepage
     path('privacy/', views.view_privacy_policy),                        # View Privacy Policy
-    path('map/', views.view_artcc_map),                                 # View ARTCC Map
 
     # Visit
     path('visit/', visit.submit_visiting_request),                      # Submit Visiting Request (LOGGED IN)

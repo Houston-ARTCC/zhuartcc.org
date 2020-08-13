@@ -58,7 +58,6 @@
             $(function() {
                 $('[data-action="edit-scenery"]').click(function() {
                     const $this = $(this)
-                    $('#customModal select[name="simulator"]').val($this.data('simulator'))
                     launchCustomModal(
                         'info',
                         'Editing Scenery',
@@ -104,6 +103,7 @@
                         <hr>
                         <button class="btn btn-danger" onClick="deleteScenery(` + $this.data('id') + `)"><i class="far fa-trash-alt"></i> Delete</button>`
                     )
+                    $('#customModal select[name="simulator"]').val($this.data('simulator'))
                     $('#editForm').submit(function(e) {
                         e.preventDefault()
                         $.post({

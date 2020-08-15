@@ -18,6 +18,7 @@ from apps.visit import views as visit
 urlpatterns = [
     # Administration
     path('admin/', administration.view_admin_panel),                    # View Admin Panel (STAFF)
+    path('admin/log/', administration.view_action_log),
     path('admin/transfers/', administration.view_transfers),
 
     # API

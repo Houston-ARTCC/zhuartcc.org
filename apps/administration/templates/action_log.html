@@ -1,0 +1,30 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+    <table class="table table-striped" id="actions">
+        <thead>
+            <tr>
+                <th class="border-0" style="width: 33.3%">Date / Time</th>
+                <th class="border-0" style="width: 33.3%">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for action in actions %}
+                <tr>
+                    <td style="width: 15%; padding: 0.8%!important"><span class="d-none">{{ action.timestamp|date:'m/d/Y Hi' }}</span>{{ action.timestamp|date:'M d, Y @ Hi\z' }}</td>
+                    <td style="width: 85%; padding: 0.8%!important">{{ action.action }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#actions').DataTable({
+            pageLength: 20,
+            lengthChange: false,
+            order: [[ 0, "desc" ]]
+        })
+    </script>
+{% endblock %}

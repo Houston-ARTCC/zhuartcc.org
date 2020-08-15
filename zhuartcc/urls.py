@@ -3,6 +3,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from apps.administration import views as administration
 from apps.api import views as api
 from apps.event import views as event
 from apps.feedback import views as feedback
@@ -15,6 +16,9 @@ from apps.views import views as views
 from apps.visit import views as visit
 
 urlpatterns = [
+    # Administration
+    path('admin/', administration.view_admin_panel),                    # View Admin Panel (STAFF)
+
     # API
     path('stats/', api.view_statistics),                                # View Statistics
 

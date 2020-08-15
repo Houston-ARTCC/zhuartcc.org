@@ -1,0 +1,97 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+    {% if transfers %}
+        <div class="row">
+            {% for transfer in transfers %}
+                <div class="col-md-4 mx-auto">
+                    <div class="card">
+                        <div class="card-header bg-secondary">
+                            <div class="float-right">
+                                <span class="badge badge-info">ID: {{ transfer.id }}</span>
+                            </div>
+                            <h5>{{ transfer.fname }} {{ transfer.lname }} ({{ transfer.cid }})</h5>
+                            <p class="mb-0">Submitted {{ transfer.date }}</p>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ transfer.reason }}</p>
+                            <div class="text-center">
+                                <button class="btn btn-danger" data-action="reject" data-id="{{ transfer.id }}" data-name="{{ transfer.fname }} {{ transfer.lname }}">Reject</button>
+                                <button class="btn btn-success" data-action="accept" data-id="{{ transfer.id }}" data-name="{{ transfer.fname }} {{ transfer.lname }}">Accept</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-primary">
+            <h4 class="alert-heading">Whup, looks like its empty!</h4>
+            <p class="mb-0">There are currently no pending transfer requests.</p>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('[data-action="accept"], [data-action="reject"]').click(function() {
+            const $this = $(this);
+            if ($this.data('action') === 'accept') {
+                launchCustomModal(
+                    'info',
+                    `Accept ${$this.data('name')}'s Transfer Request?`,
+                    `<p>Are you sure you would like to accept this transfer request? This action cannot be undone!</p>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+                )
+                $('#customModal [data-action="confirm"]').click(function() {
+                    $.ajax({
+                        url: 'https://api.vatusa.net/v2/facility/ZHU/transfers/' + $(this).data('id'),
+                        type: 'PUT',
+                        data: {'action': 'accept'}
+                    })
+                    .done(function() {
+                        location.reload()
+                    })
+                    .fail(function(error) {
+                        $('#customModal').modal('hide')
+                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                    })
+                })
+            } else {
+                launchCustomModal(
+                    'info',
+                    `Reject ${$this.data('name')}'s Transfer Request?`,
+                    `<form id="rejectForm">
+                        <div class="label-group">
+                            <textarea name="reason" rows="2" required></textarea>
+                            <label>Reason for Rejection</label>
+                            <span class="focus-border"></span>
+                        </div>
+                        <p>Are you sure you would like to reject this transfer request? This action cannot be undone!</p>
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary">Confirm</button>
+                    </form>`
+                )
+                $('#customModal #rejectForm').submit(function(e) {
+                    e.preventDefault()
+                    $.ajax({
+                        url: 'https://api.vatusa.net/v2/facility/ZHU/transfers/' + $(this).data('id'),
+                        type: 'PUT',
+                        data: {
+                            'action': 'reject',
+                            'reason': $('#customModal [name="reason"]').val()
+                        }
+                    })
+                    .done(function() {
+                        location.reload()
+                    })
+                    .fail(function(error) {
+                        $('#customModal').modal('hide')
+                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                    })
+                })
+            }
+        })
+    </script>
+{% endblock %}

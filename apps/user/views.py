@@ -198,7 +198,7 @@ def add_comment(request, cid):
         user.save()
 
         admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Staff comment added for {user.full_name} by {admin.full_name}.').save()
+        ActionLog(action=f'Staff comment for {user.full_name} added by {admin.full_name}.').save()
 
         return HttpResponse(status=200)
     except:
@@ -215,7 +215,7 @@ def remove_comment(request, cid):
         user.save()
 
         admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Staff comment removed for {user.full_name} by {admin.full_name}.').save()
+        ActionLog(action=f'Staff comment for {user.full_name} removed by {admin.full_name}.').save()
 
         return HttpResponse(status=200)
     except:

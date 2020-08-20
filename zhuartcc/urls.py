@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.decorators.clickjacking import xframe_options_sameorigin
+from django.views.static import serve
 
 from apps.administration import views as administration
 from apps.api import views as api
@@ -84,4 +86,4 @@ urlpatterns = [
 ]
 
 # Allows access of media files such as documents and user profiles
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, view=xframe_options_sameorigin(serve), document_root=settings.MEDIA_ROOT)

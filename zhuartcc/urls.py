@@ -20,6 +20,8 @@ urlpatterns = [
     path('admin/', administration.view_admin_panel),                    # View Admin Panel (STAFF)
     path('admin/log/', administration.view_action_log),
     path('admin/transfers/', administration.view_transfers),
+    path('admin/broadcast/', administration.view_broadcast),
+    path('admin/broadcast/send/', administration.send_broadcast),
 
     # API
     path('stats/', api.view_statistics),                                # View Statistics

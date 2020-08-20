@@ -4,7 +4,7 @@
 <form action="/feedback/new/" method="POST">
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-12 col-xl-5">
+        <div class="col-md-12 col-xl-5 d-flex align-content-stretch">
             <div class="card card-nav-tabs">
                 <div class="card-header">Controller & Pilot Details</div>
                 <div class="card-body">
@@ -13,7 +13,7 @@
                             <div class="col-6">
                                 <div class="label-group">
                                     <select name="controller" required>
-                                            <option selected></option>
+                                        <option selected></option>
                                         {% for controller in controllers %}
                                             <option value="{{ controller.cid }}">{{ controller.full_name }}</option>
                                         {% endfor %}
@@ -64,8 +64,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 col-xl-7">
-            <div class="card card-nav-tabs my-4">
+        <div class="col-md-12 col-xl-7 d-flex align-content-stretch">
+            <div class="card card-nav-tabs">
                 <div class="card-header">Comments</div>
                 <div class="card-body">
                     <div class="col">

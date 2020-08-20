@@ -27,7 +27,7 @@
                 <a href="#" class="alert-link" data-action="remove-comment"><div class="float-right">Remove <i class="far fa-times"></i></div></a>
                 <h4 class="alert-heading">Staff Comment</h4>
                 <p class="mb-0">{{ user.staff_comment }}</p>
-                <footer class="blockquote-footer">{{ user.staff_comment_author.full_name }}</footer>
+                <div class="blockquote-footer">{{ user.staff_comment_author.full_name }}</div>
             </div>
         {% endif %}
         <a href="edit"><button class="btn btn-secondary mb-4">Edit User</button></a><button class="btn btn-secondary mb-4" onclick="addComment()">Add Staff Comment</button>
@@ -183,46 +183,48 @@
                 order: [[ 0, "desc" ]]
             })
         })
-        function addComment() {
-            launchCustomModal(
-                'info',
-                'Adding Staff Comment',
-                `<form id="commentForm">
-                    {% csrf_token %}
-                    <div class="label-group">
-                        <textarea name="comment" rows="2"></textarea>
-                        <span class="focus-border"></span>
-                    </div>
-                    <button class="btn btn-primary">Submit</button>
-                </form>`
-            )
-            $('#commentForm').submit(function(e) {
-                e.preventDefault()
-                $.post({
-                    url: 'addcomment/',
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
+        {% if request.session.staff %}
+            function addComment() {
+                launchCustomModal(
+                    'info',
+                    'Adding Staff Comment',
+                    `<form id="commentForm">
+                        {% csrf_token %}
+                        <div class="label-group">
+                            <textarea name="comment" rows="2" required></textarea>
+                            <span class="focus-border"></span>
+                        </div>
+                        <button class="btn btn-primary">Submit</button>
+                    </form>`
+                )
+                $('#commentForm').submit(function(e) {
+                    e.preventDefault()
+                    $.post({
+                        url: 'addcomment/',
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false,
+                    })
+                    .done(function() {
+                        location.reload()
+                    })
+                    .fail(function(error) {
+                        $('#customModal').modal('hide')
+                        console.log(error)
+                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                    })
                 })
+            }
+            $('[data-action="remove-comment"]').click(function() {
+                $.post('removecomment/')
                 .done(function() {
                     location.reload()
                 })
                 .fail(function(error) {
                     $('#customModal').modal('hide')
-                    console.log(error)
                     launchErrorModal('Error ' + error.status + ': ' + error.responseText)
                 })
             })
-        }
-        $('[data-action="remove-comment"]').click(function() {
-            $.post('removecomment/')
-            .done(function() {
-                location.reload()
-            })
-            .fail(function(error) {
-                $('#customModal').modal('hide')
-                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-            })
-        })
+        {% endif %}
     </script>
 {% endblock %}

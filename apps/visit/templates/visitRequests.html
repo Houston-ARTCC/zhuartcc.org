@@ -1,103 +1,103 @@
 {% extends 'mainTemplate.html' %}
 
 {% block body %}
-{% csrf_token %}
-{% for visit in visiting_requests %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card card-nav-tabs">
-            <div class="card-body">
-                <h2><b>{{ visit.first_name }} {{ visit.last_name }}</b> <small><small>from <b>{{ visit.home_facility }}</b></small></small></h2>
-                <p>{{ visit.reason }}</p>
-                <table style="width: 50%" class="table">
-                    <thead>
-                        <th>CID</th>
-                        <th>Rating</th>
-                        <th>Email</th>
-                        <th>Submitted</th>
-                    </thead>
-                    <tbody>
-                        <td>{{ visit.cid }}</td>
-                        <td>{{ visit.rating }}</td>
-                        <td>{{ visit.email }}</td>
-                        <td>{{ visit.submitted }}</td>
-                    </tbody>
-                </table>
-                <button onclick="acceptRequest('{{ visit.cid }}')" class="btn btn-success" id="{{ visit.cid }}">Accept</button><button onclick="rejectRequest('{{ visit.cid }}')" class="btn btn-danger">Reject</button>
+    {% for visit in visiting_requests %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-nav-tabs">
+                    <div class="card-body">
+                        <h4 class="d-inline" style="font-size: 35px">{{ visit.full_name }}</h4> <h2 class="d-inline" style="font-size: 25px">from <b>{{ visit.home_facility }}</b></h2>
+                        <p>{{ visit.reason }}</p>
+                        <table style="width: 50%" class="table">
+                            <thead>
+                                <tr>
+                                    <th>CID</th>
+                                    <th>Rating</th>
+                                    <th>Email</th>
+                                    <th>Submitted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ visit.cid }}</td>
+                                    <td>{{ visit.rating }}</td>
+                                    <td>{{ visit.email }}</td>
+                                    <td>{{ visit.submitted|date:'M d, Y @ Hi\z' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="btn btn-danger" data-action="reject" data-id="{{ visit.id }}" data-name="{{ visit.full_name }}">Reject</button>
+                        <button class="btn btn-success" data-action="accept" data-id="{{ visit.id }}" data-name="{{ visit.full_name }}">Accept</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-{% empty %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card card-nav-tabs">
-            <div class="card-body text-center">
-                <h5>There are currently no pending visiting requests!</h5>
-            </div>
+    {% empty %}
+        <div class="alert alert-primary">
+            <h4 class="alert-heading">Whup, looks like its empty!</h4>
+            <p class="mb-0">There are currently no pending visiting requests.</p>
         </div>
-    </div>
-</div>
-{% endfor %}
-<script>
-    async function acceptRequest(cid) {
-        $.ajax({
-            type: 'POST',
-            url: '/admin/visit/accept/',
-            headers: { 'X-CSRFToken': '{{ csrf_token }}' },
-            data: { 'cid': cid }
-        })
-        .done(function() {
-            Swal.fire({
-                title: 'Success!',
-                icon: 'success',
-            }).then((result) => location.reload())
-        })
-        .fail(function(error) {
-            Swal.fire({
-                title: 'Oh no!',
-                html: 'Something went wrong...<br><code>' + error + '</code>',
-                icon: 'error',
-            })
-        })
-    }
-    async function rejectRequest(cid) {
-        Swal.fire({
-            title: 'Reason for rejection:',
-            input: 'textarea',
-            confirmButtonColor: '#FF3636',
-            confirmButtonText: 'Reject',
-            icon: 'warning',
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            inputValidator: (value) => {
-                if (!value) {
-                    return 'You need to write something!'
-                }
-            },
-            preConfirm: (reason) => {
-                return $.ajax({
-                    type: 'POST',
-                    url: '/admin/visit/reject/',
-                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
-                    data: { 'cid': cid, 'reason': reason }
-                })
-                .done(function() {
-                    Swal.fire({
-                        title: 'Success!',
-                        icon: 'success',
-                    }).then((result) => location.reload())
-                })
-                .fail(function(error) {
-                    Swal.fire({
-                        title: 'Oh no!',
-                        html: 'Something went wrong...<br><code>' + error + '</code>',
-                        icon: 'error',
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('[data-action="accept"], [data-action="reject"]').click(function() {
+            const $this = $(this);
+            if ($this.data('action') === 'accept') {
+                launchCustomModal(
+                    'info',
+                    `Accept ${$this.data('name')}'s Visiting Request?`,
+                    `<p>Are you sure you would like to accept this visiting request? This action cannot be undone!</p>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+                )
+                $('#customModal [data-action="confirm"]').click(function() {
+                    $.post({
+                        url: 'accept/',
+                        data: {'id': $this.data('id')}
+                    })
+                    .done(function() {
+                        location.reload()
+                    })
+                    .fail(function(error) {
+                        $('#customModal').modal('hide')
+                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
                     })
                 })
-            },
-            allowOutsideClick: () => !Swal.isLoading()
+            } else {
+                launchCustomModal(
+                    'info',
+                    `Reject ${$this.data('name')}'s Visiting Request?`,
+                    `<form id="rejectForm">
+                        <div class="label-group">
+                            <textarea name="reason" rows="2" required></textarea>
+                            <label>Reason for Rejection</label>
+                            <span class="focus-border"></span>
+                        </div>
+                        <p>Are you sure you would like to reject this visiting request? This action cannot be undone!</p>
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary">Confirm</button>
+                    </form>`
+                )
+                $('#customModal #rejectForm').submit(function(e) {
+                    e.preventDefault()
+                    $.post({
+                        url: 'reject/',
+                        data: {
+                            'id': $this.data('id'),
+                            'reason': $('#customModal [name="reason"]').val()
+                        }
+                    })
+                    .done(function() {
+                        location.reload()
+                    })
+                    .fail(function(error) {
+                        $('#customModal').modal('hide')
+                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                    })
+                })
+            }
         })
-    }
-</script>
+    </script>
 {% endblock %}

@@ -28,6 +28,18 @@ def submit_visiting_request(request):
                 submitted=timezone.now(),
             )
             visiting_request.save()
+
+            context = {
+                'name': visiting_request.first_name,
+            }
+            send_mail(
+                '[vZHU] We have received your visiting request!',
+                render_to_string('emails/visiting_request_received.txt', context),
+                'no-reply@zhuartcc.org',
+                [visiting_request.email],
+                html_message=render_to_string('emails/visiting_request_received.html', context),
+            )
+
             return redirect('/')
         except:
             return HttpResponse('Something was wrong your request!', status=400)
@@ -49,13 +61,13 @@ def view_visiting_requests(request):
 @require_staff
 @require_POST
 def accept_visiting_request(request):
-    visiting_request = Visit.objects.get(cid=request.POST['cid'])
+    visiting_request = Visit.objects.get(id=request.POST['id'])
 
     # If user is visiting the ARTCC after being marked inactive
     if User.objects.filter(cid=visiting_request.cid).exists():
         edit_user = User.objects.get(cid=visiting_request.cid)
         if edit_user.status == 2:
-            edit_user.status = 1
+            edit_user.status = 0
             edit_user.email = visiting_request.email,
             edit_user.oper_init = assign_oper_init(visiting_request.first_name[0], visiting_request.first_name[0]),
             edit_user.rating = visiting_request.rating,
@@ -76,18 +88,16 @@ def accept_visiting_request(request):
         new_user.assign_initial_cert()
         new_user.save()
 
-    message = {
-        'recipient_name': visiting_request.first_name,
-        'text': 'Your visiting request has been accepted.',
-        'sender': 'Marcus Miller',
-        'sender_role': 'Air Traffic Manager'
+
+    context = {
+        'name': visiting_request.first_name,
     }
     send_mail(
-        'Welcome to ZHU!',
-        render_to_string('emailTemplate.txt', {'message': message}),
+        '[vZHU] Welcome to the Houston ARTCC!',
+        render_to_string('emails/visiting_request_accepted.txt', context),
         'no-reply@zhuartcc.org',
         [visiting_request.email],
-        html_message=render_to_string('emailTemplate.html', {'message': message}),
+        html_message=render_to_string('emails/visiting_request_accepted.html', context),
     )
 
     visiting_request.delete()
@@ -98,20 +108,18 @@ def accept_visiting_request(request):
 @require_staff
 @require_POST
 def reject_visiting_request(request):
-    visiting_request = Visit.objects.get(cid=request.POST['cid'])
+    visiting_request = Visit.objects.get(id=request.POST['id'])
 
-    message = {
-        'recipient_name': visiting_request.first_name,
-        'text': 'Your visiting request has been rejected for the following reason: ' + request.POST['reason'],
-        'sender': 'Marcus Miller',
-        'sender_role': 'Air Traffic Manager'
+    context = {
+        'name': visiting_request.first_name,
+        'reason': request.POST['reason']
     }
     send_mail(
-        'Your ZHU Visting Request...',
-        render_to_string('emailTemplate.txt', {'message': message}),
+        '[vZHU] Your Houston ARTCC Visiting Request...',
+        render_to_string('emails/visiting_request_rejected.txt', context),
         'no-reply@zhuartcc.org',
         [visiting_request.email],
-        html_message=render_to_string('emailTemplate.html', {'message': message}),
+        html_message=render_to_string('emails/visiting_request_rejected.html', context),
     )
 
     visiting_request.delete()

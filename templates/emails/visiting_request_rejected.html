@@ -1,0 +1,14 @@
+{% extends 'emailTemplate.html' %}
+
+
+{% block message %}
+    <p><b>Hello {{ name }},</b></p>
+    <p>We thank you for your interest in visiting the virtual Houston ARTCC. However, your request to visit the ARTCC has been unfortunately denied due to the following reason:</p>
+    <p><i>{{ reason }}</i></p>
+    <p>If you believe there has been an error or wish to appeal this decision, please contact <a href="mailto:atm@zhuartcc.org">atm@zhuartcc.org</a> or <a href="mailto:datm@zhuartcc.org">datm@zhuartcc.org</a> immediately!</p>
+{% endblock %}
+
+
+{% block footer %}
+    This message was sent automatically from <a href="https://zhuartcc.org" target="_blank">zhuartcc.org</a> on {% now 'M d, Y \a\t H:i\z' %}.
+{% endblock %}

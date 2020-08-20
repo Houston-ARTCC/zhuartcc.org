@@ -28,7 +28,9 @@ def view_transfers(request):
         'https://api.vatusa.net/v2/facility/ZHU/transfers',
         params={'apikey': settings.API_KEY},
     ).json()['transfers']
-    return render(request, 'transfers.html', {'page_title': 'Transfers', 'transfers': transfers})
+    return render(request, 'transfers.html', {'page_title': 'Transfer Requests', 'transfers': transfers})
+
+
 @require_staff
 def view_broadcast(request):
     return render(request, 'broadcast.html', {'page_title': 'Broadcast'})

@@ -379,8 +379,8 @@ input.has-content ~ .upload-btn {
 .radio-group-label {
     position: inherit;
     display: block;
-    padding-bottom: 9px;
-    font-size: 13px;
+    padding-bottom: 2px;
+    font-size: 15px;
     color: #2d45a2;
 }
 .radio-label {
@@ -402,7 +402,18 @@ input:checked ~ .radio-label {
     padding-left: 10px;
     color: #aeaeae;
 }
-.toggle input:checked ~ label {
+.toggle input[type="checkbox"] {
+    margin: 0;
+}
+input[type="checkbox"] {
+    margin-bottom: 10px;
+}
+input[type="checkbox"] ~ label {
+    display: inline;
+    position: relative;
+    top: unset;
+}
+input[type="checkbox"]:checked ~ label {
     color: #333333;
 }
 .toggle input {
@@ -973,4 +984,13 @@ dP   dP   dP `88888P8 88Y888P' `88888P'
 }
 .mapboxgl-popup-close-button {
     color: white;
+}
+
+.quill h1,
+.quill h2,
+.quill h3,
+.quill h4,
+.quill h5,
+.quill p {
+    all: unset;
 }

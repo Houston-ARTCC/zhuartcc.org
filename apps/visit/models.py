@@ -12,5 +12,9 @@ class Visit(models.Model):
     reason = models.TextField()
     submitted = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    @property
+    def full_name(self):
         return f'{self.first_name} {self.last_name}'
+
+    def __str__(self):
+        return self.full_name

@@ -1,0 +1,12 @@
+{% extends 'emailTemplate.html' %}
+
+
+{% block message %}
+    <p><b>Hello {{ name }},</b></p>
+    <p></p>
+{% endblock %}
+
+
+{% block footer %}
+    This message was sent automatically from <a href="https://zhuartcc.org" target="_blank">zhuartcc.org</a> on {% now 'M d, Y \a\t H:i\z' %}.
+{% endblock %}

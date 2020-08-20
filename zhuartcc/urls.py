@@ -76,9 +76,9 @@ urlpatterns = [
 
     # Visit
     path('visit/', visit.submit_visiting_request),                      # Submit Visiting Request (LOGGED IN)
-    path('requests/', visit.view_visiting_requests),                    # View All Visiting Requests (STAFF)
-    path('requests/accept/', visit.accept_visiting_request),            # Accept Visiting Request (POST / STAFF)
-    path('requests/reject/', visit.reject_visiting_request),            # Reject Visiting Request (POST / STAFF)
+    path('admin/visits/', visit.view_visiting_requests),                # View All Visiting Requests (STAFF)
+    path('admin/visits/accept/', visit.accept_visiting_request),        # Accept Visiting Request (POST / STAFF)
+    path('admin/visits/reject/', visit.reject_visiting_request),        # Reject Visiting Request (POST / STAFF)
 
     path('django/', admin.site.urls),                                   # django Admin Panel
 ]

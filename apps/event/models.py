@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 
 from ..user.models import User
@@ -15,9 +17,32 @@ class Event(models.Model):
 
 
 class EventPosition(models.Model):
-    event = models.ForeignKey(Event, models.CASCADE, related_name='event_positions')
+    event = models.ForeignKey(Event, models.CASCADE, related_name='positions')
     user = models.ForeignKey(User, models.SET_NULL, null=True, related_name='event_positions', blank=True)
     position = models.CharField(max_length=16)
 
     def __str__(self):
         return f'{self.event.name} | {self.position}'
+
+
+class PositionPreset(models.Model):
+    name = models.CharField(max_length=32)
+    positions_json = models.TextField()
+
+    @property
+    def positions(self):
+        return json.loads(self.positions_json)
+
+    def set_positions(self, positions):
+        self.positions_json = json.dumps(positions)
+
+    def add_to_event(self, event):
+        for position in self.positions:
+            EventPosition(
+                event=event,
+                user=None,
+                position=position,
+            ).save()
+
+    def __str__(self):
+        return f'{self.name}'

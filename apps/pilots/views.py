@@ -37,7 +37,7 @@ def edit_scenery(request):
         scenery.save()
 
         user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Scenery "{scenery.name}" edited by {user.full_name}.').save()
+        ActionLog(action=f'Scenery "{scenery.name}" modified by {user.full_name}.').save()
 
         return HttpResponse(status=200)
     except:

@@ -122,7 +122,7 @@ def edit_user(request, cid):
         user.save()
 
         admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'User {user.full_name} updated by {admin.full_name}.').save()
+        ActionLog(action=f'User {user.full_name} modified by {admin.full_name}.').save()
         return redirect('/roster')
 
     return render(request, 'editUser.html', {'page_title': f'Editing {user.full_name}', 'user': user})

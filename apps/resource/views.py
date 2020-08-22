@@ -36,7 +36,7 @@ def edit_resource(request):
         resource.save()
 
         user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Resource "{resource.name}" edited by {user.full_name}.').save()
+        ActionLog(action=f'Resource "{resource.name}" modified by {user.full_name}.').save()
 
         return HttpResponse(status=200)
     except:

@@ -1,44 +1,57 @@
-<li class="nav-item ml-5">
-    <a class="nav-link" href="/events">Events</a>
-</li>
+{% if request.session.staff %}
+    <li class="nav-item dropdown ml-5">
+        <a class="nav-link" href="#" data-toggle="dropdown">Events</a>
+        <div class="dropdown-menu mt-3">
+            <a class="dropdown-item" href="/events/">Events</a>
+            <a class="dropdown-item" href="#">Archived Events</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/events/new/">New Event</a>
+            <a class="dropdown-item" href="/events/presets/">Position Presets</a>
+        </div>
+    </li>
+{% else %}
+    <li class="nav-item ml-5">
+        <a class="nav-link" href="/events/">Events</a>
+    </li>
+{% endif %}
 <li class="nav-item dropdown ml-5">
     <a class="nav-link" href="#" data-toggle="dropdown">Pilots</a>
     <div class="dropdown-menu mt-3">
-        <a class="dropdown-item" href="/map">ARTCC Map</a>
+        <a class="dropdown-item" href="/map/">ARTCC Map</a>
         <a class="dropdown-item" href="https://simcharts.info/" target="_blank">Charts</a>
         <a class="dropdown-item" href="http://www.flightaware.com/statistics/ifr-route/" target="_blank">Routing</a>
-        <a class="dropdown-item" href="/scenery">Scenery</a>
+        <a class="dropdown-item" href="/scenery/">Scenery</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="/feedback">Feedback</a>
+        <a class="dropdown-item" href="/feedback/">Feedback</a>
     </div>
 </li>
 <li class="nav-item dropdown ml-5">
     <a class="nav-link" href="#" data-toggle="dropdown">Controllers</a>
     <div class="dropdown-menu mt-3">
-        <a class="dropdown-item" href="/roster">Roster</a>
-        <a class="dropdown-item" href="/staff">Staff</a>
+        <a class="dropdown-item" href="/roster/">Roster</a>
+        <a class="dropdown-item" href="/staff/">Staff</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="/resources">Resources</a>
-        <a class="dropdown-item" href="/stats">Statistics</a>
+        <a class="dropdown-item" href="/resources/">Resources</a>
+        <a class="dropdown-item" href="/stats/">Statistics</a>
     </div>
 </li>
 <li class="nav-item dropdown ml-5">
     {% if request.session.vatsim_data %}
-    <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
-    <div class="dropdown-menu mt-3">
-        {% if request.session.guest %}
-        <a class="dropdown-item" href="/visit">Become a Visitor</a>
-        {% else %}
-        <a class="dropdown-item" href="/roster/{{ request.session.vatsim_data.cid }}">My Profile</a>
-        <a class="dropdown-item" href="/training">Training Center</a>
-        {% if request.session.staff %}
-        <a class="dropdown-item" href="/admin">Administration Panel</a>
-        {% endif %}
-        {% endif %}
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="/logout">Log Out</a>
-    </div>
+        <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
+        <div class="dropdown-menu mt-3">
+            {% if request.session.guest %}
+                <a class="dropdown-item" href="/visit/">Become a Visitor</a>
+            {% else %}
+                <a class="dropdown-item" href="/roster/{{ request.session.vatsim_data.cid }}/">My Profile</a>
+                <a class="dropdown-item" href="/training/">Training Center</a>
+                {% if request.session.staff %}
+                    <a class="dropdown-item" href="/admin/">Administration Panel</a>
+                {% endif %}
+            {% endif %}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/logout/">Log Out</a>
+        </div>
     {% else %}
-    <a class="nav-link" href="https://login.vatusa.net/uls/v2/login?fac=ZHU&url=3">Log In</a>
+        <a class="nav-link" href="https://login.vatusa.net/uls/v2/login?fac=ZHU&url=3/">Log In</a>
     {% endif %}
 </li>

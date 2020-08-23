@@ -20,10 +20,10 @@ from apps.visit import views as visit
 urlpatterns = [
     # Administration
     path('admin/', administration.view_admin_panel),                    # View Admin Panel (STAFF)
-    path('admin/log/', administration.view_action_log),
-    path('admin/transfers/', administration.view_transfers),
-    path('admin/broadcast/', administration.view_broadcast),
-    path('admin/broadcast/send/', administration.send_broadcast),
+    path('admin/log/', administration.view_action_log),                 # View Action Log (STAFF)
+    path('admin/transfers/', administration.view_transfers),            # View VATUSA Transfer Requests (STAFF)
+    path('admin/broadcast/', administration.view_broadcast),            # View Broadcast Page (STAFF)
+    path('admin/broadcast/send/', administration.send_broadcast),       # Send Broadcast Email (POST / STAFF)
 
     # API
     path('stats/', api.view_statistics),                                # View Statistics
@@ -57,9 +57,9 @@ urlpatterns = [
     path('resources/delete/', resource.delete_resource),                # Delete Resource (POST / STAFF)
 
     # Training
-    path('training/', training.view_training_center),                   # View Training Center Home
-    path('training/session/<int:id>/', training.view_session),
-    path('training/exam/<int:id>/', training.view_exam),
+    path('training/', training.view_training_center),                   # View Training Center
+    path('training/session/<int:id>/', training.view_session),          # View Training Session
+    path('training/exam/<int:id>/', training.view_exam),                # View Exam
 
     # ULS (Auth)
     path('login/', uls.login),                                          # Login via VATUSA ULS

@@ -10,7 +10,7 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th class="border-0 text-center"><input type="checkbox" id="select-all"></th>
+                                    <th class="border-0 text-center align-middle"><input class="mb-0" type="checkbox" id="select-all"></th>
                                     <th class="border-0 pl-0">Name</th>
                                     <th class="border-0 text-center">CID</th>
                                     <th class="border-0 text-center">Rating</th>
@@ -24,7 +24,7 @@
                                 {% for user in users %}
                                     {% if not user.user_obj.is_staff and not user.user_obj.activity_exempt and not user.user_obj.status == 1 and not user.user_obj.loa_last_month %}
                                         <tr>
-                                            <td style="width: 4%" class="text-center px-0"><input type="checkbox" name="{{ user.user_obj.id }}"></td>
+                                            <td style="width: 4%" class="text-center align-middle"><input class="mb-0" type="checkbox" name="{{ user.user_obj.id }}"></td>
                                             <td class="pl-0">{{ user.user_obj.full_name }} {% if user.user_obj.main_role == 'VC' %}<b>(Visitor)</b>{% endif %}</td>
                                             <td class="text-center">{{ user.user_obj.cid }}</td>
                                             <td class="text-center">{{ user.user_obj.rating }}</td>

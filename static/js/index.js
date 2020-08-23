@@ -115,7 +115,7 @@ function bindModalEvents(modal) {
     modal.on('hidden.bs.modal', function() {
         modal.remove()
     })
-    $('#successModal').on('hidden.bs.modal', function() {
+    $('#successModal, #errorModal, #customModal').on('hidden.bs.modal', function() {
         location.reload()
     })
     $('#customModal input, #customModal select, #customModal textarea').change(checkValue).each(checkValue)

@@ -18,6 +18,7 @@
             <i class="fas fa-angle-right"></i>
         </button>
     </div>
+    <p class="text-center" id="calendar-range"></p>
 
     <div id="calendar" style="height: 800px"></div>
 {% endblock %}
@@ -28,26 +29,121 @@
     <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.min.js"></script>
     <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
-    <script src="http://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
+    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
     <script>
-    const cal = $('#calendar')
-    cal.tuiCalendar({
-        defaultView: 'week',
-        taskView: false,
-        scheduleView: ['time'],
-        useCreationPopup: false,
-        useDetailPopup: false,
-        timezones: [{
-            timezoneOffset: -new Date().getTimezoneOffset(),
-            displayLabel: 'Local',
-            tooltip: 'Local'
-        }, {
-            timezoneOffset: 0,
-            displayLabel: 'UTC',
-            tooltip: 'UTC'
-        }]
-    })
-    $(function() {
+        var cal = null
+        var dateOptions = {year: 'numeric', month: 'long', day: '2-digit'}
+        function setRange() {
+            $('#calendar-range').html('<b>' +
+                new Date(cal.getDateRangeStart().getTime()).toLocaleDateString("en-US", dateOptions) + ' - ' +
+                new Date(cal.getDateRangeEnd().getTime()).toLocaleDateString("en-US", dateOptions) + '</b>'
+            )
+        }
+        $(function() {
+            cal = new tui.Calendar(document.getElementById('calendar'), {
+                defaultView: 'week',
+                taskView: false,
+                scheduleView: ['time'],
+                template: {
+                },
+                useCreationPopup: false,
+                useDetailPopup: false,
+                timezones: [{
+                    timezoneOffset: -new Date().getTimezoneOffset(),
+                    displayLabel: 'Local',
+                    tooltip: 'Local'
+                }, {
+                    timezoneOffset: 0,
+                    displayLabel: 'UTC',
+                    tooltip: 'UTC'
+                }]
+            })
+            cal.on({
+                'clickSchedule': function(e) {
+                    console.log('clickSchedule', e);
+                },
+                'beforeCreateSchedule': function(e) {
+                    console.log('beforeCreateSchedule', e);
+                    launchCustomModal(
+                        'info',
+                        'Creating New Event',
+                        `<form id="new-event" action="/events/new/" method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <input name="name" type="text" required>
+                                        <label>Event Name</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="start" type="datetime-local" value="${new Date(e.start.getTime()).toISOString().slice(0,-1)}" required>
+                                        <label>Start Time (Zulu)</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="end" type="datetime-local" value="${new Date(e.end.getTime()).toISOString().slice(0,-1)}" required>
+                                        <label>End Time (Zulu)</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <input name="banner" type="text" required>
+                                        <label>Banner URL</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="host" type="text" required>
+                                        <label>Event Host</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <select name="preset">
+                                            <option selected></option>
+                                            {% for preset in position_presets %}
+                                                <option value="{{ preset.id }}">{{ preset.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label>Position Preset</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <textarea name="description" rows="3"></textarea>
+                                        <label>Event Description</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary">Submit</button>
+                        </form>`
+                    )
+                    e.guide.clearGuideElement();
+                },
+                'beforeUpdateSchedule': function(e) {
+                    console.log('beforeUpdateSchedule', e);
+                    e.schedule.start = e.start;
+                    e.schedule.end = e.end;
+                    cal.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);
+                },
+                'beforeDeleteSchedule': function(e) {
+                    console.log('beforeDeleteSchedule', e);
+                    cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);
+                }
+            });
+            setRange()
+        })
         $('#calendar-menu button').click(function() {
             switch ($(this).data('action')) {
                 case 'prev':
@@ -60,9 +156,9 @@
                     cal.next()
                     break
             }
-            calendar.clear();
-            calendar.render();
+            setRange()
+            cal.clear()
+            cal.render()
         })
-    })
     </script>
 {% endblock %}

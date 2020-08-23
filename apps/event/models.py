@@ -10,6 +10,7 @@ class Event(models.Model):
     banner = models.URLField()
     start = models.DateTimeField()
     end = models.DateTimeField()
+    host = models.CharField(max_length=16)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):

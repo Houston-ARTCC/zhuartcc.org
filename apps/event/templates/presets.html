@@ -1,0 +1,86 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+    <div class="accordion">
+        <div class="row">
+            {% for preset in position_presets %}
+                <div class="col-6 mx-auto">
+                    <div class="card" data-id="{{ preset.id }}">
+                        <div class="card-header bg-secondary">
+                            <h5 class="mb-0"><a data-toggle="collapse" href="#collapse-{{ preset.id }}"><i class="far fa-plus"></i> &nbsp;{{ preset.name }}</a></h5>
+                        </div>
+                        <div class="collapse" id="collapse-{{ preset.id }}">
+                            <div class="card-body">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width: 8%">
+                                        <col style="width: 92%">
+                                    </colgroup>
+                                    <tbody data-id="{{ preset.id }}">
+                                        {% for position in preset.positions %}
+                                            <tr>
+                                                <td class="text-center">
+                                                    <a data-action="edit-position"><i class="far fa-pencil-ruler"></i></a>&nbsp;
+                                                    <a data-action="delete-position"><i class="far fa-trash-alt"></i></a>
+                                                </td>
+                                                <td data-type="name">{{ position }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button class="float-right btn btn-primary" data-action="save" data-id="{{ preset.id }}">Save Changes</button>
+                                <input id="position-input" class="form-control d-inline mr-3" style="width: 20%">
+                                <button class="btn btn-secondary" data-action="add-position" data-id="{{ preset.id }}"><i class="far fa-plus"></i> Add Position</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="d-none" id="template">
+        <table>
+            <tr>
+                <td class="text-center">
+                    <a data-action="edit-position"><i class="far fa-pencil-ruler"></i></a>&nbsp;
+                    <a data-action="delete-position"><i class="far fa-trash-alt"></i></a>
+                </td>
+                <td data-type="name"></td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('[data-action="add-position"]').click(function() {
+            let id = $(this).data('id')
+            let $input = $('#position-input')
+            if ($input.val()) {
+                $('#template tr').clone(true).appendTo($('tbody[data-id="' + id + '"]'))
+                    .find('[data-type="name"]').text($input.val())
+                $input.val('')
+            }
+        })
+        $('[data-action="edit-position"]').click(function() {
+            $(this).closest('tr').find('[data-type="name"]').attr('contenteditable','true').focus()
+        })
+        $('[data-action="delete-position"]').click(function() {
+            $(this).closest('tr').remove()
+        })
+        $('[data-action="save"]').click(function() {
+            let id = $(this).data('id')
+            let positions = []
+            $('tbody[data-id="' + id + '"] tr').each(function() {
+                positions.push($(this).find('[data-type="name"]').text())
+            })
+            $.post('edit/' + id + '/', {positions: JSON.stringify(positions)})
+            .done(function() {
+                launchSuccessModal('Your changes were successfully saved!')
+            })
+            .fail(function(error) {
+                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        })
+    </script>
+{% endblock %}

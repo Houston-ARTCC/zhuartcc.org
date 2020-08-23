@@ -117,6 +117,7 @@ hr {
 a {
     color: #5ec2fa;
     transition: 400ms;
+    cursor: pointer;
 }
 a:hover {
     opacity: 70%;

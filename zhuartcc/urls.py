@@ -34,6 +34,10 @@ urlpatterns = [
     path('events/<int:id>/edit/', event.edit_event),                    # Edit Event (POST / STAFF)
     path('events/<int:id>/delete/', event.delete_event),                # Delete Event (POST / STAFF)
     path('events/new/', event.add_event),                               # Add Event (POST / STAFF)
+    path('events/presets/', event.view_presets),                        # View Position Presets (STAFF)
+    path('events/presets/new/', event.add_preset),                      # Add Position Preset (POST / STAFF)
+    path('events/presets/edit/<int:id>/', event.edit_preset),           # Edit Position Preset (POST / STAFF)
+    path('events/presets/delete/<int:id>/', event.delete_preset),       # Delete Position Preset (POST / STAFF)
 
     # Feedback
     path('feedback/', feedback.view_all_feedback),                      # View All Feedback

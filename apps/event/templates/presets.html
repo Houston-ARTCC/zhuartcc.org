@@ -1,6 +1,9 @@
 {% extends 'mainTemplate.html' %}
 
 {% block body %}
+    <div class="text-center">
+        <button class="btn btn-lg btn-primary mb-4" id="add-preset"><i class="far fa-plus"></i> Add Preset</button>
+    </div>
     <div class="accordion">
         <div class="row">
             {% for preset in position_presets %}
@@ -29,7 +32,7 @@
                                     </tbody>
                                 </table>
                                 <button class="float-right btn btn-primary" data-action="save" data-id="{{ preset.id }}">Save Changes</button>
-                                <input id="position-input" class="form-control d-inline mr-3" style="width: 20%">
+                                <input class="form-control d-inline mr-3 position-input" style="width: 20%">
                                 <button class="btn btn-secondary" data-action="add-position" data-id="{{ preset.id }}"><i class="far fa-plus"></i> Add Position</button>
                             </div>
                         </div>
@@ -55,7 +58,7 @@
     <script>
         $('[data-action="add-position"]').click(function() {
             let id = $(this).data('id')
-            let $input = $('#position-input')
+            let $input = $(this).parent().find('.position-input')
             if ($input.val()) {
                 $('#template tr').clone(true).appendTo($('tbody[data-id="' + id + '"]'))
                     .find('[data-type="name"]').text($input.val())
@@ -80,6 +83,39 @@
             })
             .fail(function(error) {
                 launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        })
+        $('#add-preset').click(function() {
+            launchCustomModal(
+                'info',
+                'Adding Position Preset',
+                `<form id="newPreset">
+                    <div class="col-12">
+                        <div class="label-group">
+                            <input name="name" type="text" required>
+                            <label>Preset Name</label>
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary">Submit</button>
+                </form>`
+            )
+            $('#newPreset').submit(function(e) {
+                e.preventDefault()
+                $.post({
+                    url: 'new/',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                })
+                .done(function() {
+                    location.reload()
+                })
+                .fail(function(error) {
+                    $('#customModal').modal('hide')
+                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                })
             })
         })
     </script>

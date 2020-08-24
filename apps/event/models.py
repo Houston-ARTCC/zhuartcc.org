@@ -28,7 +28,7 @@ class EventPosition(models.Model):
 
 class PositionPreset(models.Model):
     name = models.CharField(max_length=32)
-    positions_json = models.TextField()
+    positions_json = models.TextField(default='[]')
 
     @property
     def positions(self):

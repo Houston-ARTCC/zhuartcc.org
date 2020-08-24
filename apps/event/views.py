@@ -109,8 +109,7 @@ def view_presets(request):
 @require_POST
 def add_preset(request):
     preset = PositionPreset(
-        name=request.POST['name'],
-        positions=request.POST['positions']
+        name=request.POST['name']
     )
     preset.save()
 

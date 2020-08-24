@@ -1,18 +1,8 @@
 $(function() {
     $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
 
-    // Sticky navbar
-    $(document).scroll(function(){
-        if ($(document).scrollTop() > 10) {
-            $('.navbar-shrink').addClass('shrink')
-            $('.navbar-logo-gray').addClass('d-none')
-            $('.navbar-logo-color').removeClass('d-none')
-        } else {
-            $('.navbar-shrink').removeClass('shrink')
-            $('.navbar-logo-color').addClass('d-none')
-            $('.navbar-logo-gray').removeClass('d-none')
-        }
-    })
+    stickyNav()
+    $(document).scroll(stickyNav)
 
     // Input animation control
     $('input, select, textarea').change(checkValue).each(checkValue)
@@ -43,6 +33,19 @@ $(function() {
         }
     })
 })
+
+// Sticky navbar
+function stickyNav() {
+    if ($(document).scrollTop() > 10) {
+        $('.navbar-shrink').addClass('shrink')
+        $('.navbar-logo-gray').addClass('d-none')
+        $('.navbar-logo-color').removeClass('d-none')
+    } else {
+        $('.navbar-shrink').removeClass('shrink')
+        $('.navbar-logo-color').addClass('d-none')
+        $('.navbar-logo-gray').removeClass('d-none')
+    }
+}
 
 // Checks input value and adds .has-content if there is content
 function checkValue() {

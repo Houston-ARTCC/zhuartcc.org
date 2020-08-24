@@ -22,6 +22,15 @@ class EventPosition(models.Model):
     user = models.ForeignKey(User, models.SET_NULL, null=True, related_name='event_positions', blank=True)
     position = models.CharField(max_length=16)
 
+    @property
+    def category(self):
+        if '_DEL' in self.position or '_GND' in self.position or '_TWR' in self.position:
+            return 'cab'
+        elif 'APP' in self.position or '_DEP' in self.position:
+            return 'tracon'
+        else:
+            return 'center'
+
     def __str__(self):
         return f'{self.event.name} | {self.position}'
 

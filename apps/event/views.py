@@ -1,8 +1,10 @@
 import pytz
 from datetime import datetime
+from itertools import groupby
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .models import Event, EventPosition, PositionPreset
@@ -14,13 +16,20 @@ from zhuartcc.decorators import require_staff
 def view_all_events(request):
     return render(request, 'events.html', {
         'page_title': 'Events',
-        'events': Event.objects.all().order_by('start'),
+        'events': Event.objects.filter(end__gte=timezone.now()).order_by('start'),
     })
 
 
 def view_event(request, id):
     event = Event.objects.get(id=id)
-    return render(request, 'view_event.html', {'page_title': event.name, 'event': event})
+    positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
+    available = {k: len(list(filter(lambda pos: pos.user is None, positions[k]))) for k in positions}
+    return render(request, 'view_event.html', {
+        'page_title': event.name,
+        'event': event,
+        'positions': positions,
+        'available': available,
+    })
 
 
 @require_staff

@@ -20,6 +20,13 @@ def view_all_events(request):
     })
 
 
+def view_archived_events(request):
+    return render(request, 'archived_events.html', {
+        'page_title': 'Archived Events',
+        'events': Event.objects.filter(start__lte=timezone.now()).order_by('-start'),
+    })
+
+
 def view_event(request, id):
     event = Event.objects.get(id=id)
     positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}

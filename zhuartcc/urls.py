@@ -29,7 +29,8 @@ urlpatterns = [
     path('stats/', api.view_statistics),                                # View Statistics
 
     # Event
-    path('events/', event.view_all_events),                             # View All Events
+    path('events/', event.view_all_events),                             # View Upcoming Events
+    path('events/archived/', event.view_archived_events),               # View Archived Events
     path('events/<int:id>/', event.view_event),                         # View Event
     path('events/<int:id>/edit/', event.edit_event),                    # Edit Event (POST / STAFF)
     path('events/<int:id>/delete/', event.delete_event),                # Delete Event (POST / STAFF)

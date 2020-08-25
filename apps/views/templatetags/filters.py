@@ -27,7 +27,6 @@ def get_value_from_dict(dict, key):
 
 @register.filter
 def id_from_user(queryset, user_id):
-    print(queryset, user_id)
     for object in queryset:
         if object.user_id == user_id:
             return object.id

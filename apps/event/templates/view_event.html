@@ -1,4 +1,5 @@
 {% extends 'secondaryTemplate.html' %}
+{% load filters %}
 
 {% block header %}
     <div class="row">
@@ -31,7 +32,16 @@
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">
                         {% for position in positions.center %}
-                            <li><b>{{ position.position }}</b> - {{ position.user.full_name|default:'Unassigned' }}</li>
+                            <li>
+                                <b>{{ position.name }}</b> -
+                                {% if position.user %}
+                                    {{ position.user.full_name }}
+                                {% elif user.id in requests|get_value_from_dict:position.id %}
+                                    <b><span class="text-success">Requested</span></b>
+                                {% else %}
+                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}">Request</a></b>
+                                {% endif %}
+                            </li>
                         {% empty %}
                             <li><i>No positions posted...</i></li>
                         {% endfor %}
@@ -48,7 +58,16 @@
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">
                         {% for position in positions.tracon %}
-                            <li><b>{{ position.position }}</b> - {{ position.user.full_name|default:'Unassigned' }}</li>
+                            <li>
+                                <b>{{ position.name }}</b> -
+                                {% if position.user %}
+                                    {{ position.user.full_name }}
+                                {% elif user.id in requests|get_value_from_dict:position.id %}
+                                    <b><span class="text-success">Requested</span></b>
+                                {% else %}
+                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}">Request</a></b>
+                                {% endif %}
+                            </li>
                         {% empty %}
                             <li><i>No positions posted...</i></li>
                         {% endfor %}
@@ -65,7 +84,16 @@
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">
                         {% for position in positions.cab %}
-                            <li><b>{{ position.position }}</b> - {{ position.user.full_name|default:'Unassigned' }}</li>
+                            <li>
+                                <b>{{ position.name }}</b> -
+                                {% if position.user %}
+                                    {{ position.user.full_name }}
+                                {% elif user.id in requests|get_value_from_dict:position.id %}
+                                    <b><span class="text-success">Requested</span></b>
+                                {% else %}
+                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}">Request</a></b>
+                                {% endif %}
+                            </li>
                         {% empty %}
                             <li><i>No positions posted...</i></li>
                         {% endfor %}
@@ -101,5 +129,17 @@
         }
         updateTimer()
         setInterval(function() { updateTimer() }, 1000)
+
+        {% if not request.session.guest %}
+            $('[data-action="request"]').click(function() {
+                $.post('/events/request/' + $(this).data('id') + '/')
+                .done(function() {
+                    location.reload()
+                })
+                .fail(function(error) {
+                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                })
+            })
+        {% endif %}
     </script>
 {% endblock %}

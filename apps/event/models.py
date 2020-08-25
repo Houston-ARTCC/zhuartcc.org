@@ -19,20 +19,25 @@ class Event(models.Model):
 
 class EventPosition(models.Model):
     event = models.ForeignKey(Event, models.CASCADE, related_name='positions')
-    user = models.ForeignKey(User, models.SET_NULL, null=True, related_name='event_positions', blank=True)
-    position = models.CharField(max_length=16)
+    user = models.ForeignKey(User, models.CASCADE, null=True, blank=True, related_name='event_positions')
+    name = models.CharField(max_length=16)
 
     @property
     def category(self):
-        if '_DEL' in self.position or '_GND' in self.position or '_TWR' in self.position:
+        if '_DEL' in self.name or '_GND' in self.name or '_TWR' in self.name:
             return 'cab'
-        elif 'APP' in self.position or '_DEP' in self.position:
+        elif 'APP' in self.name or '_DEP' in self.name:
             return 'tracon'
         else:
             return 'center'
 
     def __str__(self):
-        return f'{self.event.name} | {self.position}'
+        return f'{self.event.name} | {self.name}'
+
+
+class EventPositionRequest(models.Model):
+    position = models.ForeignKey(EventPosition, models.CASCADE, related_name='requests')
+    user = models.ForeignKey(User, models.CASCADE, related_name='event_requests')
 
 
 class PositionPreset(models.Model):

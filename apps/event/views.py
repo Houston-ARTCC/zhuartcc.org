@@ -32,14 +32,12 @@ def view_event(request, id):
     positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
     available = {k: len(list(filter(lambda pos: pos.user is None, positions[k]))) for k in positions}
     user = User.objects.get(cid=request.session['cid'])
-    requests = {str(pos.id): pos.requests.values_list('user', flat=True) for pos in event.positions.all()}
     return render(request, 'view_event.html', {
         'page_title': event.name,
         'event': event,
         'positions': positions,
         'available': available,
         'user': user,
-        'requests': requests,
     })
 
 
@@ -137,6 +135,17 @@ def request_position(request, id):
     ).save()
 
     return HttpResponse(status=200)
+
+
+@require_member
+@require_POST
+def remove_position_request(request, id):
+    position_request = EventPositionRequest.objects.get(id=id)
+    if position_request.user.id == User.objects.get(cid=request.session['cid']).id:
+        position_request.delete()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse('You are unauthorized to complete this action!', status=401)
 
 
 @require_staff

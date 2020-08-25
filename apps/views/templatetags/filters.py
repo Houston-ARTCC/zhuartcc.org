@@ -23,3 +23,12 @@ def as_range(int):
 @register.filter
 def get_value_from_dict(dict, key):
     return dict[str(key)] if str(key) in dict else None
+
+
+@register.filter
+def id_from_user(queryset, user_id):
+    print(queryset, user_id)
+    for object in queryset:
+        if object.user_id == user_id:
+            return object.id
+    return None

@@ -36,10 +36,10 @@
                                 <b>{{ position.name }}</b> -
                                 {% if position.user %}
                                     {{ position.user.full_name }}
-                                {% elif user.id in requests|get_value_from_dict:position.id %}
-                                    <b><span class="text-success">Requested</span></b>
+                                {% elif position.requests.all|id_from_user:user.id %}
+                                    <b><a class="text-success" data-action="delete" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="top" title="Click to remove request">Requested</a></b>
                                 {% else %}
-                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}">Request</a></b>
+                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="top" title="Click to request position">Request</a></b>
                                 {% endif %}
                             </li>
                         {% empty %}
@@ -62,10 +62,10 @@
                                 <b>{{ position.name }}</b> -
                                 {% if position.user %}
                                     {{ position.user.full_name }}
-                                {% elif user.id in requests|get_value_from_dict:position.id %}
-                                    <b><span class="text-success">Requested</span></b>
+                                {% elif position.requests.all|id_from_user:user.id %}
+                                    <b><a class="text-success" data-action="delete" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="top" title="Click to remove request">Requested</a></b>
                                 {% else %}
-                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}">Request</a></b>
+                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="top" title="Click to request position">Request</a></b>
                                 {% endif %}
                             </li>
                         {% empty %}
@@ -88,10 +88,10 @@
                                 <b>{{ position.name }}</b> -
                                 {% if position.user %}
                                     {{ position.user.full_name }}
-                                {% elif user.id in requests|get_value_from_dict:position.id %}
-                                    <b><span class="text-success">Requested</span></b>
+                                {% elif position.requests.all|id_from_user:user.id %}
+                                    <b><a class="text-success" data-action="delete" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="top" title="Click to remove request">Requested</a></b>
                                 {% else %}
-                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}">Request</a></b>
+                                    <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="top" title="Click to request position">Request</a></b>
                                 {% endif %}
                             </li>
                         {% empty %}
@@ -133,6 +133,15 @@
         {% if not request.session.guest %}
             $('[data-action="request"]').click(function() {
                 $.post('/events/request/' + $(this).data('id') + '/')
+                .done(function() {
+                    location.reload()
+                })
+                .fail(function(error) {
+                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                })
+            })
+            $('[data-action="delete"]').click(function() {
+                $.post('/events/remove/' + $(this).data('id') + '/')
                 .done(function() {
                     location.reload()
                 })

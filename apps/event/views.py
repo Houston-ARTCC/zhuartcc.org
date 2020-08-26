@@ -30,14 +30,13 @@ def view_archived_events(request):
 def view_event(request, id):
     event = Event.objects.get(id=id)
     positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
-    available = {k: len(list(filter(lambda pos: pos.user is None, positions[k]))) for k in positions}
-    user = User.objects.get(cid=request.session['cid'])
     return render(request, 'view_event.html', {
         'page_title': event.name,
         'event': event,
         'positions': positions,
-        'available': available,
-        'user': user,
+        'available': {k: len(list(filter(lambda pos: pos.user is None, positions[k]))) for k in positions},
+        'user': User.objects.get(cid=request.session['cid']),
+        'time_now': timezone.now(),
     })
 
 

@@ -119,6 +119,7 @@ class User(models.Model):
             self.twr_cert = 1
         if self.rating_int > 2:
             self.app_cert = 1
+        self.save()
 
     def __str__(self):
         return self.full_name

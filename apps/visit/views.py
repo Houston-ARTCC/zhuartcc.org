@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .models import Visit
+from ..administration.models import ActionLog
 from ..user.models import User
 from ..user.updater import assign_oper_init
 from zhuartcc.decorators import require_logged_in, require_staff
@@ -74,6 +75,8 @@ def accept_visiting_request(request):
             edit_user.main_role = 'VC'
             edit_user.assign_initial_cert()
             edit_user.save()
+        else:
+            return HttpResponse('Visitor is already on the roster.', status=400)
     else:
         new_user = User(
             first_name=visiting_request.first_name.capitalize(),
@@ -88,6 +91,8 @@ def accept_visiting_request(request):
         new_user.assign_initial_cert()
         new_user.save()
 
+    admin = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'{visiting_request.full_name}\'s visiting request was rejected by {admin.full_name}.').save()
 
     context = {
         'name': visiting_request.first_name,
@@ -109,6 +114,9 @@ def accept_visiting_request(request):
 @require_POST
 def reject_visiting_request(request):
     visiting_request = Visit.objects.get(id=request.POST['id'])
+
+    admin = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'{visiting_request.full_name}\'s visiting request was rejected by {admin.full_name}.').save()
 
     context = {
         'name': visiting_request.first_name,

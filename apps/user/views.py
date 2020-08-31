@@ -167,7 +167,7 @@ def view_inactive_users(request):
 @require_POST
 def remove_users(request):
     for id in request.POST.keys():
-        try:
+        if id != 'csrfmiddlewaretoken':
             user = User.objects.get(id=id)
             requests.delete(f'https://api.vatusa.net/v2/facility/ZHU/roster/{user.cid}')
             user.status = 2
@@ -182,8 +182,6 @@ def remove_users(request):
 
             admin = User.objects.get(cid=request.session['cid'])
             ActionLog(action=f'User {user.full_name} set to inactive by {admin.full_name}.').save()
-        except:
-            continue
 
     return HttpResponse(status=200)
 

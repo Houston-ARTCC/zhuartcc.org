@@ -50,6 +50,7 @@ def add_event(request):
             banner=request.POST['banner'],
             host=request.POST['host'],
             description=request.POST['description'] if 'description' in request.POST else None,
+            hidden=True if 'hidden' in request.POST else False,
         )
         event.save()
 
@@ -68,20 +69,28 @@ def add_event(request):
 
 
 @require_staff
-@require_POST
 def edit_event(request, id):
     event = Event.objects.get(id=id)
-    event.name = request.POST['name']
-    event.banner = request.POST['banner']
-    event.start = request.POST['start']
-    event.end = request.POST['end']
-    event.description = request.POST['description']
-    event.save()
+    if request.method == 'POST':
+        event.name = request.POST['name']
+        event.banner = request.POST['banner']
+        event.start = request.POST['start']
+        event.end = request.POST['end']
+        event.description = request.POST['description']
+        event.hidden = True if 'hidden' in request.POST else False
+        event.save()
 
-    user = User.objects.get(cid=request.session['cid'])
-    ActionLog(action=f'Event "{event.name}" modified by {user.full_name}.').save()
+        user = User.objects.get(cid=request.session['cid'])
+        ActionLog(action=f'Event "{event.name}" modified by {user.full_name}.').save()
 
-    return redirect(f'/events/{id}')
+        return redirect(f'/events/{id}/')
+    else:
+        positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
+        return render(request, 'edit_event.html', {
+            'page_title': f'Editing {event.name}',
+            'positions': positions,
+            'event': event
+        })
 
 
 @require_staff
@@ -100,29 +109,20 @@ def delete_event(request, id):
 @require_staff
 @require_POST
 def add_position(request, id):
-    position = EventPosition(
+    EventPosition(
         event=Event.objects.get(id=id),
-        position=request.POST['position'],
-    )
-    position.save()
+        name=request.POST['position'],
+    ).save()
 
-    user = User.objects.get(cid=request.session['cid'])
-    ActionLog(action=f'Position "{position.name}" for "{position.event.name}" created by {user.full_name}.').save()
-
-    return redirect(f'/events/{id}')
+    return HttpResponse(status=200)
 
 
 @require_staff
 @require_POST
 def delete_position(request, id):
-    position = EventPosition.objects.get(id=id)
+    EventPosition.objects.get(id=id).delete()
 
-    user = User.objects.get(cid=request.session['cid'])
-    ActionLog(action=f'Position "{position.name}" for "{position.event.name}" deleted by {user.full_name}.').save()
-
-    position.delete()
-
-    return redirect(f'/events/{id}')
+    return HttpResponse(status=200)
 
 
 @require_member
@@ -138,7 +138,7 @@ def request_position(request, id):
 
 @require_member
 @require_POST
-def remove_position_request(request, id):
+def unrequest_position(request, id):
     position_request = EventPositionRequest.objects.get(id=id)
     if position_request.user.id == User.objects.get(cid=request.session['cid']).id:
         position_request.delete()
@@ -149,10 +149,18 @@ def remove_position_request(request, id):
 
 @require_staff
 @require_POST
-def approve_position_request(request, id):
-    position_request = EventPositionRequest.objects.get(id=id)
-    position_request.position.user = position_request.user
-    position_request.delete()
+def assign_position(request, id):
+    EventPositionRequest.objects.get(id=id).assign()
+
+    return HttpResponse(status=200)
+
+
+@require_staff
+@require_POST
+def unassign_position(request, id):
+    position = EventPosition.objects.get(id=id)
+    position.user = None
+    position.save()
 
     return HttpResponse(status=200)
 

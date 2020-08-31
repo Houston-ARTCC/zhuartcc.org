@@ -30,14 +30,17 @@ urlpatterns = [
 
     # Event
     path('events/', event.view_all_events),                             # View Upcoming Events
+    path('events/new/', event.add_event),                               # Add Event (POST / STAFF)
     path('events/archived/', event.view_archived_events),               # View Archived Events
     path('events/<int:id>/', event.view_event),                         # View Event
-    path('events/<int:id>/edit/', event.edit_event),                    # Edit Event (POST / STAFF)
+    path('events/<int:id>/edit/', event.edit_event),                    # Edit Event (STAFF)
     path('events/<int:id>/delete/', event.delete_event),                # Delete Event (POST / STAFF)
     path('events/request/<int:id>/', event.request_position),           # Request Position (POST / MEMBER)
-    path('events/remove/<int:id>/', event.remove_position_request),     # Remove Position Request (POST / MEMBER)
-    path('events/accept/<int:id>/', event.approve_position_request),    # Accept Position Request (POST / STAFF)
-    path('events/new/', event.add_event),                               # Add Event (POST / STAFF)
+    path('events/unrequest/<int:id>/', event.unrequest_position),       # Unrequest Postiion (POST / MEMBER)
+    path('events/assign/<int:id>/', event.assign_position),             # Assign Positions (POST / STAFF)
+    path('events/unassign/<int:id>/', event.unassign_position),         # Unassign Position Request (POST / STAFF)
+    path('events/delete/<int:id>/', event.delete_position),             # Delete Position (POST / STAFF)
+    path('events/new/<int:id>/', event.add_position),                   # Add Position (POST / STAFF)
     path('events/presets/', event.view_presets),                        # View Position Presets (STAFF)
     path('events/presets/new/', event.add_preset),                      # Add Position Preset (POST / STAFF)
     path('events/presets/edit/<int:id>/', event.edit_preset),           # Edit Position Preset (POST / STAFF)

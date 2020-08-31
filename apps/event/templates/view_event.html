@@ -15,11 +15,17 @@
 {% endblock %}
 
 {% block body %}
+    {% if event.hidden %}
+        <div class="alert alert-primary">
+            <h4 class="alert-heading">Event Hidden</h4>
+            <p class="mb-0">This event is currently hidden and is only visibile by ARTCC staff members. To make this event visible, <a href="edit/" class="alert-link">edit</a> the event.</p>
+        </div>
+    {% endif %}
     <div class="card">
         <div class="card-body">
             <img class="d-inline float-left mr-4" src="{{ event.banner }}" style="max-width: 50%">
             <h3>Presented by {{ event.host }}</h3>
-            <p>{{ event.description }}</p>
+            <p>{{ event.description|linebreaks }}</p>
         </div>
     </div>
     <div class="row">
@@ -38,7 +44,7 @@
                                     {% if position.user %}
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
-                                        <b><a class="text-success" data-action="delete" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="right" title="Click to remove request">Requested</a></b>
+                                        <b><a class="text-success" data-action="unrequest" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="right" title="Click to remove request">Requested</a></b>
                                     {% else %}
                                         <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="right" title="Click to request position">Request</a></b>
                                     {% endif %}
@@ -164,8 +170,8 @@
                     launchErrorModal('Error ' + error.status + ': ' + error.responseText)
                 })
             })
-            $('[data-action="delete"]').click(function() {
-                $.post('/events/remove/' + $(this).data('id') + '/')
+            $('[data-action="unrequest"]').click(function() {
+                $.post('/events/unrequest/' + $(this).data('id') + '/')
                 .done(function() {
                     location.reload()
                 })

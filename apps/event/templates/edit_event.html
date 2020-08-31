@@ -1,0 +1,160 @@
+{% extends 'secondaryTemplate.html' %}
+{% load filters %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block header %}
+    <h2 style="font-size: 40px">You are now editing</h2>
+    <h1 style="font-size: 65px">{{ event.name }}</h1>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h5 class="mb-0">Center Assignments</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for position in positions.center %}
+                            <li class="py-2">
+                                <div class="float-right">
+                                    <a class="text-info" data-action="unassign" data-id="{{ position.id }}"><b><i class="far fa-user-times"></i> Unassign</b></a> &nbsp;
+                                    <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
+                                </div>
+                                <b>{{ position.name }}</b>
+                                <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
+                                    {% if position.user %}
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>" selected>{{ position.user.full_name }}</option>
+                                    {% endif %}
+                                    {% for request in position.requests.all %}
+                                        {% if position.user != request.user %}
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>">{{ request.user.full_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </li>
+                        {% empty %}
+                            <li class="py-2"><i>No positions posted...</i></li>
+                        {% endfor %}
+                    </ul>
+                    <input class="form-control d-inline mr-3 position-input" style="width: 30%">
+                    <button class="btn btn-primary" data-action="add-position"><i class="far fa-plus"></i> Add Position</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h5 class="mb-0">TRACON Assignments</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for position in positions.tracon %}
+                            <li class="py-2">
+                                <div class="float-right">
+                                    <a class="text-info" data-action="unassign" data-id="{{ position.id }}"><b><i class="far fa-user-times"></i> Unassign</b></a> &nbsp;
+                                    <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
+                                </div>
+                                <b>{{ position.name }}</b>
+                                <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
+                                    {% if position.user %}
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>" selected>{{ position.user.full_name }}</option>
+                                    {% endif %}
+                                    {% for request in position.requests.all %}
+                                        {% if position.user != request.user %}
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>">{{ request.user.full_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </li>
+                        {% empty %}
+                            <li class="py-2"><i>No positions posted...</i></li>
+                        {% endfor %}
+                    </ul>
+                    <input class="form-control d-inline mr-3 position-input" style="width: 30%">
+                    <button class="btn btn-primary" data-action="add-position"><i class="far fa-plus"></i> Add Position</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h5 class="mb-0">Cab Assignments</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for position in positions.cab %}
+                            <li class="py-2">
+                                <div class="float-right">
+                                    <a class="text-info" data-action="unassign" data-id="{{ position.id }}"><b><i class="far fa-user-times"></i> Unassign</b></a> &nbsp;
+                                    <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
+                                </div>
+                                <b>{{ position.name }}</b>
+                                <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
+                                    {% if position.user %}
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>" selected>{{ position.user.full_name }}</option>
+                                    {% endif %}
+                                    {% for request in position.requests.all %}
+                                        {% if position.user != request.user %}
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>">{{ request.user.full_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </li>
+                        {% empty %}
+                            <li class="py-2"><i>No positions posted...</i></li>
+                        {% endfor %}
+                    </ul>
+                    <input class="form-control d-inline mr-3 position-input" style="width: 30%">
+                    <button class="btn btn-primary" data-action="add-position"><i class="far fa-plus"></i> Add Position</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script>
+        $('[data-action="unassign"]').click(function() {
+            $.post('/events/unassign/' + $(this).data('id') + '/')
+            .done(function() {
+                location.reload()
+            })
+            .fail(function(error) {
+                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        })
+        $('[data-action="delete"]').click(function() {
+            $.post('/events/delete/' + $(this).data('id') + '/')
+            .done(function() {
+                location.reload()
+            })
+            .fail(function(error) {
+                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        })
+        $('[data-action="add-position"]').click(function() {
+            $.post('/events/new/{{ event.id }}/', {position: $('.position-input').val()})
+            .done(function() {
+                location.reload()
+            })
+            .fail(function(error) {
+                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        })
+        $('select').change(function() {
+            $.post('/events/assign/' + $(this).val() + '/')
+            .done(function() {
+                location.reload()
+            })
+            .fail(function(error) {
+                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        })
+    </script>
+{% endblock %}

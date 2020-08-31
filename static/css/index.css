@@ -160,7 +160,7 @@ a:hover {
     font: 16px Gilroy-Bold, Helvetica, sans-serif;
 }
 .badge-sm {
-    font-size: 15px;
+    font-size: 12px;
     border-radius: 5px;
 }
 .badge-md {
@@ -188,6 +188,9 @@ a:hover {
 .badge-light {
     background-color: white!important;
     color: #2d45a2!important;
+}
+.dropdown-item.active, .dropdown-item:active {
+    background-color: rgba(45, 69, 162, 0.25);
 }
 
 
@@ -485,6 +488,9 @@ input[type="datetime-local"] {
 }
 input[type="datetime-local"]:focus, input[type="datetime-local"].has-content {
      color: initial;
+}
+.bootstrap-select li {
+    font: 14px Gilroy-Bold, Helvetica, sans-serif;
 }
 
 

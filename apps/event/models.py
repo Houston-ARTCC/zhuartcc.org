@@ -12,6 +12,7 @@ class Event(models.Model):
     end = models.DateTimeField()
     host = models.CharField(max_length=16)
     description = models.TextField(null=True, blank=True)
+    hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.start.strftime("%b %d, %Y @ %H%Mz")} | {self.name}'
@@ -39,6 +40,10 @@ class EventPositionRequest(models.Model):
     position = models.ForeignKey(EventPosition, models.CASCADE, related_name='requests')
     user = models.ForeignKey(User, models.CASCADE, related_name='event_requests')
 
+    def assign(self):
+        self.position.user = self.user
+        self.position.save()
+
 
 class PositionPreset(models.Model):
     name = models.CharField(max_length=32)
@@ -56,7 +61,7 @@ class PositionPreset(models.Model):
             EventPosition(
                 event=event,
                 user=None,
-                position=position,
+                name=position,
             ).save()
 
     def __str__(self):

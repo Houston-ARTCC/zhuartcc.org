@@ -92,7 +92,7 @@ def accept_visiting_request(request):
         new_user.save()
 
     admin = User.objects.get(cid=request.session['cid'])
-    ActionLog(action=f'{visiting_request.full_name}\'s visiting request was rejected by {admin.full_name}.').save()
+    ActionLog(action=f'{visiting_request.full_name}\'s visiting request was accepted by {admin.full_name}.').save()
 
     context = {
         'name': visiting_request.first_name,

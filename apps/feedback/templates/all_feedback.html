@@ -33,7 +33,7 @@
                                     <td class="text-center">{{ feedback.controller.full_name }}</td>
                                     <td class="text-center">{{ feedback.controller_callsign }}</td>
                                     <td class="text-center text-warning">{% for i in feedback.rating|as_range  %}<i class="fas fa-star mr-1"></i>{% endfor %}</td>
-                                    <td class="text-center"><a data-action="info" data-comments="{{ feedback.comments }}" data-callsign="{{ feedback.flight_callsign|default:'' }}" data-time="{{ feedback.flight_time|date:'M d, Y @ Hi\z' }}"><i class="far fa-lg fa-eye text-dark"></i></a></td>
+                                    <td class="text-center"><a data-action="info" data-comments="{{ feedback.comments }}" data-callsign="{{ feedback.flight_callsign|default:'' }}" data-event="{{ feedback.event.name }}"><i class="far fa-lg fa-eye text-dark"></i></a></td>
                                 </tr>
                             {% empty %}
                                 <tr>
@@ -66,13 +66,13 @@
         })
         $('[data-action="info"]').click(function() {
             let callsign = $(this).data('callsign')
-            let time = $(this).data('time')
+            let event = $(this).data('event')
             let comments = $(this).data('comments')
             launchCustomModal(
                 'info',
                 'Info',
                 (callsign ? '<h5>Pilot Callsign</h5><p>' : '') + callsign + (callsign ? '</p>' : '') +
-                (time ? '<h5>Flight Time</h5><p>' : '') + time + (time ? '</p>' : '') +
+                (event ? '<h5>Event</h5><p>' : '') + event + (event ? '</p>' : '') +
                 '<h5>Comments</h5><p>' + comments + '</p>' +
                 '<div class="mt-3"><button class="btn btn-secondary" data-dismiss="modal">Close</button></div>'
             )

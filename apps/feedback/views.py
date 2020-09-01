@@ -1,9 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from .models import Feedback
+from ..event.models import Event
 from ..user.models import User
 
 
@@ -23,9 +25,7 @@ def add_feedback(request):
             rating=int(post['rating']),
             pilot_name=post['pilot_name'] if 'pilot_name' in post else None,
             pilot_email=post['pilot_email'] if 'pilot_email' in post else None,
-            flight_time=pytz.utc.localize(
-                datetime.strptime(post['flight_time'], '%Y-%m-%dT%H:%M')
-            ) if 'flight_time' in post else None,
+            event=Event.objects.get(id=post['event']) if 'event' in post else None,
             flight_callsign=post['flight_callsign'] if 'flight_callsign' in post else None,
             comments=post['comments'],
         ).save()
@@ -34,5 +34,6 @@ def add_feedback(request):
     else:
         return render(request, 'add_feedback.html', {
             'page_title': 'Submit Feedback',
-            'controllers': User.objects.filter(status=0)
+            'controllers': User.objects.filter(status=0),
+            'events': Event.objects.filter(start__gte=timezone.now() - timedelta(days=30)),
         })

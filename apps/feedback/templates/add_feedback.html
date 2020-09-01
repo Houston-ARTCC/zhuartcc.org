@@ -31,8 +31,13 @@
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <input name="flight_time" type="datetime-local">
-                                    <label>Flight Time (Zulu)</label>
+                                    <select name="event">
+                                        <option value="" selected></option>
+                                        {% for event in events %}
+                                            <option value="{{ event.id }}">{{ event.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label>Event</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>

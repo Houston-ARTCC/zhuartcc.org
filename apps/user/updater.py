@@ -52,7 +52,7 @@ def update_roster():
                 edit_user.main_role = 'HC'
                 edit_user.save()
                 edit_user.assign_initial_cert()
-                ActionLog(action=f'User {new_user.full_name} was set as active by system.').save()
+                ActionLog(action=f'User {edit_user.full_name} was set as active by system.').save()
 
             edit_user.save()
 
@@ -62,7 +62,7 @@ def update_roster():
         if user.cid not in cids:
             user.status = 2
             user.save()
-            ActionLog(action=f'User {new_user.full_name} was set as inactive by system.').save()
+            ActionLog(action=f'User {user.full_name} was set as inactive by system.').save()
 
     # Cycles through visiting controllers separately since they are not on main roster
     for edit_user in User.objects.filter(main_role='VC'):

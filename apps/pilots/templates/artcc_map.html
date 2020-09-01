@@ -1,4 +1,5 @@
 {% extends 'mainTemplate.html' %}
+{% load static %}
 
 {% block stylesheets %}
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
@@ -6,7 +7,13 @@
 {% endblock %}
 
 {% block body %}
-    <div id='map' style='width: 100%; height: 804px;'></div>
+    <div class="position-relative">
+        <div id='map' style='width: 100%; height: 804px;'></div>
+        <div class="position-absolute text-center" id="overlay" style="background-color: #f1f2f3; top: 0; width: 100%; height: 100%; z-index: 1">
+            <span class="d-inline-block" style="vertical-align: middle; height: 100%;"></span>
+            <img src="{% static 'img/preloader.gif' %}" style="vertical-align: middle">
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
@@ -28,6 +35,9 @@
         })
         var all_metars = null
         map.on('load', function() {
+            $('#overlay').fadeOut('fast', function() {
+                $(this).remove()
+            })
             let airports = map.querySourceFeatures('composite', {
                 'sourceLayer': 'Houston_ARTCC_-_Airports'
             })

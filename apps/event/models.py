@@ -66,3 +66,9 @@ class PositionPreset(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class EventScore(models.Model):
+    user = models.ForeignKey(User, models.CASCADE, related_name='event_scores')
+    event = models.ForeignKey(Event, models.CASCADE, related_name='scores')
+    score = models.IntegerField()

@@ -49,6 +49,16 @@ class User(models.Model):
     loa_until = models.DateField(null=True, blank=True)
     loa_last_month = models.BooleanField(default=False)
     activity_exempt = models.BooleanField(default=False)
+    prevent_event_signup = models.BooleanField(default=False)
+
+    @property
+    def event_score(self):
+        if self.main_role == 'HC':
+            scores = [100]
+        else:
+            scores = [85]
+        scores += [score.score for score in self.event_scores.all()]
+        return int(sum(scores) / len(scores))
 
     # Returns boolean value representing whether or not the user is staff
     @property

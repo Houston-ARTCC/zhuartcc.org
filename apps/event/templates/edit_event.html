@@ -104,11 +104,19 @@
                                 <b>{{ position.name }}</b>
                                 <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
                                     {% if position.user %}
-                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>" selected>{{ position.user.full_name }}</option>
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
+                                            {% if position.user.event_score >= 90 %}badge-success
+                                            {% elif position.user.event_score >= 65 %}badge-warning
+                                            {% elif position.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ position.user.event_score }}%</span></span>" selected>{{ position.user.full_name }}</option>
                                     {% endif %}
                                     {% for request in position.requests.all %}
                                         {% if position.user != request.user %}
-                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>">{{ request.user.full_name }}</option>
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm
+                                            {% if request.user.event_score >= 90 %}badge-success
+                                            {% elif request.user.event_score >= 65 %}badge-warning
+                                            {% elif request.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ request.user.event_score }}%</span></span>">{{ request.user.full_name }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
@@ -138,11 +146,19 @@
                                 <b>{{ position.name }}</b>
                                 <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
                                     {% if position.user %}
-                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>" selected>{{ position.user.full_name }}</option>
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
+                                            {% if position.user.event_score >= 90 %}badge-success
+                                            {% elif position.user.event_score >= 65 %}badge-warning
+                                            {% elif position.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ position.user.event_score }}%</span></span>" selected>{{ position.user.full_name }}</option>
                                     {% endif %}
                                     {% for request in position.requests.all %}
                                         {% if position.user != request.user %}
-                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>">{{ request.user.full_name }}</option>
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm
+                                            {% if request.user.event_score >= 90 %}badge-success
+                                            {% elif request.user.event_score >= 65 %}badge-warning
+                                            {% elif request.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ request.user.event_score }}%</span></span>">{{ request.user.full_name }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
@@ -172,11 +188,19 @@
                                 <b>{{ position.name }}</b>
                                 <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
                                     {% if position.user %}
-                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>" selected>{{ position.user.full_name }}</option>
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
+                                            {% if position.user.event_score >= 90 %}badge-success
+                                            {% elif position.user.event_score >= 65 %}badge-warning
+                                            {% elif position.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ position.user.event_score }}%</span></span>" selected>{{ position.user.full_name }}</option>
                                     {% endif %}
                                     {% for request in position.requests.all %}
                                         {% if position.user != request.user %}
-                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm badge-info'>100%</span></span>">{{ request.user.full_name }}</option>
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm
+                                            {% if request.user.event_score >= 90 %}badge-success
+                                            {% elif request.user.event_score >= 65 %}badge-warning
+                                            {% elif request.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ request.user.event_score }}%</span></span>">{{ request.user.full_name }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>

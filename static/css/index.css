@@ -162,6 +162,7 @@ a:hover {
 .badge-sm {
     font-size: 12px;
     border-radius: 5px;
+    padding: 2px 4px;
 }
 .badge-md {
     font-size: 28px;

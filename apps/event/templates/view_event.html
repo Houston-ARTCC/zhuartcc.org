@@ -18,12 +18,15 @@
     {% if event.hidden %}
         <div class="alert alert-primary">
             <h4 class="alert-heading">Event Hidden</h4>
-            <p class="mb-0">This event is currently hidden and is only visibile by ARTCC staff members. To make this event visible, <a href="edit/" class="alert-link">edit</a> the event.</p>
+            <p class="mb-0">This event is currently hidden and is only visibile by ARTCC staff members. To make this event visible, <a href="edit/" class="alert-link">edit the event</a>.</p>
         </div>
+    {% endif %}
+    {% if request.session.staff %}
+        <a href="edit/"><button class="btn btn-secondary mb-4"><i class="far fa-pencil-ruler"></i> Edit Event</button></a>
     {% endif %}
     <div class="card">
         <div class="card-body">
-            <img class="d-inline float-left mr-4" src="{{ event.banner }}" style="max-width: 50%">
+            <img class="d-inline float-right ml-4 mb-4" src="{{ event.banner }}" style="max-width: 50%">
             <h3>Presented by {{ event.host }}</h3>
             <p>{{ event.description|linebreaks }}</p>
         </div>
@@ -40,7 +43,7 @@
                         {% for position in positions.center %}
                             <li>
                                 <b>{{ position.name }}</b> -
-                                {% if event.end >= time_now %}
+                                {% if not request.session.guest and event.end >= time_now %}
                                     {% if position.user %}
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
@@ -74,7 +77,7 @@
                         {% for position in positions.tracon %}
                             <li>
                                 <b>{{ position.name }}</b> -
-                                {% if event.end >= time_now %}
+                                {% if not request.session.guest and event.end >= time_now %}
                                     {% if position.user %}
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
@@ -108,7 +111,7 @@
                         {% for position in positions.cab %}
                             <li>
                                 <b>{{ position.name }}</b> -
-                                {% if event.end >= time_now %}
+                                {% if not request.session.guest and event.end >= time_now %}
                                     {% if position.user %}
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}

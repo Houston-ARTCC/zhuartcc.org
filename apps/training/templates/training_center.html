@@ -73,10 +73,6 @@
                         <h1 style="font-size: 35px">{{ sessions|length|default:'<span class="text-muted">N/A</span>' }}</h1>
                     </div>
                     <div class="text-center">
-                        <h2 style="font-size: 25px">Avg. Exam Score</h2>
-                        <h1 style="font-size: 35px">{{ statistics.avg_exam_score|default:'<span class="text-muted">N/A</span>' }}{% if statistics.avg_exam_score %}%{% endif %}</h1>
-                    </div>
-                    <div class="text-center">
                         <h2 style="font-size: 25px">Total Training Time</h2>
                         <h1 style="font-size: 35px">{{ statistics.training_time|duration|default:'<span class="text-muted">N/A</span>' }}</h1>
                     </div>
@@ -85,7 +81,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-7">
+        <div class="col-12">
             <div class="card card-nav-tabs">
                 <div class="card-header card-header-warning">Session History</div>
                 <div class="card-body text-center">
@@ -130,47 +126,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-5">
-            <div class="card card-nav-tabs">
-                <div class="card-header">Exam History</div>
-                <div class="card-body text-center">
-                    <table id="exams" class="table table-hover">
-                        <colgroup>
-                            <col style="width: 40%">
-                            <col style="width: 35%">
-                            <col style="width: 25%">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th class="text-center">Date / Time</th>
-                                <th class="text-center">Name</th>
-                                <th class="text-center">Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for exam in exams %}
-                                <tr data-type="href" data-exam="{{ exam.id }}">
-                                    <td class="text-center"><span class="d-none">{{ session.start|date:'m/d/Y Hi' }}</span>{{ exam.assigned|date:'M d, Y' }}</td>
-                                    <td class="text-center">{{ exam.name }}</td>
-                                    {% if exam.completed %}
-                                        <td class="text-center"><span class="badge
-                                            {% if exam.score >= 90 %}badge-success
-                                            {% elif exam.score >= 65 %}badge-warning
-                                            {% elif exam.score < 65 %}badge-danger
-                                            {% endif %}
-                                        ">{{ exam.score }}%</span></td>
-                                    {% else %}
-                                        <td class="text-center"><span class="badge badge-muted">N/A</span></td>
-                                    {% endif %}
-                                </tr>
-                            {% empty %}
-                                <td class="text-center" colspan="3"><i>You do not have any exams on record...</i></td>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 {% endblock %}
 
@@ -182,17 +137,9 @@
                 lengthChange: false,
                 order: [[ 0, 'desc' ]]
             })
-            $('#exams').DataTable({
-                pageLength: 4,
-                lengthChange: false,
-                order: [[ 0, 'desc' ]]
-            })
         })
         $('#sessions tr[data-type="href"]').click(function() {
             window.location.href = `session/${$(this).data('session')}/`
-        })
-        $('#exams tr[data-type="href"]').click(function() {
-            window.location.href = `exam/${$(this).data('exam')}/`
         })
     </script>
 {% endblock %}

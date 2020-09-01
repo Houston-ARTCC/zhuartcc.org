@@ -74,26 +74,30 @@ def add_event(request):
 @require_staff
 def edit_event(request, id):
     event = Event.objects.get(id=id)
-    if request.method == 'POST':
-        event.name = request.POST['name']
-        event.banner = request.POST['banner']
-        event.start = request.POST['start']
-        event.end = request.POST['end']
-        event.description = request.POST['description']
-        event.hidden = True if 'hidden' in request.POST else False
-        event.save()
+    if event.end >= timezone.now():
+        if request.method == 'POST':
+            event.name = request.POST['name']
+            event.start = pytz.utc.localize(datetime.fromisoformat(request.POST['start']))
+            event.end = pytz.utc.localize(datetime.fromisoformat(request.POST['end']))
+            event.banner = request.POST['banner']
+            event.host = request.POST['host']
+            event.description = request.POST['description'] if 'description' in request.POST else None
+            event.hidden = True if 'hidden' in request.POST else False
+            event.save()
 
-        user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Event "{event.name}" modified by {user.full_name}.').save()
+            user = User.objects.get(cid=request.session['cid'])
+            ActionLog(action=f'Event "{event.name}" modified by {user.full_name}.').save()
 
-        return redirect(f'/events/{id}/')
+            return redirect(f'/events/{id}/')
+        else:
+            positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
+            return render(request, 'edit_event.html', {
+                'page_title': f'Editing {event.name}',
+                'positions': positions,
+                'event': event
+            })
     else:
-        positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
-        return render(request, 'edit_event.html', {
-            'page_title': f'Editing {event.name}',
-            'positions': positions,
-            'event': event
-        })
+        return HttpResponse(status=403)
 
 
 @require_staff

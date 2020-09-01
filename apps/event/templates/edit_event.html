@@ -11,6 +11,82 @@
 {% endblock %}
 
 {% block body %}
+    <form action="/events/{{ event.id }}/edit/" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Event Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <input name="name" type="text" value="{{ event.name }}" required>
+                                    <label>Event Name</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="start" type="datetime-local" value="{{ event.start|to_iso_format }}" required>
+                                    <label>Start Time (Zulu)</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="end" type="datetime-local" value="{{ event.end|to_iso_format }}" required>
+                                    <label>End Time (Zulu)</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="banner" type="text" value="{{ event.banner }}" required>
+                                    <label>Banner URL</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="host" type="text" value="{{ event.host }}" required>
+                                    <label>Event Host</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="text-left col-12 mb-3 toggle">
+                                <input name="hidden" type="checkbox" {% if event.hidden %}checked{% endif %}>
+                                <label>Event hidden from controllers</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Event Description</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <textarea name="description" rows="9">{{ event.description }}</textarea>
+                                    <label>Event Description</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-secondary">Return to Event</button>
+        <button class="btn btn-primary">Save Changes</button>
+    </form>
+    <hr>
     <div class="row">
         <div class="col-4">
             <div class="card">

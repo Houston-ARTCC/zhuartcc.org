@@ -31,3 +31,8 @@ def id_from_user(queryset, user_id):
         if object.user_id == user_id:
             return object.id
     return None
+
+
+@register.filter
+def to_iso_format(dt):
+    return dt.isoformat().replace('+00:00', '')

@@ -2,16 +2,12 @@
 {% load filters %}
 
 {% block header %}
-    <div class="row">
-        <div class="col-8">
-            <h1 style="font-size: 65px">{{ event.name }}</h1>
-            <h2 style="font-size: 40px">{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
-        </div>
-        <div class="col-4 text-right">
-            <h1 style="font-size: 65px" id="countdown">N/A</h1>
-            <h2 style="font-size: 40px" id="countdown-sub">Until Event</h2>
-        </div>
+    <div class="text-right float-right">
+        <h1 style="font-size: 65px" id="countdown">N/A</h1>
+        <h2 style="font-size: 40px" id="countdown-sub">Until Event</h2>
     </div>
+    <h1 style="font-size: 65px">{{ event.name }}</h1>
+    <h2 style="font-size: 40px">{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
 {% endblock %}
 
 {% block body %}
@@ -21,7 +17,13 @@
             <p class="mb-0">This event is currently hidden and is only visibile by ARTCC staff members. To make this event visible, <a href="edit/" class="alert-link">edit the event</a>.</p>
         </div>
     {% endif %}
-    {% if request.session.staff %}
+    {% if event.end <= time_now %}
+        <div class="alert alert-success mb-4">
+            <h4 class="alert-heading">Event Archived</h4>
+            <p class="mb-0">This event has passed and is now in a read-only archived state.</p>
+        </div>
+    {% endif %}
+    {% if request.session.staff and event.end >= time_now %}
         <a href="edit/"><button class="btn btn-secondary mb-4"><i class="far fa-pencil-ruler"></i> Edit Event</button></a>
     {% endif %}
     <div class="card">

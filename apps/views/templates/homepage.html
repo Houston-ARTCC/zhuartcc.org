@@ -146,7 +146,7 @@
                             </div>
                             <div class="card-body">
                                 {% for event in events %}
-                                    {{ event.name }}
+                                    <a href="/events/{{ event.id }}/"><img src="{{ event.banner }}" width="100%"></a>
                                 {% empty %}
                                     No events were found...
                                 {% endfor %}
@@ -159,24 +159,24 @@
                             <div class="card-body">
                                 <table class="table text-center">
                                     <thead>
-                                    <tr>
-                                        <th>Callsign</th>
-                                        <th>Controller</th>
-                                        <th>Duration</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Callsign</th>
+                                            <th>Controller</th>
+                                            <th>Duration</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {% for controller in online %}
-                                        <tr>
-                                            <td>{{ controller.callsign }}</td>
-                                            <td>{{ controller.user.full_name }}</td>
-                                            <td>{{ controller.duration|duration }}</td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="3">No controllers online.</td>
-                                        </tr>
-                                    {% endfor %}
+                                        {% for controller in online %}
+                                            <tr>
+                                                <td class="py-2">{{ controller.callsign }}</td>
+                                                <td class="py-2">{{ controller.user.full_name }}</td>
+                                                <td class="py-2">{{ controller.duration|duration }}</td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td class="py-2" colspan="3">No controllers online.</td>
+                                            </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -186,24 +186,39 @@
                             <div class="card-body">
                                 <table class="table text-center">
                                     <thead>
-                                    <tr>
-                                        <th>Callsign</th>
-                                        <th>Departure</th>
-                                        <th>Arrival</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Callsign</th>
+                                            <th>Departure</th>
+                                            <th>Arrival</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {% for pilot in pilots %}
+                                        {% for pilot in pilots %}
+                                            <tr>
+                                                <td class="py-2">{{ pilot.callsign }}</td>
+                                                <td class="py-2">{{ pilot.dep|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                                <td class="py-2">{{ pilot.arr|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td class="py-2" colspan="3">No pilots in Houston.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Weather</div>
+                            <div class="card-body">
+                                <table class="table text-center">
+                                    <thead>
                                         <tr>
-                                            <td>{{ pilot.callsign }}</td>
-                                            <td>{{ pilot.dep|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                                            <td>{{ pilot.arr|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <th>Station</th>
+                                            <th>Condition</th>
                                         </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="3">No pilots in Houston.</td>
-                                        </tr>
-                                    {% endfor %}
+                                    </thead>
+                                    <tbody id="metars">
                                     </tbody>
                                 </table>
                             </div>
@@ -219,10 +234,11 @@
                 <p class="mb-1">All information on this website is for flight simulation use only and is not to be used for real world navigation or flight. This site is not affiliated with ICAO, the FAA, the actual Houston ARTCC, or any other real world aerospace entity.</p>
                 <p class="float-right"><b><a class="text-danger" href="https://github.com/MikeRomaa/zhuartcc.org/issues" target="_blank"><i class="far fa-bug"></i> Report a bug</a></b></p>
                 <p class="mb-1"><b>
-                    <a href="https://vatusa.net" target="_blank">VATUSA</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
                     <a href="https://vatsim.net" target="_blank">VATSIM</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
+                    <a href="https://vatusa.net" target="_blank">VATUSA</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
                     <a href="/privacy/" target="_blank">Privacy Policy</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
                     <a href="/feedback/" target="_blank">Feedback</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
+                    <a href="http://discord.gg/Ag2cdZz" target="_blank">Discord</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
                     <a href="https://github.com/MikeRomaa/zhuartcc.org" target="_blank">GitHub</a>
                 </b></p>
             </footer>
@@ -232,6 +248,28 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="{% static 'js/index.js' %}"></script>
         <script>
+            $(function() {
+                $.get('https://cors-anywhere.herokuapp.com/' +
+                        'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&stationString=KIAH%20KHOU%20KMSY%20KCRP%20KAUS%20KSAT%20KLCH'
+                )
+                .done(function(data) {
+                    let metar_list = data.getElementsByTagName('data')[0].children
+                    for (let metar of metar_list) {
+                        let id = metar.getElementsByTagName('station_id')[0].textContent
+                        let raw = metar.getElementsByTagName('raw_text')[0].textContent
+                        let category = metar.getElementsByTagName('flight_category')[0].textContent
+                        $('#metars').append(
+                            `<tr>
+                                <td class="py-2">${id}</td>
+                                <td class="py-2" data-toggle="popover" data-placement="top" data-content="${raw}">
+                                    <span class="badge ${(category === 'VFR' ? 'badge-success' : category === 'MVFR' ? 'badge-info' : category === 'IFR' ? 'badge-warning' : 'badge-danger')}">${category}</span>
+                                </td>
+                            </tr>`
+                        )
+                    }
+                    $('[data-toggle="popover"]').hover(function() { $(this).popover('show') }, function() { $(this).popover('hide') })
+                })
+            })
         </script>
     </body>
 </html>

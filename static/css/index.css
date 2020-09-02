@@ -211,6 +211,17 @@ a:hover {
 .dropdown-item.active, .dropdown-item:active {
     background-color: rgba(45, 69, 162, 0.25);
 }
+.popover {
+    font: 15px Gilroy-Regular, Helvetica, sans-serif;
+    padding: 10px;
+    max-width: 350px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 0 17px #cfcfcf;
+}
+.bs-popover-top>.arrow::before {
+    border: none;
+}
 
 
 /*
@@ -997,6 +1008,7 @@ dP   dP   dP `88888P8 88Y888P' `88888P'
 }
 .mapboxgl-popup-content {
     padding: 0!important;
+    border-radius: 0!important;
 }
 .mapboxgl-popup-header {
     padding: 15px!important;

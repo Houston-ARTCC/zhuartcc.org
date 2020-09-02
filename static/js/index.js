@@ -1,6 +1,7 @@
 $(function() {
     $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
     $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="popover"]').popover()
 
     stickyNav()
     $(document).scroll(stickyNav)

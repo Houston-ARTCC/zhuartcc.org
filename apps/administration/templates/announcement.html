@@ -1,0 +1,58 @@
+{% extends 'mainTemplate.html' %}
+
+{% block stylesheets %}
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <form id="announcementForm" method="POST">
+        {% csrf_token %}
+        <div class="label-group">
+            <input name="subject" type="text" required>
+            <label>Announcement Subject</label>
+            <span class="focus-border"></span>
+        </div>
+        <textarea name="message" hidden></textarea>
+        <div class="quill mb-2" id="editor"></div>
+        <a href="/admin"><button class="btn btn-secondary" type="button">Cancel</button></a>
+        <button class="btn btn-primary">Confirm</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        var quill = null
+        $(function() {
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+
+                        [{ 'size': ['small', false, 'large', 'huge'] }],
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'font': [] }],
+
+                        ['image'],
+
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Announcement message goes here...',
+            });
+        })
+        $('#announcementForm').submit(function(e) {
+            e.preventDefault()
+            $('textarea[name="message"]').val(quill.root.innerHTML)
+            this.submit()
+        })
+    </script>
+{% endblock %}

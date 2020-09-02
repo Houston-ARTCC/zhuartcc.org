@@ -106,7 +106,7 @@ d888888P                                                                dP
 .text-warning {
     color: #f6d93e!important;
 }
-body {
+body, p, ol, ul {
     font: 16px/26px Gilroy-Regular, Helvetica, sans-serif;
 }
 h1 {
@@ -1024,11 +1024,11 @@ dP   dP   dP `88888P8 88Y888P' `88888P'
     color: white;
 }
 
-.quill h1,
-.quill h2,
-.quill h3,
-.quill h4,
-.quill h5,
-.quill p {
+.quill.broadcast h1,
+.quill.broadcast h2,
+.quill.broadcast h3,
+.quill.broadcast h4,
+.quill.broadcast h5,
+.quill.broadcast p {
     all: unset;
 }

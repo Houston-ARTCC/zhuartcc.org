@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', administration.view_admin_panel),                    # View Admin Panel (STAFF)
     path('admin/log/', administration.view_action_log),                 # View Action Log (STAFF)
     path('admin/transfers/', administration.view_transfers),            # View VATUSA Transfer Requests (STAFF)
+    path('admin/announcement/', administration.view_announcement),      # View Announcement Page (STAFF)
     path('admin/broadcast/', administration.view_broadcast),            # View Broadcast Page (STAFF)
     path('admin/broadcast/send/', administration.send_broadcast),       # Send Broadcast Email (POST / STAFF)
 

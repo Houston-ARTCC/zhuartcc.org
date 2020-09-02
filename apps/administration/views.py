@@ -2,12 +2,12 @@ import requests
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from zhuartcc.overrides import send_mass_html_mail
-from .models import ActionLog
+from .models import ActionLog, Announcement
 from ..user.models import User
 from zhuartcc.decorators import require_staff
 
@@ -29,6 +29,23 @@ def view_transfers(request):
         params={'apikey': settings.API_KEY},
     ).json()['transfers']
     return render(request, 'transfers.html', {'page_title': 'Transfer Requests', 'transfers': transfers})
+
+
+@require_staff
+def view_announcement(request):
+    if request.method == 'POST':
+        admin = User.objects.get(cid=request.session['cid'])
+        Announcement(
+            author=admin,
+            subject=request.POST['subject'],
+            message=request.POST['message'],
+        ).save()
+
+        ActionLog(action=f'User {admin.full_name} created announcement "{request.POST["subject"]}".').save()
+
+        return redirect('/')
+    else:
+        return render(request, 'announcement.html', {'page_title': 'Announcement'})
 
 
 @require_staff
@@ -65,7 +82,7 @@ def send_broadcast(request):
         )
         send_mass_html_mail(mail_tuple)
 
-        ActionLog(action=f'User {admin.full_name} sent broadcast "{request.post["subject"]}".').save()
+        ActionLog(action=f'User {admin.full_name} sent broadcast "{request.POST["subject"]}".').save()
 
         return HttpResponse(status=200)
     except:

@@ -15,7 +15,7 @@ class Event(models.Model):
     hidden = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.start.strftime("%b %d, %Y @ %H%Mz")} | {self.name}'
+        return self.name
 
 
 class EventPosition(models.Model):
@@ -65,7 +65,7 @@ class PositionPreset(models.Model):
             ).save()
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class EventScore(models.Model):

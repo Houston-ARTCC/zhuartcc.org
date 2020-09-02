@@ -6,7 +6,7 @@ class Scenery(models.Model):
         ('P3D', 'Prepar3D / FSX'),
         ('XP', 'X-Plane')
     )
-    simulator = models.CharField(max_length=8, choices=SIMULATORS)
     name = models.CharField(max_length=255)
+    simulator = models.CharField(max_length=8, choices=SIMULATORS)
     link = models.URLField()
     payware = models.BooleanField()

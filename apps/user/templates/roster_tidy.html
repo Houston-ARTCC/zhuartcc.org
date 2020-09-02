@@ -2,6 +2,14 @@
 {% load filters %}
 
 {% block body %}
+    <div class="alert alert-info mb-4">
+        <h4 class="alert-heading">Restricted Access</h4>
+        <p class="mb-0">This action is restricted to the ZHU ATM, ZHU DATM, and members of VATUSA staff. The VATUSA API will simply deny any requests coming from users not belonging to one of those categories.</p>
+    </div>
+    <div class="alert alert-warning mb-4">
+        <h4 class="alert-heading">Warning</h4>
+        <p class="mb-0">Removal of controllers is irreversible and all selected controllers will be automatically removed from the Houston ARTCC active roster. Please verify your actions before submitting!</p>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -37,10 +45,8 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <a href="/roster"><button class="btn btn-secondary" type="button">Cancel</button></a>
-                        <button class="btn btn-primary" type="submit">Remove Selected Users</button>
-                        <p class="mt-3"><b>Warning!</b> Removal of controllers is irreversible and all selected controllers will be automatically removed from the Houston ARTCC active roster. Please verify your actions before submitting!</p>
-                        <p><b>Note:</b> This action is restricted to the ZHU ATM, ZHU DATM, and members of VATUSA staff. The VATUSA API will simply deny any requests coming from users not belonging to one of those categories.</p>
+                        <a href="/roster"><button class="btn btn-secondary mb-0" type="button">Cancel</button></a>
+                        <button class="btn btn-primary mb-0" type="submit">Remove Selected Users</button>
                     </form>
                 </div>
             </div>

@@ -67,6 +67,24 @@ d888888P                                                                dP
     opacity: 60%;
     transition: 400ms;
 }
+.bg-gold {
+    background: linear-gradient(45deg, #d0852a, #e9c43e);
+    color: white;
+}
+.bg-silver {
+    background: linear-gradient(45deg, #acabab, #d9d9e2);
+    color: white;
+}
+.bg-bronze {
+    background: linear-gradient(45deg, #A44200, #e99237);
+    color: white;
+}
+.card-footer {
+    border: none;
+    margin: 0 -1.25rem -1.25rem;
+    padding: 1.25rem;
+    background-color: rgba(0, 0, 0, 0.1);
+}
 .text-primary {
     color: #2d45a2!important;
 }

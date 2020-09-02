@@ -91,56 +91,123 @@
                 <p class="scroll-arrow"><i class="far fa-sm fa-arrow-left"></i>&nbsp; Scroll</p>
             </div>
             <div class="page-container">
-                <div class="card">
-                    <div class="card-body">
-                        <table class="table text-center">
-                            <thead>
-                                <tr>
-                                    <th>Callsign</th>
-                                    <th>Controller</th>
-                                    <th>Duration</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for controller in online %}
-                                <tr>
-                                    <td>{{ controller.callsign }}</td>
-                                    <td>{{ controller.user.full_name }}</td>
-                                    <td>{{ controller.duration|duration }}</td>
-                                </tr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="card text-center">
+                                    <div class="card-body bg-gold">
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy-alt"></i> First Place</h2>
+                                        <div class="card-footer">
+                                            <h3>{{ top_controllers.0.user.full_name }}</h3>
+                                            <h5 class="mb-0">{{ top_controllers.0.hours|duration }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card text-center">
+                                    <div class="card-body bg-silver">
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Second Place</h2>
+                                        <div class="card-footer">
+                                            <h3>{{ top_controllers.1.user.full_name }}</h3>
+                                            <h5 class="mb-0">{{ top_controllers.1.hours|duration }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card text-center">
+                                    <div class="card-body bg-bronze">
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Third Place</h2>
+                                        <div class="card-footer">
+                                            <h3>{{ top_controllers.2.user.full_name }}</h3>
+                                            <h5 class="mb-0">{{ top_controllers.2.hours|duration }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                Recent Announcements
+                            </div>
+                            <div class="card-body">
+                                {% for announcement in announcements %}
+                                    {{ announcement.subject }}
                                 {% empty %}
-                                <tr>
-                                    <td colspan="3">No controllers online.</td>
-                                </tr>
+                                    No announcements were found...
                                 {% endfor %}
-                            </tbody>
-                        </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                Events
+                            </div>
+                            <div class="card-body">
+                                {% for event in events %}
+                                    {{ event.name }}
+                                {% empty %}
+                                    No events were found...
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <table class="table text-center">
-                            <thead>
-                                <tr>
-                                    <th>Callsign</th>
-                                    <th>Departure</th>
-                                    <th>Arrival</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for pilot in pilots %}
-                                <tr>
-                                    <td>{{ pilot.callsign }}</td>
-                                    <td>{{ pilot.dep|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                                    <td>{{ pilot.arr|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="3">No pilots in Houston.</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-header">Online Controllers</div>
+                            <div class="card-body">
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>Callsign</th>
+                                        <th>Controller</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for controller in online %}
+                                        <tr>
+                                            <td>{{ controller.callsign }}</td>
+                                            <td>{{ controller.user.full_name }}</td>
+                                            <td>{{ controller.duration|duration }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="3">No controllers online.</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Pilots within Houston</div>
+                            <div class="card-body">
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>Callsign</th>
+                                        <th>Departure</th>
+                                        <th>Arrival</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for pilot in pilots %}
+                                        <tr>
+                                            <td>{{ pilot.callsign }}</td>
+                                            <td>{{ pilot.dep|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <td>{{ pilot.arr|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="3">No pilots in Houston.</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,5 +231,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="{% static 'js/index.js' %}"></script>
+        <script>
+        </script>
     </body>
 </html>

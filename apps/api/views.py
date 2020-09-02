@@ -66,3 +66,21 @@ def return_inactive_users():
             inactive_users.append(user_status)
 
     return inactive_users
+
+
+def return_sorted_hours():
+    aggregates = []
+    for user in User.objects.all():
+        aggregate = {
+            'user': user,
+            'hours': ControllerSession.objects.filter(user=user).aggregate(
+                current=Sum('duration', filter=Q(time_logon__month=timezone.now().month))
+            )['current']
+        }
+
+        if not aggregate['hours']:
+            aggregate['hours'] = timedelta()
+
+        aggregates += [aggregate]
+
+    return sorted(aggregates, key=lambda i: i['hours'], reverse=True)

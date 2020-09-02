@@ -1,13 +1,20 @@
 import requests
 from django.shortcuts import render
+from django.utils import timezone
 
+from ..administration.models import Announcement
 from ..api.models import Controller
+from ..api.views import return_sorted_hours
+from ..event.models import Event
 
 
 def view_homepage(request):
     return render(request, 'homepage.html', {
         'online': Controller.objects.all(),
         'pilots': requests.get('https://api.denartcc.org/live/ZHU').json,
+        'events': Event.objects.filter(end__gte=timezone.now()).order_by('start'),
+        'announcements': Announcement.objects.all().order_by('created'),
+        'top_controllers': return_sorted_hours()
     })
 
 

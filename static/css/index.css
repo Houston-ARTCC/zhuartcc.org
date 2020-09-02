@@ -106,7 +106,7 @@ d888888P                                                                dP
 .text-warning {
     color: #f6d93e!important;
 }
-body, p, ol, ul {
+body {
     font: 16px/26px Gilroy-Regular, Helvetica, sans-serif;
 }
 h1 {

@@ -262,14 +262,14 @@
                 .done(function(data) {
                     let metar_list = data.getElementsByTagName('data')[0].children
                     for (let metar of metar_list) {
-                        let id = metar.getElementsByTagName('station_id')[0]?.textContent
-                        let raw = metar.getElementsByTagName('raw_text')[0]?.textContent
+                        let id = metar.getElementsByTagName('station_id')[0].textContent
+                        let raw = metar.getElementsByTagName('raw_text')[0].textContent
                         let category = metar.getElementsByTagName('flight_category')[0]?.textContent
                         $('#metars').append(
                             `<tr>
                                 <td class="py-2">${id}</td>
                                 <td class="py-2" data-toggle="popover" data-placement="top" data-content="${raw}">
-                                    <span class="badge ${(category === 'VFR' ? 'badge-success' : category === 'MVFR' ? 'badge-info' : category === 'IFR' ? 'badge-warning' : category === 'LIFR' ? 'badge-danger' : 'badge-muted')}">${category ? category : 'N/A'}</span>
+                                    <span class="badge badge-${(category === 'VFR' ? 'success' : category === 'MVFR' ? 'info' : category === 'IFR' ? 'warning' : category === 'LIFR' ? 'danger' : 'muted')}">${category ? category : 'N/A'}</span>
                                 </td>
                             </tr>`
                         )

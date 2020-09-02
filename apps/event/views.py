@@ -53,7 +53,7 @@ def add_event(request):
             end=pytz.utc.localize(datetime.fromisoformat(request.POST['end'])),
             banner=request.POST['banner'],
             host=request.POST['host'],
-            description=request.POST['description'] if 'description' in request.POST else None,
+            description=request.POST.get('description', None),
             hidden=True if 'hidden' in request.POST else False,
         )
         event.save()
@@ -84,7 +84,7 @@ def edit_event(request, id):
             event.end = pytz.utc.localize(datetime.fromisoformat(request.POST['end']))
             event.banner = request.POST['banner']
             event.host = request.POST['host']
-            event.description = request.POST['description'] if 'description' in request.POST else None
+            event.description = request.POST.get('description', None)
             event.hidden = True if 'hidden' in request.POST else False
             event.save()
 

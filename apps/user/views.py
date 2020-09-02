@@ -107,7 +107,7 @@ def edit_user(request, cid):
         user.last_name = post['last_name']
         user.email = post['email']
         user.main_role = post['main_role']
-        user.home_facility = post['home_facility'] if 'home_facility' in post else None
+        user.home_facility = request.POST.get('home_facility', None)
         user.staff_role = post['staff_role'] if post['staff_role'] in settings.STAFF_ROLES else None
         user.training_role = post['training_role'] if post['training_role'] in settings.TRAINING_ROLES else None
         user.mentor_level = post['mentor_level']

@@ -18,16 +18,15 @@ def view_all_feedback(request):
 
 def add_feedback(request):
     if request.method == 'POST':
-        post = request.POST
         Feedback(
-            controller=User.objects.get(cid=post['controller']),
-            controller_callsign=post['controller_callsign'],
-            rating=int(post['rating']),
-            pilot_name=post['pilot_name'] if 'pilot_name' in post else None,
-            pilot_email=post['pilot_email'] if 'pilot_email' in post else None,
-            event=Event.objects.get(id=post['event']) if 'event' in post else None,
-            flight_callsign=post['flight_callsign'] if 'flight_callsign' in post else None,
-            comments=post['comments'],
+            controller=User.objects.get(cid=request.POST['controller']),
+            controller_callsign=request.POST['controller_callsign'],
+            rating=int(request.POST['rating']),
+            pilot_name=request.POST.get('pilot_name', None),
+            pilot_email=request.POST.get('pilot_email', None),
+            event=Event.objects.get(id=request.POST['event']) if 'event' in request.POST else None,
+            flight_callsign=request.POST.get('flight_callsign', None),
+            comments=request.POST['comments'],
         ).save()
 
         return redirect('/feedback')

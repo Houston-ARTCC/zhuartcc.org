@@ -9,6 +9,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Event, EventPosition, PositionPreset, EventPositionRequest
 from ..administration.models import ActionLog
+from ..training.models import TrainingSession
 from ..user.models import User
 from zhuartcc.decorators import require_staff, require_member
 
@@ -68,6 +69,8 @@ def add_event(request):
         return render(request, 'new_event.html', {
             'page_title': 'New Event',
             'position_presets': PositionPreset.objects.all(),
+            'events': Event.objects.all(),
+            'sessions': TrainingSession.objects.all(),
         })
 
 

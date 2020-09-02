@@ -1,4 +1,5 @@
 {% extends 'mainTemplate.html' %}
+{% load filters %}
 
 
 {% block stylesheets %}
@@ -43,27 +44,34 @@
             cal = new tui.Calendar(document.getElementById('calendar'), {
                 defaultView: 'week',
                 taskView: false,
-                scheduleView: ['time'],
+                useDetailPopup: true,
                 template: {
                 },
-                useCreationPopup: false,
-                useDetailPopup: false,
                 timezones: [{
-                    timezoneOffset: -new Date().getTimezoneOffset(),
-                    displayLabel: 'Local',
-                    tooltip: 'Local'
-                }, {
                     timezoneOffset: 0,
                     displayLabel: 'UTC',
                     tooltip: 'UTC'
-                }]
+                },
+                {
+                    timezoneOffset: -new Date().getTimezoneOffset(),
+                    displayLabel: 'Local',
+                    tooltip: 'Local'
+                }],
+                calendars: [
+                    {
+                        id: '1',
+                        name: 'Events',
+                        color: '#ffffff',
+                    },
+                    {
+                        id: '2',
+                        name: 'Training',
+                        color: '#ffffff',
+                    }
+                ]
             })
             cal.on({
-                'clickSchedule': function(e) {
-                    console.log('clickSchedule', e);
-                },
                 'beforeCreateSchedule': function(e) {
-                    console.log('beforeCreateSchedule', e);
                     launchCustomModal(
                         'info',
                         'Creating New Event',
@@ -136,17 +144,46 @@
                     e.guide.clearGuideElement();
                 },
                 'beforeUpdateSchedule': function(e) {
-                    console.log('beforeUpdateSchedule', e);
                     e.schedule.start = e.start;
                     e.schedule.end = e.end;
                     cal.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);
                 },
                 'beforeDeleteSchedule': function(e) {
-                    console.log('beforeDeleteSchedule', e);
                     cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);
                 }
             });
             setRange()
+            cal.createSchedules([
+                {% for event in events %}
+                    {
+                        id: '{{ event.id }}',
+                        calendarId: '1',
+                        title: '{{ event.name }}',
+                        body: '{{ event.description|escape|linebreaksbr }}',
+                        location: '{{ event.host }}',
+                        category: 'time',
+                        isReadOnly: true,
+                        bgColor: '#2d45a2',
+                        borderColor: '#091a6d',
+                        start: '{{ event.start|to_iso_format }}',
+                        end: '{{ event.end|to_iso_format }}',
+                    },
+                {% endfor %}
+                {% for session in sessions %}
+                    {
+                        id: '{{ session.id }}',
+                        calendarId: '2',
+                        title: '{{ session.student.full_name }}\'s {{ session.get_type_display }} Session',
+                        category: 'time',
+                        attendees: ['{{ session.student.full_name }}', '{{ session.instructor.full_name }}'],
+                        isReadOnly: true,
+                        bgColor: '#dd8425',
+                        borderColor: '#c6720b',
+                        start: '{{ session.start|to_iso_format }}',
+                        end: '{{ session.get_end_time|to_iso_format }}',
+                    },
+                {% endfor %}
+            ])
         })
         $('#calendar-menu button').click(function() {
             switch ($(this).data('action')) {
@@ -161,8 +198,6 @@
                     break
             }
             setRange()
-            cal.clear()
-            cal.render()
         })
     </script>
 {% endblock %}

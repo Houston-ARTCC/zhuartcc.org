@@ -225,6 +225,9 @@ a:hover {
 .bs-popover-top>.arrow::before {
     border: none;
 }
+.tui-full-calendar-popup-detail .tui-full-calendar-popup-container {
+    min-width: 350px!important;
+}
 
 
 /*
@@ -732,7 +735,7 @@ img {
 .modal-content {
     border: none;
     border-radius: 0;
-    padding: 10%;
+    padding: 7%;
 }
 .modal-title {
     font: 35px Gilroy-Bold, Helvetica, sans-serif;

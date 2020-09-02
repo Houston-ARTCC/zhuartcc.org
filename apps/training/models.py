@@ -39,6 +39,9 @@ class TrainingSession(models.Model):
     status = models.IntegerField(default=0, choices=STATUSES)
     session_notes = models.FileField(upload_to='training/', null=True, blank=True)
 
+    def get_end_time(self):
+        return self.start + self.duration
+
     def __str__(self):
         return f'{self.start} | {self.student.full_name} with {self.instructor.full_name}'
 

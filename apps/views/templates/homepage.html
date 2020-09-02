@@ -184,7 +184,10 @@
                         <div class="card">
                             <div class="card-header">Pilots within Houston</div>
                             <div class="card-body">
-                                <table class="table text-center">
+                                <div class="text-center" id="pilots-loader">
+                                    <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
+                                </div>
+                                <table class="table text-center" id="pilots">
                                     <thead>
                                         <tr>
                                             <th>Callsign</th>
@@ -192,18 +195,7 @@
                                             <th>Arrival</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {% for pilot in pilots %}
-                                            <tr>
-                                                <td class="py-2">{{ pilot.callsign }}</td>
-                                                <td class="py-2">{{ pilot.dep|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                                                <td class="py-2">{{ pilot.arr|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                                            </tr>
-                                        {% empty %}
-                                            <tr>
-                                                <td class="py-2" colspan="3">No pilots in Houston.</td>
-                                            </tr>
-                                        {% endfor %}
+                                    <tbody id="flights">
                                     </tbody>
                                 </table>
                             </div>
@@ -211,7 +203,10 @@
                         <div class="card">
                             <div class="card-header">Weather</div>
                             <div class="card-body">
-                                <table class="table text-center">
+                                <div class="text-center" id="weather-loader">
+                                    <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
+                                </div>
+                                <table class="table text-center" id="weather">
                                     <thead>
                                         <tr>
                                             <th>Station</th>
@@ -248,6 +243,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="{% static 'js/index.js' %}"></script>
         <script>
+            $('#weather, #pilots').hide()
             $(function() {
                 $.get('https://cors-anywhere.herokuapp.com/' +
                         'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&stationString=KIAH%20KHOU%20KMSY%20KCRP%20KAUS%20KSAT%20KLCH'
@@ -255,19 +251,44 @@
                 .done(function(data) {
                     let metar_list = data.getElementsByTagName('data')[0].children
                     for (let metar of metar_list) {
-                        let id = metar.getElementsByTagName('station_id')[0].textContent
-                        let raw = metar.getElementsByTagName('raw_text')[0].textContent
-                        let category = metar.getElementsByTagName('flight_category')[0].textContent
+                        let id = metar.getElementsByTagName('station_id')[0]?.textContent
+                        let raw = metar.getElementsByTagName('raw_text')[0]?.textContent
+                        let category = metar.getElementsByTagName('flight_category')[0]?.textContent
                         $('#metars').append(
                             `<tr>
                                 <td class="py-2">${id}</td>
                                 <td class="py-2" data-toggle="popover" data-placement="top" data-content="${raw}">
-                                    <span class="badge ${(category === 'VFR' ? 'badge-success' : category === 'MVFR' ? 'badge-info' : category === 'IFR' ? 'badge-warning' : 'badge-danger')}">${category}</span>
+                                    <span class="badge ${(category === 'VFR' ? 'badge-success' : category === 'MVFR' ? 'badge-info' : category === 'IFR' ? 'badge-warning' : category === 'LIFR' ? 'badge-danger' : 'badge-muted')}">${category ? category : 'N/A'}</span>
                                 </td>
                             </tr>`
                         )
                     }
                     $('[data-toggle="popover"]').hover(function() { $(this).popover('show') }, function() { $(this).popover('hide') })
+                    $('#weather-loader').fadeOut('fast', function() {
+                        $(this).remove()
+                        $('#weather').fadeIn('fast')
+                    })
+                })
+                $.get('https://cors-anywhere.herokuapp.com/https://api.denartcc.org/live/ZHU')
+                .done(function(data) {
+                    let flights = JSON.parse(data)
+                    if (flights.length > 0) {
+                        flights.forEach(function (flight) {
+                            $('#flights').append(
+                                `<tr>
+                                    <td class="py-2">${flight.callsign}</td>
+                                    <td class="py-2">${flight.dep ? flight.dep : '<span class="text-muted">N/A</span>'}</td>
+                                    <td class="py-2">${flight.arr ? flight.arr : '<span class="text-muted">N/A</span>'}</td>
+                                </tr>)`
+                            )
+                        })
+                    } else {
+                        $('#flights').append('<tr><td class="py-2" colspan="3">No pilots in Houston.</td></tr>')
+                    }
+                    $('#pilots-loader').fadeOut('fast', function() {
+                        $(this).remove()
+                        $('#pilots').fadeIn('fast')
+                    })
                 })
             })
         </script>

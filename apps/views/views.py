@@ -11,9 +11,8 @@ from ..event.models import Event
 def view_homepage(request):
     return render(request, 'homepage.html', {
         'online': Controller.objects.all(),
-        'pilots': requests.get('https://api.denartcc.org/live/ZHU').json,
         'events': Event.objects.filter(hidden=False).filter(end__gte=timezone.now()).order_by('start')[:3],
-        'announcements': Announcement.objects.all().order_by('created'),
+        'announcements': Announcement.objects.all().order_by('created')[:5],
         'top_controllers': return_sorted_hours()
     })
 

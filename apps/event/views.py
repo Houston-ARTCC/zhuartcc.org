@@ -32,12 +32,14 @@ def view_event(request, id):
     event = Event.objects.get(id=id)
     if event.hidden and request.session['staff'] or not event.hidden:
         positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
+        user = User.objects.get(cid=request.session['cid']) if 'cid' in request.session else None
         return render(request, 'view_event.html', {
             'page_title': event.name,
             'event': event,
             'positions': positions,
             'available': {k: len(list(filter(lambda pos: pos.user is None, positions[k]))) for k in positions},
-            'user': User.objects.get(cid=request.session['cid']) if 'cid' in request.session else None,
+            'user': user,
+            'allowed_to_signup': user and not user.prevent_event_signup and event.end >= timezone.now(),
             'time_now': timezone.now(),
         })
     else:
@@ -138,12 +140,16 @@ def delete_position(request, id):
 @require_member
 @require_POST
 def request_position(request, id):
-    EventPositionRequest(
-        position=EventPosition.objects.get(id=id),
-        user=User.objects.get(cid=request.session['cid']),
-    ).save()
+    user = User.objects.get(cid=request.session['cid'])
+    if user.prevent_event_signup:
+        return HttpResponse(status=403)
+    else:
+        EventPositionRequest(
+            position=EventPosition.objects.get(id=id),
+            user=user,
+        ).save()
 
-    return HttpResponse(status=200)
+        return HttpResponse(status=200)
 
 
 @require_member

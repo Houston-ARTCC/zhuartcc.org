@@ -112,6 +112,7 @@ def edit_user(request, cid):
         user.training_role = post['training_role'] if post['training_role'] in settings.TRAINING_ROLES else None
         user.mentor_level = post['mentor_level']
         user.activity_exempt = True if 'activity_exempt' in post else False
+        user.prevent_event_signup = True if 'prevent_event_signup' in post else False
         user.biography = post['biography'] if 'biography' in post else ''
         user.del_cert = int(post['del_cert'])
         user.gnd_cert = int(post['gnd_cert'])

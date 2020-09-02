@@ -158,6 +158,10 @@
                                 <input name="activity_exempt" type="checkbox" {% if user.activity_exempt %}checked{% endif %}>
                                 <label>Exempt from monthly hour requirements.</label>
                             </div>
+                            <div class="col-12 mb-0 toggle">
+                                <input name="prevent_event_signup" type="checkbox" {% if user.prevent_event_signup %}checked{% endif %}>
+                                <label>Blocked from signing up for events.</label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-12 mb-3 text-center">

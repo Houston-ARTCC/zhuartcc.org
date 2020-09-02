@@ -142,7 +142,7 @@ def delete_position(request, id):
 def request_position(request, id):
     user = User.objects.get(cid=request.session['cid'])
     if user.prevent_event_signup:
-        return HttpResponse(status=403)
+        return HttpResponse('You are not allowed to sign up for events!', status=403)
     else:
         EventPositionRequest(
             position=EventPosition.objects.get(id=id),

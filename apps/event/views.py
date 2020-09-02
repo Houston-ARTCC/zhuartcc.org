@@ -36,7 +36,7 @@ def view_event(request, id):
             'event': event,
             'positions': positions,
             'available': {k: len(list(filter(lambda pos: pos.user is None, positions[k]))) for k in positions},
-            'user': User.objects.get(cid=request.session['cid']),
+            'user': User.objects.get(cid=request.session['cid']) if 'cid' in request.session else None,
             'time_now': timezone.now(),
         })
     else:

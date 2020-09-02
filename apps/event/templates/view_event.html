@@ -45,7 +45,7 @@
                         {% for position in positions.center %}
                             <li>
                                 <b>{{ position.name }}</b> -
-                                {% if not request.session.guest and event.end >= time_now %}
+                                {% if 'cid' in request.session and event.end >= time_now %}
                                     {% if position.user %}
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
@@ -79,7 +79,7 @@
                         {% for position in positions.tracon %}
                             <li>
                                 <b>{{ position.name }}</b> -
-                                {% if not request.session.guest and event.end >= time_now %}
+                                {% if 'cid' in request.session and event.end >= time_now %}
                                     {% if position.user %}
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
@@ -113,7 +113,7 @@
                         {% for position in positions.cab %}
                             <li>
                                 <b>{{ position.name }}</b> -
-                                {% if not request.session.guest and event.end >= time_now %}
+                                {% if 'cid' in request.session and event.end >= time_now %}
                                     {% if position.user %}
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
@@ -165,7 +165,7 @@
         updateTimer()
         setInterval(function() { updateTimer() }, 1000)
 
-        {% if not request.session.guest and event.end >= time_now %}
+        {% if 'cid' in request.session and event.end >= time_now %}
             $('[data-action="request"]').click(function() {
                 $.post('/events/request/' + $(this).data('id') + '/')
                 .done(function() {

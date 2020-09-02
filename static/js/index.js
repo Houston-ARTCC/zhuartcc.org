@@ -94,14 +94,16 @@ function launchErrorModal(error) {
     `)
     bindModalEvents($('#errorModal'))
 }
-function launchCustomModal(icon, title, content) {
+function launchCustomModal(icon, title, content, center=true, large=false) {
     $('.page-container').append(`
     <div id="customModal" class="modal" tabindex="2000">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered ${large ? 'modal-lg' : ''}">
             <div class="modal-content">
-                <div class="modal-body text-center">
-                    <i class="icon-` + icon + `"></i>
-                    <h3 class="modal-title">` + title + `</h3>
+                <div class="modal-body ${center ? 'text-center' : ''}">
+                    <div class="text-center">
+                        <i class="icon-` + icon + `"></i>
+                        <h3 class="modal-title">` + title + `</h3>
+                    </div>
                     ` + content + `
                 </div>
             </div>
@@ -120,7 +122,7 @@ function bindModalEvents(modal) {
     modal.on('hidden.bs.modal', function() {
         modal.remove()
     })
-    $('#successModal, #errorModal, #customModal').on('hidden.bs.modal', function() {
+    $('#successModal, #errorModal').on('hidden.bs.modal', function() {
         location.reload()
     })
     $('#customModal input, #customModal select, #customModal textarea').change(checkValue).each(checkValue)
@@ -128,6 +130,5 @@ function bindModalEvents(modal) {
         $(this).siblings().eq(1).text(($(this).val().replace(/.*([\/\\])/, '')))
     })
     $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
-    modal.modal({backdrop: 'static'})
     modal.modal('show')
 }

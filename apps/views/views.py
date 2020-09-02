@@ -12,7 +12,7 @@ def view_homepage(request):
     return render(request, 'homepage.html', {
         'online': Controller.objects.all(),
         'events': Event.objects.filter(hidden=False).filter(end__gte=timezone.now()).order_by('start')[:3],
-        'announcements': Announcement.objects.all().order_by('created')[:5],
+        'announcements': Announcement.objects.all().order_by('-created')[:5],
         'top_controllers': return_sorted_hours()
     })
 

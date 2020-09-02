@@ -190,6 +190,9 @@ a:hover {
     font-size: 45px;
     border-radius: 10px;
 }
+.badge-primary {
+    background-color: #2d45a2!important;
+}
 .badge-success {
     background-color: #50cb4a!important;
 }
@@ -242,6 +245,9 @@ dP `88888P' `88888P' dP    dP `88888P'
 }
 .icon-info::after {
     content: url("https://img.icons8.com/cute-clipart/90/000000/info.png");
+}
+.icon-news::after {
+    content: url("https://img.icons8.com/cute-clipart/90/000000/news.png");
 }
 
 
@@ -719,6 +725,9 @@ img {
 }
 .modal-dialog {
     max-width: 600px;
+}
+.modal-lg {
+    max-width: 900px;
 }
 .modal-content {
     border: none;

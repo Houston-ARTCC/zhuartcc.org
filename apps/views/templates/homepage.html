@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>Welcome to Houston ARTCC!</title>
-        <link rel="shortcut icon" href="{% static 'img/favicon.ico' type='image/x-icon' %}">
+        <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -129,21 +129,23 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header">
-                                Recent Announcements
-                            </div>
+                            <div class="card-header"><i class="far fa-newspaper"></i> Recent Announcements</div>
                             <div class="card-body">
-                                {% for announcement in announcements %}
-                                    {{ announcement.subject }}
-                                {% empty %}
-                                    No announcements were found...
-                                {% endfor %}
+                                <ul class="list-unstyled mb-0">
+                                    {% for announcement in announcements %}
+                                        <li>
+                                            <button class="btn btn-link mb-0" data-action="announcement" data-subject="{{ announcement.subject }}" data-message="{{ announcement.message }}">
+                                                <h5><span class="badge badge-primary">{{ announcement.created|date:'M. j Y' }}</span> {{ announcement.subject }} <small><span class="text-black-50">by {{ announcement.author.full_name }}</span></small></h5>
+                                            </button>
+                                        </li>
+                                    {% empty %}
+                                        <li>No announcements were found...</li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header">
-                                Events
-                            </div>
+                            <div class="card-header"><i class="far fa-calendar"></i> Events</div>
                             <div class="card-body">
                                 {% for event in events %}
                                     <a href="/events/{{ event.id }}/"><img src="{{ event.banner }}" width="100%"></a>
@@ -155,7 +157,7 @@
                     </div>
                     <div class="col-4">
                         <div class="card">
-                            <div class="card-header">Online Controllers</div>
+                            <div class="card-header"><i class="far fa-user"></i> Online Controllers</div>
                             <div class="card-body">
                                 <table class="table text-center">
                                     <thead>
@@ -182,7 +184,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header">Pilots within Houston</div>
+                            <div class="card-header"><i class="far fa-plane"></i> Pilots within Houston</div>
                             <div class="card-body">
                                 <div class="text-center" id="pilots-loader">
                                     <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
@@ -201,7 +203,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header">Weather</div>
+                            <div class="card-header"><i class="far fa-cloud-sun"></i> Weather</div>
                             <div class="card-body">
                                 <div class="text-center" id="weather-loader">
                                     <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
@@ -244,6 +246,15 @@
         <script src="{% static 'js/index.js' %}"></script>
         <script>
             $('#weather, #pilots').hide()
+            $('[data-action="announcement"]').click(function() {
+                launchCustomModal(
+                    'news',
+                    $(this).data('subject'),
+                    $(this).data('message'),
+                    false,
+                    true
+                )
+            })
             $(function() {
                 $.get('https://cors-anywhere.herokuapp.com/' +
                         'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&stationString=KIAH%20KHOU%20KMSY%20KCRP%20KAUS%20KSAT%20KLCH'

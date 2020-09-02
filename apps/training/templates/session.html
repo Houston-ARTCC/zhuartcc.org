@@ -2,9 +2,9 @@
 {% load filters %}
 
 {% block header %}
-    <h1 style="font-size: 65px">{{ session.student.return_full_name }}</h1>
+    <h1 style="font-size: 65px">{{ session.get_level_display }} Session</h1>
     <h2 style="font-size: 40px">{{ session.start|date:'M d, Y @ Hi\z' }}
-    <span class="badge
+    <span class="badge badge-md
         {% if session.status == 0 %}badge-info
         {% elif session.status == 1 %}badge-success
         {% elif session.status == 2 %}badge-danger
@@ -22,4 +22,7 @@
     <p>{{ session.instructor.full_name }}</p>
     <h3>Duration</h3>
     <p>{{ session.duration|duration }}</p>
+    {% if session.session_notes %}
+        <embed src="{{ session.session_notes.url }}" width="100%" height="600px" type="application/pdf">
+    {% endif %}
 {% endblock %}

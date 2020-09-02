@@ -52,6 +52,7 @@ class TrainingRequest(models.Model):
     end = models.DateTimeField()
     type = models.IntegerField(choices=TYPES)
     level = models.IntegerField(choices=LEVELS)
+    remarks = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.student.full_name} | Training request for {self.get_level_display()}'

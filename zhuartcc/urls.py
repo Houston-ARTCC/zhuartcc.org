@@ -66,6 +66,7 @@ urlpatterns = [
 
     # Training
     path('training/', training.view_training_center),                   # View Training Center
+    path('training/request/', training.request_training),               # Request Training Session
     path('training/session/<int:id>/', training.view_session),          # View Training Session
 
     # ULS (Auth)

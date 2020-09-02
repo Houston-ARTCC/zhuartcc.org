@@ -1,9 +1,13 @@
+from datetime import datetime
+
+import pytz
 from django.db.models import Sum, Avg
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from zhuartcc.decorators import require_member
-from .models import TrainingSession
+from .models import TrainingSession, TrainingRequest
+from ..event.models import Event
 from ..user.models import User
 
 
@@ -32,3 +36,26 @@ def view_session(request, id):
         return render(request, 'session.html', {'session': session})
     else:
         return HttpResponse('You are unauthorized to view somebody else\'s training session!', status=401)
+
+
+@require_member
+def request_training(request):
+    if request.method == 'POST':
+        TrainingRequest(
+            student=User.objects.get(cid=request.session['cid']),
+            start=pytz.utc.localize(datetime.fromisoformat(request.POST['start'])),
+            end=pytz.utc.localize(datetime.fromisoformat(request.POST['end'])),
+            type=request.POST['type'],
+            level=request.POST['level'],
+            remarks=request.POST.get('remarks', None)
+        ).save()
+
+        return redirect(f'/training/')
+    else:
+        return render(request, 'request_training.html', {
+            'page_title': 'Request Training',
+            'events': Event.objects.all(),
+            'sessions': TrainingSession.objects.all(),
+            'types': TrainingRequest._meta.get_field('type').choices,
+            'levels': TrainingRequest._meta.get_field('level').choices,
+        })

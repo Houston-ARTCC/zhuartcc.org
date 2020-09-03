@@ -5,9 +5,11 @@ from django.db.models import Sum, Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from zhuartcc.decorators import require_member, require_staff
 from .models import TrainingSession, TrainingRequest
+from ..administration.models import ActionLog
 from ..event.models import Event
 from ..user.models import User
 
@@ -15,14 +17,11 @@ from ..user.models import User
 @require_member
 def view_training_center(request):
     user = User.objects.get(cid=request.session['cid'])
-    sessions = TrainingSession.objects.filter(student=user)
-    statistics = {
-        'training_time': sessions.filter(status=1).aggregate(Sum('duration'))['duration__sum'],
-    }
+    sessions = user.student_sessions.all()
     return render(request, 'training_center.html', {
         'page_title': 'Training Center',
         'user': user,
-        'statistics': statistics,
+        'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
         'sessions': sessions,
     })
 
@@ -72,3 +71,44 @@ def view_mentor_history(request):
             mentor.instructor_sessions.filter(start__gte=timezone.now() - timedelta(days=30)).filter(status=1)
         ) for mentor in mentors]
     })
+
+
+@require_staff
+def view_training_requests(request):
+    return render(request, 'training_requests.html', {
+        'page_title': 'Training Requests',
+        'requests': TrainingRequest.objects.all().order_by('start'),
+    })
+
+
+@require_POST
+@require_staff
+def accept_training_request(request, id):
+    print(request.POST)
+    training_request = TrainingRequest.objects.get(id=id)
+    admin = User.objects.get(cid=request.session['cid'])
+    TrainingSession(
+        student=training_request.student,
+        instructor=admin,
+        start=pytz.utc.localize(datetime.strptime(request.POST['start'], '%Y-%m-%dT%H:%M:%S.%f')),
+        end=pytz.utc.localize(datetime.strptime(request.POST['end'], '%Y-%m-%dT%H:%M:%S.%f')),
+        type=training_request.type,
+        level=training_request.level,
+    ).save()
+
+    ActionLog(action=f'{admin.full_name} accepted {training_request.student.full_name}\'s training request.').save()
+    training_request.delete()
+
+    return HttpResponse(status=200)
+
+
+@require_POST
+@require_staff
+def reject_training_request(request, id):
+    training_request = TrainingRequest.objects.get(id=id)
+    admin = User.objects.get(cid=request.session['cid'])
+
+    ActionLog(action=f'{admin.full_name} rejected {training_request.student.full_name}\'s training request.').save()
+    training_request.delete()
+
+    return HttpResponse(status=200)

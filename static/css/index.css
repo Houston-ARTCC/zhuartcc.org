@@ -175,7 +175,7 @@ a:hover {
     border-radius: 50px;
 }
 .badge {
-    font: 16px Gilroy-Bold, Helvetica, sans-serif;
+    font: 17px Gilroy-Bold, Helvetica, sans-serif;
 }
 .badge-sm {
     font-size: 12px;
@@ -530,6 +530,29 @@ input[type="datetime-local"]:focus, input[type="datetime-local"].has-content {
 }
 .bootstrap-select li {
     font: 14px Gilroy-Bold, Helvetica, sans-serif;
+}
+.ui-widget.ui-widget-content {
+    border: none!important;
+    background-color: #e7e7e7;
+    height: 8px;
+    border-radius: 4px;
+}
+.ui-state-default {
+    border: none!important;
+    background-color: #2d45a2!important;
+    height: 17px!important;
+    width: 17px!important;
+    border-radius: 9px!important;
+    transition: box-shadow 0.3s;
+}
+.ui-state-default:focus {
+    outline: none;
+    background-color: #2d45a2!important;
+    box-shadow: 0 0 0 0.2rem rgba(45, 69, 162, 0.5)!important;
+    transition: box-shadow 0.3s;
+}
+.ui-slider-range {
+    background-color: rgba(45, 78, 162, 0.5) !important;
 }
 
 

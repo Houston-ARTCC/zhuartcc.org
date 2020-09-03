@@ -45,6 +45,16 @@
                 defaultView: 'week',
                 taskView: false,
                 useDetailPopup: true,
+                theme: {
+                    'week.today.backgroundColor': 'rgba(221, 132, 37, 0.05)',
+                    'week.currentTime.color': '#dd8425',
+                    'week.currentTimeLinePast.border': '1px dashed #dd8425',
+                    'week.currentTimeLineBullet.backgroundColor': '#dd8425',
+                    'week.currentTimeLineToday.border': '1px solid #dd8425',
+                    'week.creationGuide.color': '#dd8425',
+                    'common.creationGuide.backgroundColor': 'rgba(221, 132, 37, 0.05)',
+                    'common.creationGuide.border': '1px solid #dd8425',
+                },
                 timezones: [{
                     timezoneOffset: 0,
                     displayLabel: 'UTC',
@@ -126,7 +136,6 @@
                             <button class="btn btn-primary">Submit</button>
                         </form>`
                     )
-                    e.guide.clearGuideElement();
                 },
                 'beforeUpdateSchedule': function(e) {
                     e.schedule.start = e.start;
@@ -165,7 +174,7 @@
                         bgColor: '#dd8425',
                         borderColor: '#c6720b',
                         start: '{{ session.start|to_iso_format }}',
-                        end: '{{ session.get_end_time|to_iso_format }}',
+                        end: '{{ session.end|to_iso_format }}',
                     },
                 {% endfor %}
             ])

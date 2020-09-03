@@ -1,5 +1,3 @@
-import json
-from datetime import timedelta
 from django.db import models
 from ..user.models import User
 
@@ -32,15 +30,16 @@ class TrainingSession(models.Model):
     student = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='student_sessions')
     instructor = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='instructor_sessions')
     start = models.DateTimeField()
-    duration = models.DurationField(default=timedelta(hours=1))
+    end = models.DateTimeField()
     position = models.CharField(max_length=16, null=True, blank=True)
     type = models.IntegerField(choices=TYPES)
     level = models.IntegerField(choices=LEVELS)
     status = models.IntegerField(default=0, choices=STATUSES)
     session_notes = models.FileField(upload_to='training/', null=True, blank=True)
 
-    def get_end_time(self):
-        return self.start + self.duration
+    @property
+    def duration(self):
+        return self.end - self.start
 
     def __str__(self):
         return f'{self.start} | {self.student.full_name} with {self.instructor.full_name}'
@@ -53,6 +52,10 @@ class TrainingRequest(models.Model):
     type = models.IntegerField(choices=TYPES)
     level = models.IntegerField(choices=LEVELS)
     remarks = models.TextField(null=True, blank=True)
+
+    @property
+    def duration(self):
+        return self.end - self.start
 
     def __str__(self):
         return f'{self.student.full_name} | Training request for {self.get_level_display()}'

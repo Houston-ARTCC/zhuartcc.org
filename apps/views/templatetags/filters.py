@@ -16,6 +16,11 @@ def duration(timedelta):
 
 
 @register.filter
+def duration_minutes(timedelta):
+    return timedelta.total_seconds() // 60
+
+
+@register.filter
 def as_range(int):
     return range(int)
 

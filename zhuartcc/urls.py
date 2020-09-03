@@ -66,7 +66,10 @@ urlpatterns = [
 
     # Training
     path('training/', training.view_training_center),                   # View Training Center
-    path('training/request/', training.request_training),               # Request Training Session (MEMBER)
+    path('training/schedule/', training.request_training),              # Request Training Session (MEMBER)
+    path('training/requests/', training.view_training_requests),        # View Training Requests (STAFF)
+    path('training/requests/<int:id>/accept/', training.accept_training_request),
+    path('training/requests/<int:id>/reject/', training.reject_training_request),
     path('training/session/<int:id>/', training.view_session),          # View Training Session (OWN)
     path('training/mentors/', training.view_mentor_history),            # View Mentor History (STAFF)
 

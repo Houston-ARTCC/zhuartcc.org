@@ -98,7 +98,7 @@ d888888P                                                                dP
     color: #c4c4c4!important;
 }
 .text-success {
-    color: #50cb4a!important;
+    color: #57db51!important;
 }
 .text-info {
     color: #56c8ef!important;
@@ -194,7 +194,7 @@ a:hover {
     background-color: #2d45a2!important;
 }
 .badge-success {
-    background-color: #50cb4a!important;
+    background-color: #57db51!important;
 }
 .badge-info {
     background-color: #56c8ef!important;
@@ -602,7 +602,7 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
     transition: 400ms;
 }
 .btn-outline-success {
-    border: 2px #50cb4a solid;
+    border: 2px #57db51 solid;
     transition: 400ms;
 }
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {

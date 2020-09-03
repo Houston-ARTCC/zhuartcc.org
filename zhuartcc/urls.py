@@ -70,6 +70,7 @@ urlpatterns = [
     path('training/requests/', training.view_training_requests),        # View Training Requests (STAFF)
     path('training/requests/<int:id>/accept/', training.accept_training_request),
     path('training/requests/<int:id>/reject/', training.reject_training_request),
+    path('training/requests/<int:id>/cancel/', training.cancel_training_request),
     path('training/session/<int:id>/', training.view_session),          # View Training Session (OWN)
     path('training/mentors/', training.view_mentor_history),            # View Mentor History (STAFF)
 

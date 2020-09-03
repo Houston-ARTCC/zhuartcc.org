@@ -23,6 +23,7 @@ def view_training_center(request):
         'user': user,
         'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
         'sessions': sessions,
+        'requests': user.training_requests.all(),
     })
 
 
@@ -112,3 +113,14 @@ def reject_training_request(request, id):
     training_request.delete()
 
     return HttpResponse(status=200)
+
+
+@require_POST
+def cancel_training_request(request, id):
+    training_request = TrainingRequest.objects.get(id=id)
+    user = User.objects.get(cid=request.session['cid'])
+    if user == training_request.student:
+        training_request.delete()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse('You are unauthorized to perform this action!', status=403)

@@ -67,7 +67,7 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-header">Statistics</div>
-                <div class="card-body px-5 d-flex justify-content-between">
+                <div class="card-body px-5 d-flex justify-content-around">
                     <div class="text-center">
                         <h2 style="font-size: 25px">Sessions</h2>
                         <h1 style="font-size: 35px">{{ sessions|length|default:'<span class="text-muted">N/A</span>' }}</h1>
@@ -81,7 +81,43 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-header">Training Requests</div>
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col style="width: 40%">
+                            <col style="width: 25%">
+                            <col style="width: 20%">
+                            <col style="width: 15%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="text-center">Availability</th>
+                                <th class="text-center">Level</th>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Cancel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in requests %}
+                                <tr>
+                                    <td class="text-center"><span class="d-none">{{ request.start|date:'m/d/Y Hi' }}</span>{{ request.start|date:'M j, Y @ Hi\z' }}<br><i class="far fa-long-arrow-down my-1"></i><br>{{ request.end|date:'M j, Y @ Hi\z' }}</td>
+                                    <td class="text-center">{{ request.get_level_display }}</td>
+                                    <td class="text-center">{{ request.get_type_display }}</td>
+                                    <td class="text-center text-danger"><a data-action="cancel" data-id="{{ request.id }}"><i class="far fa-lg fa-times"></i></a></td>
+                                </tr>
+                            {% empty %}
+                                <td class="text-center" colspan="5"><i>You do not have any pending training requests.</i></td>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="schedule"><button class="btn btn-primary" type="submit">Request Training</button></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
             <div class="card card-nav-tabs">
                 <div class="card-header card-header-warning">Session History</div>
                 <div class="card-body text-center">
@@ -122,7 +158,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <a href="schedule"><button class="btn btn-primary" type="submit">Schedule Training</button></a>
                 </div>
             </div>
         </div>
@@ -140,6 +175,26 @@
         })
         $('#sessions tr[data-type="href"]').click(function() {
             window.location.href = `session/${$(this).data('session')}/`
+        })
+        $('[data-action="cancel"]').click(function() {
+            let $this = $(this)
+            launchCustomModal(
+                'info',
+                'Cancel Training Request',
+                `<p>Are you sure you would like to cancel this training request? This action cannot be undone!</p>
+                <button class="btn btn-secondary" data-dismiss="modal">Go Back!</button>
+                <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+            )
+            $('#customModal button[data-action="confirm"]').click(function() {
+                $.post('/training/requests/' + $this.data('id') + '/cancel/')
+                .done(function() {
+                    location.reload()
+                })
+                .fail(function(error) {
+                    $('#customModal').modal('hide')
+                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                })
+            })
         })
     </script>
 {% endblock %}

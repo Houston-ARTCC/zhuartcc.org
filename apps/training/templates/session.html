@@ -3,7 +3,7 @@
 
 {% block header %}
     <h1 style="font-size: 65px">{{ session.get_level_display }} Session</h1>
-    <h2 style="font-size: 40px">{{ session.start|date:'M d, Y @ Hi\z' }}
+    <h2 style="font-size: 40px">{{ session.start|date:'M j, Y @ Hi\z' }}
     <span class="badge badge-md
         {% if session.status == 0 %}badge-info
         {% elif session.status == 1 %}badge-success

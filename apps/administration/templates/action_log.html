@@ -11,7 +11,7 @@
         <tbody>
             {% for action in actions %}
                 <tr>
-                    <td style="width: 15%; padding: 0.8%!important"><span class="d-none">{{ action.timestamp|date:'m/d/Y Hi' }}</span>{{ action.timestamp|date:'M d, Y @ Hi\z' }}</td>
+                    <td style="width: 15%; padding: 0.8%!important"><span class="d-none">{{ action.timestamp|date:'m/d/Y Hi' }}</span>{{ action.timestamp|date:'M j, Y @ Hi\z' }}</td>
                     <td style="width: 85%; padding: 0.8%!important">{{ action.action }}</td>
                 </tr>
             {% endfor %}

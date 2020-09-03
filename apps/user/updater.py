@@ -48,7 +48,7 @@ def update_roster():
             if edit_user.status == 2:
                 edit_user.status = 0
                 edit_user.email = user_details['email'],
-                edit_user.oper_init = assign_oper_init(user_details['fname'][0], user_details['lname'][0])
+                edit_user.oper_init = assign_oper_init(user_details['fname'][0], user_details['lname'][0], edit_user)
                 edit_user.main_role = 'HC'
                 edit_user.save()
                 edit_user.assign_initial_cert()
@@ -102,9 +102,9 @@ def base26encode(int_n):
 
 
 # Assigns operating initials to a user based on their initials. Cycles to the next letter if the initials are taken
-def assign_oper_init(f_init, l_init):
+def assign_oper_init(f_init, l_init, user=None):
     oi = (f_init + l_init).upper()
-    while User.objects.filter(oper_init=oi).exists():
+    while User.objects.filter(oper_init=oi).exclude(id=user.id if user else 0).exists():
         new_oi = base26decode(oi) + 1
         oi = base26encode(new_oi if new_oi <= 675 else 0)
     if len(oi) < 2:

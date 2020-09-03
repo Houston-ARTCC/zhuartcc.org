@@ -76,9 +76,10 @@ def update_roster():
 
 def update_loa():
     for user in User.objects.filter(status=1):
-        if user.loa_until <= timezone.now().date():
+        if user.loa_until is None or user.loa_until <= timezone.now().date():
             user.status = 0
             user.loa_last_month = True
+            ActionLog(action=f'User {user.full_name} was set as active by system.').save()
 
 
 # Decodes a string into a base 26 (A -> Z) integer

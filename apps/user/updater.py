@@ -47,7 +47,7 @@ def update_roster():
             # If user is rejoining the ARTCC after being marked inactive
             if edit_user.status == 2:
                 edit_user.status = 0
-                edit_user.email = user_details['email'],
+                edit_user.email = user_details['email']
                 edit_user.oper_init = assign_oper_init(user_details['fname'][0], user_details['lname'][0], edit_user)
                 edit_user.main_role = 'HC'
                 edit_user.save()

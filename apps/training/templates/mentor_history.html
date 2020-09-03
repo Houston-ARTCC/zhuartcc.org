@@ -1,0 +1,49 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+    <div class="row">
+        {% for tuple in mentors %}
+            <div class="col-6 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-secondary">
+                        <a class="float-right mt-3" data-toggle="collapse" href="#collapse-{{ forloop.counter }}"><i class="far fa-lg fa-plus"></i></a>
+                        <h5 class="mb-0">{{ tuple.0 }}</h5>
+                        <p class="mb-0">{{ tuple.1|length }} Session{{ tuple.1|length|pluralize }}</p>
+                    </div>
+                    <div class="collapse" id="collapse-{{ forloop.counter }}">
+                        <div class="card-body">
+                            <table class="table table-hover" style="width: 100%">
+                                <thead>
+                                    <th class="text-center" style="width: 23%">Student</th>
+                                    <th class="text-center" style="width: 23%">Type</th>
+                                    <th class="text-center" style="width: 23%">Level</th>
+                                    <th class="text-center" style="width: 70%">Date</th>
+                                </thead>
+                                <tbody id="sessions">
+                                    {% for session in tuple.1 %}
+                                        <tr data-session="{{ session.id }}" style="cursor: pointer">
+                                            <td class="text-center">{{ session.student.full_name }}</td>
+                                            <td class="text-center">{{ session.get_type_display }}</td>
+                                            <td class="text-center">{{ session.get_level_display }}</td>
+                                            <td class="text-center">{{ session.start|date:'M j, Y @ Hi\z' }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <td class="text-center" colspan="4">No sessions found!</td>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#sessions tr').click(function() {
+            window.location.href = `/training/session/${$(this).data('session')}/`
+        })
+    </script>
+{% endblock %}

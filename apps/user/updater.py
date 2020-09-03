@@ -48,7 +48,7 @@ def update_roster():
             if edit_user.status == 2:
                 edit_user.status = 1
                 edit_user.email = user_details['email'],
-                edit_user.oper_init = assign_oper_init(user_details['fname'][0], user_details['lname'][0]),
+                edit_user.oper_init = assign_oper_init(user_details['fname'][0], user_details['lname'][0])
                 edit_user.main_role = 'HC'
                 edit_user.save()
                 edit_user.assign_initial_cert()

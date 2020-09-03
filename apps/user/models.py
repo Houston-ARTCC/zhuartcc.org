@@ -123,6 +123,12 @@ class User(models.Model):
 
     # Awards minor DEL, GND, TWR, and APP endorsement to S2+ controllers
     def assign_initial_cert(self):
+        self.del_cert = 0
+        self.gnd_cert = 0
+        self.twr_cert = 0
+        self.app_cert = 0
+        self.ctr_cert = 0
+        self.ocn_cert = 0
         if self.rating_int > 1:
             self.del_cert = 1
             self.gnd_cert = 1

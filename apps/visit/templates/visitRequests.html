@@ -1,43 +1,32 @@
 {% extends 'mainTemplate.html' %}
 
 {% block body %}
-    {% for visit in visiting_requests %}
+    {% if visiting_requests %}
         <div class="row">
-            <div class="col-md-12">
-                <div class="card card-nav-tabs">
-                    <div class="card-body">
-                        <h4 class="d-inline" style="font-size: 35px">{{ visit.full_name }}</h4> <h2 class="d-inline" style="font-size: 25px">from <b>{{ visit.home_facility }}</b></h2>
-                        <p>{{ visit.reason }}</p>
-                        <table style="width: 50%" class="table">
-                            <thead>
-                                <tr>
-                                    <th>CID</th>
-                                    <th>Rating</th>
-                                    <th>Email</th>
-                                    <th>Submitted</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ visit.cid }}</td>
-                                    <td>{{ visit.rating }}</td>
-                                    <td>{{ visit.email }}</td>
-                                    <td>{{ visit.submitted|date:'M j, Y @ Hi\z' }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <button class="btn btn-danger" data-action="reject" data-id="{{ visit.id }}" data-name="{{ visit.full_name }}">Reject</button>
-                        <button class="btn btn-success" data-action="accept" data-id="{{ visit.id }}" data-name="{{ visit.full_name }}">Accept</button>
+            {% for visit in visiting_requests %}
+                <div class="col-md-4 mx-auto">
+                    <div class="card">
+                        <div class="card-header bg-secondary">
+                            <h4><span class="badge badge-primary">{{ visit.rating }}</span> {{ visit.full_name }} <small><span class="text-black-50">from {{ visit.home_facility }}</span></small></h4>
+                            <p class="mb-0">Submitted {{ visit.submitted|date:'M j, Y @ Hi\z' }}</p>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ visit.reason|default:'No Reason Provided' }}</p>
+                            <div class="text-center">
+                                <button class="btn btn-danger" data-action="reject" data-id="{{ visit.id }}" data-name="{{ visit.full_name }}">Reject</button>
+                                <button class="btn btn-success" data-action="accept" data-id="{{ visit.id }}" data-name="{{ visit.full_name }}">Accept</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-    {% empty %}
+    {% else %}
         <div class="alert alert-primary">
             <h4 class="alert-heading">Whup, looks like its empty!</h4>
-            <p class="mb-0">There are currently no pending visiting requests.</p>
+            <p class="mb-0">There are currently no pending transfer requests.</p>
         </div>
-    {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}

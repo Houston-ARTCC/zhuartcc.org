@@ -7,14 +7,11 @@
                 <div class="col-md-4 mx-auto">
                     <div class="card">
                         <div class="card-header bg-secondary">
-                            <div class="float-right">
-                                <span class="badge badge-info">ID: {{ transfer.id }}</span>
-                            </div>
-                            <h5>{{ transfer.fname }} {{ transfer.lname }} ({{ transfer.cid }})</h5>
+                            <h4><span class="badge badge-primary">{{ transfer.rating }}</span> {{ transfer.fname }} {{ transfer.lname }} <small><span class="text-black-50">from {{ transfer.fromFac.id }}</span></small></h4>
                             <p class="mb-0">Submitted {{ transfer.date }}</p>
                         </div>
                         <div class="card-body">
-                            <p>{{ transfer.reason }}</p>
+                            <p>{{ transfer.reason|default:'No Reason Provided' }}</p>
                             <div class="text-center">
                                 <button class="btn btn-danger" data-action="reject" data-id="{{ transfer.id }}" data-name="{{ transfer.fname }} {{ transfer.lname }}">Reject</button>
                                 <button class="btn btn-success" data-action="accept" data-id="{{ transfer.id }}" data-name="{{ transfer.fname }} {{ transfer.lname }}">Accept</button>

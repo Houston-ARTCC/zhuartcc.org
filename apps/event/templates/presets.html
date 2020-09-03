@@ -10,6 +10,9 @@
                 <div class="col-6 mx-auto">
                     <div class="card" data-id="{{ preset.id }}">
                         <div class="card-header bg-secondary">
+                            <div class="float-right">
+                                <a class="text-danger" data-action="delete-preset" data-id="{{ preset.id }}"><i class="far fa-trash-alt"></i> Delete</a>
+                            </div>
                             <h5 class="mb-0"><a data-toggle="collapse" href="#collapse-{{ preset.id }}"><i class="far fa-plus"></i> &nbsp;{{ preset.name }}</a></h5>
                         </div>
                         <div class="collapse" id="collapse-{{ preset.id }}">
@@ -109,6 +112,27 @@
                     processData: false,
                     contentType: false,
                 })
+                .done(function() {
+                    location.reload()
+                })
+                .fail(function(error) {
+                    $('#customModal').modal('hide')
+                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+                })
+            })
+        })
+
+        $('[data-action="delete-preset"]').click(function() {
+            let $this = $(this)
+            launchCustomModal(
+                'info',
+                'Delete Position Preset',
+                `<p>Are you sure you would like to delete this event position preset? This action cannot be undone!</p>
+                <button class="btn btn-secondary" data-dismiss="modal">Go Back!</button>
+                <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+            )
+            $('#customModal button[data-action="confirm"]').click(function() {
+                $.post('delete/' + $this.data('id') + '/')
                 .done(function() {
                     location.reload()
                 })

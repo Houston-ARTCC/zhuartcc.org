@@ -26,10 +26,21 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('SECRET_KEY', '*(8x#v^ooemwe2y02xx3e^80@^ou24hqs@u$46t6s-wmzvnmz#')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', '') != 'False'
+DEBUG = os.getenv('DEV_ENV', '') != 'True'
 
 ALLOWED_HOSTS = ['localhost', os.getenv('WEBSITE_DOMAIN')]
 
+SECURE_HSTS_SECONDS = os.getenv('DEV_ENV', '') != 'True'
+
+SECURE_SSL_REDIRECT = os.getenv('DEV_ENV', '') != 'True'
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('DEV_ENV', '') != 'True'
+
+SECURE_HSTS_PRELOAD = os.getenv('DEV_ENV', '') != 'True'
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 

@@ -1,3 +1,5 @@
+import os
+import ast
 import calendar
 import pytz
 import requests
@@ -5,14 +7,12 @@ from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from django.core.mail import send_mail
-from django.db.models import Sum, Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 from .views import return_inactive_users
 from .models import Controller, ControllerSession
 from ..user.models import User
-from zhuartcc import settings
 
 
 def update_scheduler():
@@ -24,6 +24,7 @@ def update_scheduler():
 
 
 def pull_controllers():
+    airports = ast.literal_eval(os.getenv('AIRPORT_IATA'))
     data = requests.get('http://us.data.vatsim.net/vatsim-data.txt').text
     data_array = [line.split(':') for line in data.split('\n')]
     atc_clients = {client[0]: client for client in data_array if len(client) == 42 and client[3] == 'ATC'}
@@ -44,7 +45,7 @@ def pull_controllers():
     for callsign, controller in atc_clients.items():
         if controller[1] and User.objects.filter(cid=controller[1]).exists():
             split = callsign.split('_')
-            if split[0] in settings.POSITION_PREFIXES:
+            if split[0] in airports:
                 if split[-1] != 'ATIS' and split[-1] != 'OBS' and split[-1] != 'SUP':
                     if not Controller.objects.filter(callsign=callsign).exists():
                         Controller(

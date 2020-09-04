@@ -11,22 +11,24 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from .artcc_settings import *
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Loads environment variables from .env file
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*(8x#v^ooemwe2y02xx3e^80@^ou24hqs@u$46t6s-wmzvnmz#'
+SECRET_KEY = os.getenv('SECRET_KEY', '*(8x#v^ooemwe2y02xx3e^80@^ou24hqs@u$46t6s-wmzvnmz#')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '120.0.0.1']
+ALLOWED_HOSTS = ['localhost', os.getenv('WEBSITE_DOMAIN')]
 
 
 # Application definition
@@ -140,6 +142,15 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-STAFF_ROLES = ['ATM', 'DATM', 'TA', 'ATA', 'EC', 'AEC', 'FE', 'AFE', 'WM', 'AWM']
 
-TRAINING_ROLES = ['MTR', 'INS']
+# Email configuration
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+
+EMAIL_HOST_USER = os.getenv('EMAIL_USERNAME')
+
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')

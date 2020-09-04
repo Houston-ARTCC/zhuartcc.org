@@ -1,8 +1,8 @@
+import os
 import hmac
 import requests
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 
-from django.conf import settings
 from django.shortcuts import redirect
 from ..user.models import User
 
@@ -10,14 +10,6 @@ from ..user.models import User
 def login(request):
     # Checks if user has a token from VATUSA
     if request.GET.get('token'):
-        jwk = settings.ULS_KEY
-
-        algorithms = {
-            'HS256': 'sha256',
-            'HS384': 'sha384',
-            'HS512': 'sha512',
-        }
-
         raw_token = request.GET['token']
         token = raw_token.split('.')
 
@@ -25,9 +17,9 @@ def login(request):
 
         jwk_sig = urlsafe_b64encode(
             hmac.digest(
-                urlsafe_b64decode(jwk['k'] + '=='),
+                urlsafe_b64decode(os.getenv('ULS_K_VALUE') + '=='),
                 f'{token[0]}.{token[1]}'.encode(),
-                algorithms[jwk['alg']],
+                'sha256',
             ))[:-1].decode()
 
         if token_sig == jwk_sig:

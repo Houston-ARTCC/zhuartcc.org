@@ -1,9 +1,7 @@
 from itertools import groupby
 
-from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.utils import timezone
+from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
 from .models import Resource

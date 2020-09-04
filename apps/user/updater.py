@@ -1,9 +1,9 @@
-from apscheduler.schedulers.background import BackgroundScheduler
+import os
 import requests
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from .models import User
 from django.utils import timezone
-from django.conf import settings
 
 from ..administration.models import ActionLog
 
@@ -21,7 +21,7 @@ def update_scheduler():
 def update_roster():
     roster = requests.get(
         'https://api.vatusa.net/v2/facility/ZHU/roster',
-        params={'apikey': settings.API_KEY},
+        params={'apikey': os.getenv('API_KEY')},
     ).json()
     del roster['testing']
 
@@ -68,7 +68,7 @@ def update_roster():
     for edit_user in User.objects.filter(main_role='VC'):
         user_details = requests.get(
             f'https://api.vatusa.net/v2/user/{edit_user.cid}',
-            params={'apikey': settings.API_KEY},
+            params={'apikey': os.getenv('API_KEY')},
         ).json()
         edit_user.rating = user_details['rating_short']
         edit_user.save()

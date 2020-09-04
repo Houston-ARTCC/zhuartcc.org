@@ -108,12 +108,12 @@ def edit_user(request, cid):
         user.email = post['email']
         user.main_role = post['main_role']
         user.home_facility = request.POST.get('home_facility', None)
-        user.staff_role = post['staff_role'] if post['staff_role'] in settings.STAFF_ROLES else None
-        user.training_role = post['training_role'] if post['training_role'] in settings.TRAINING_ROLES else None
-        user.mentor_level = post['mentor_level']
+        user.staff_role = request.POST.get('staff_role', None)
+        user.training_role = request.POST.get('training_role', None)
+        user.mentor_level = request.POST.get('mentor_level', None)
         user.activity_exempt = True if 'activity_exempt' in post else False
         user.prevent_event_signup = True if 'prevent_event_signup' in post else False
-        user.biography = post['biography'] if 'biography' in post else ''
+        user.biography = request.POST.get('biography', None)
         user.del_cert = int(post['del_cert'])
         user.gnd_cert = int(post['gnd_cert'])
         user.twr_cert = int(post['twr_cert'])

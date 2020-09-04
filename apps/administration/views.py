@@ -1,6 +1,6 @@
+import os
 import requests
 
-from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -26,7 +26,7 @@ def view_action_log(request):
 def view_transfers(request):
     transfers = requests.get(
         'https://api.vatusa.net/v2/facility/ZHU/transfers',
-        params={'apikey': settings.API_KEY},
+        params={'apikey': os.getenv('API_KEY')},
     ).json()['transfers']
     return render(request, 'transfers.html', {'page_title': 'Transfer Requests', 'transfers': transfers})
 

@@ -38,9 +38,6 @@ def return_hour_aggregate(user):
             current=Sum('duration', filter=Q(time_logon__month=now.month)),
             previous=Sum('duration', filter=Q(time_logon__month=now.month - 1)),
             previous1=Sum('duration', filter=Q(time_logon__month=now.month - 2)),
-        ),
-        'training_hours': TrainingSession.objects.filter(student=user).filter(status=1).aggregate(
-            current=Sum('duration', filter=Q(start__month=now.month))
         )
     }
     if aggregate['user_obj'].is_staff:
@@ -48,9 +45,7 @@ def return_hour_aggregate(user):
     elif aggregate['user_obj'].cert_int > 0:
         requirement = timedelta(hours=2)
     else:
-        training_hours = aggregate['training_hours']['current']
-        aggregate['training_status'] = training_hours >= timedelta(hours=1) if training_hours is not None else False
-        return aggregate
+        requirement = timedelta()
 
     hours = aggregate['hours']
     aggregate['current_status'] = hours['current'] >= requirement if hours['current'] is not None else False

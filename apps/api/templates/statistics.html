@@ -45,15 +45,13 @@
                             <col style="width: 15%">
                             <col style="width: 10%">
                             <col style="width: 6%">
-                            <col style="width: 2%">
-                            <col style="width: 6%">
-                            <col style="width: 2%">
-                            <col style="width: 6%">
-                            <col style="width: 2%">
-                            <col style="width: 6%">
-                            <col style="width: 2%">
-                            <col style="width: 6%">
-                            <col style="width: 6%">
+                            <col style="width: 3%">
+                            <col style="width: 7%">
+                            <col style="width: 3%">
+                            <col style="width: 7%">
+                            <col style="width: 3%">
+                            <col style="width: 7%">
+                            <col style="width: 8%">
                         </colgroup>
                         <thead>
                             <tr>
@@ -63,7 +61,6 @@
                                 {% for month in months %}
                                     <th class="border-0 text-center" colspan="2">{{ month }} Hours</th>
                                 {% endfor %}
-                                <th class="border-0 text-center" colspan="2">Training Hours</th>
                                 <th class="border-0 text-center">Exempt</th>
                             </tr>
                         </thead>
@@ -85,11 +82,7 @@
                                         <i class="far fa-lg fa-check text-success{% if not user.current_status %} d-none{% endif %}"></i>
                                     </td>
                                     <td>{{ user.hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                                    <td class="text-right pr-0 border-left" style="width: 2%">
-                                        <i class="far fa-lg fa-check text-success{% if not user.training_status %} d-none{% endif %}"></i>
-                                    </td>
-                                    <td class="border-right">{{ user.training_hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
-                                    <td>
+                                    <td class="border-left">
                                         {% if user.user_obj.is_staff %}
                                             <i class="far fa-lg fa-check text-success"></i>&nbsp; Staff
                                         {% elif user.user_obj.activity_exempt %}

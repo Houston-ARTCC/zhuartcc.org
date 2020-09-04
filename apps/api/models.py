@@ -21,8 +21,12 @@ class Controller(models.Model):
 class ControllerSession(models.Model):
     user = models.ForeignKey(User, models.CASCADE, related_name='controller_sessions')
     callsign = models.CharField(max_length=16)
-    time_logon = models.DateTimeField()
+    start = models.DateTimeField()
     duration = models.DurationField()
 
+    @property
+    def end(self):
+        return self.start + self.duration
+
     def __str__(self):
-        return f'{self.time_logon} | {self.user.full_name} on {self.callsign}'
+        return f'{self.start} | {self.user.full_name} on {self.callsign}'

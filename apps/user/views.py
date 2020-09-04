@@ -79,11 +79,11 @@ def sort_controllers(query_set):
 # Gets specified user from local database and serves 'profile.html' file
 def view_profile(request, cid):
     user = User.objects.get(cid=cid)
-    connections = ControllerSession.objects.filter(user=user).order_by('-time_logon')
+    connections = ControllerSession.objects.filter(user=user).order_by('-start')
     now = timezone.now()
     stats = connections.aggregate(
-        month=Sum('duration', filter=Q(time_logon__month=now.month)),
-        year=Sum('duration', filter=Q(time_logon__year=now.year)),
+        month=Sum('duration', filter=Q(start__month=now.month)),
+        year=Sum('duration', filter=Q(start__year=now.year)),
         total=Sum('duration'),
     )
 

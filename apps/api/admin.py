@@ -9,4 +9,4 @@ class ControllerAdmin(admin.ModelAdmin):
 
 @admin.register(ControllerSession)
 class ControllerSessionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'callsign', 'time_logon', 'duration')
+    list_display = ('user', 'callsign', 'start', 'duration')

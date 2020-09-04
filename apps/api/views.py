@@ -13,8 +13,8 @@ from ..user.models import User
 def view_statistics(request):
     now = timezone.now()
     main_stats = ControllerSession.objects.aggregate(
-        month=Sum('duration', filter=Q(time_logon__month=now.month)),
-        year=Sum('duration', filter=Q(time_logon__year=now.year)),
+        month=Sum('duration', filter=Q(start__month=now.month)),
+        year=Sum('duration', filter=Q(start__year=now.year)),
         total=Sum('duration'),
     )
     main_users = [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC').order_by('first_name')]
@@ -35,9 +35,9 @@ def return_hour_aggregate(user):
     aggregate = {
         'user_obj': user,
         'hours': ControllerSession.objects.filter(user=user).aggregate(
-            current=Sum('duration', filter=Q(time_logon__month=now.month)),
-            previous=Sum('duration', filter=Q(time_logon__month=now.month - 1)),
-            previous1=Sum('duration', filter=Q(time_logon__month=now.month - 2)),
+            current=Sum('duration', filter=Q(start__month=now.month)),
+            previous=Sum('duration', filter=Q(start__month=now.month - 1)),
+            previous1=Sum('duration', filter=Q(start__month=now.month - 2)),
         )
     }
     if aggregate['user_obj'].is_staff:
@@ -69,7 +69,7 @@ def return_sorted_hours():
         aggregate = {
             'user': user,
             'hours': ControllerSession.objects.filter(user=user).aggregate(
-                current=Sum('duration', filter=Q(time_logon__month=timezone.now().month))
+                current=Sum('duration', filter=Q(start__month=timezone.now().month))
             )['current']
         }
 

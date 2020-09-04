@@ -37,7 +37,7 @@ def pull_controllers():
             ControllerSession(
                 user=controller.user,
                 callsign=controller.callsign,
-                time_logon=controller.online_since,
+                start=controller.online_since,
                 duration=controller.last_update - controller.online_since,
             ).save()
             controller.delete()

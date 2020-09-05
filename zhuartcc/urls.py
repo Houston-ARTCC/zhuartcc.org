@@ -41,7 +41,7 @@ urlpatterns = [
     path('events/assign/<int:id>/', event.assign_position),             # Assign Positions (POST / STAFF)
     path('events/unassign/<int:id>/', event.unassign_position),         # Unassign Position Request (POST / STAFF)
     path('events/delete/<int:id>/', event.delete_position),             # Delete Position (POST / STAFF)
-    path('events/new/<int:id>/', event.add_position),                   # Add Position (POST / STAFF)
+    path('events/add/<int:id>/', event.add_position),                   # Add Position (POST / STAFF)
     path('events/presets/', event.view_presets),                        # View Position Presets (STAFF)
     path('events/presets/new/', event.add_preset),                      # Add Position Preset (POST / STAFF)
     path('events/presets/edit/<int:id>/', event.edit_preset),           # Edit Position Preset (POST / STAFF)

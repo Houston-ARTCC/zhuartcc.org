@@ -239,10 +239,13 @@
             })
         })
         $('.position-input').keyup(function(event) {
-            addPos($(this).val())
+            let pos = $(this).val()
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                addPos(pos)
+            }
         })
         $('[data-action="add-position"]').click(function() {
-            addPos($(this).closest('.position-input').val())
+            addPos($(this).parent().find('.position-input').val())
         })
         $('select').change(function() {
             $.post('/events/assign/' + $(this).val() + '/')
@@ -253,8 +256,8 @@
                 launchErrorModal('Error ' + error.status + ': ' + error.responseText)
             })
         })
-        function addPos(position) {
-            $.post('/events/new/{{ event.id }}/', {position: position})
+        function addPos(pos) {
+            $.post('/events/add/{{ event.id }}/', {position: pos})
             .done(function() {
                 location.reload()
             })

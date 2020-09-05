@@ -31,7 +31,9 @@ def view_archived_events(request):
 def view_event(request, id):
     event = Event.objects.get(id=id)
     if event.hidden and request.session['staff'] or not event.hidden:
-        positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
+        positions = {'center': [], 'tracon': [], 'cab': []}
+        for position in event.positions.all():
+            positions[position.category] += [position]
         user = User.objects.get(cid=request.session['cid']) if 'cid' in request.session else None
         return render(request, 'view_event.html', {
             'page_title': event.name,
@@ -95,7 +97,9 @@ def edit_event(request, id):
 
             return redirect(f'/events/{id}/')
         else:
-            positions = {k: list(g) for k, g in groupby(event.positions.all(), key=lambda position: position.category)}
+            positions = {'center': [], 'tracon': [], 'cab': []}
+            for position in event.positions.all():
+                positions[position.category] += [position]
             return render(request, 'edit_event.html', {
                 'page_title': f'Editing {event.name}',
                 'positions': positions,

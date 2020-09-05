@@ -15,8 +15,7 @@ from .models import Controller, ControllerSession
 from ..user.models import User
 
 
-def update_scheduler():
-    pull_controllers()
+def start():
     scheduler = BackgroundScheduler()
     scheduler.add_job(pull_controllers, 'interval', minutes=1)
     scheduler.add_job(warn_inactive_users, 'cron', day=23)

@@ -9,8 +9,7 @@ from ..administration.models import ActionLog
 
 
 # Schedules a task to update the roster every 30 minutes
-def update_scheduler():
-    update_roster()
+def start():
     scheduler = BackgroundScheduler()
     scheduler.add_job(update_roster, 'interval', minutes=30)
     scheduler.add_job(update_loa, 'cron', hour=0)

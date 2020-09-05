@@ -6,5 +6,5 @@ class ApiConfig(AppConfig):
 
     # Overrides ready method to include scheduler for api updater
     def ready(self):
-        from .updater import update_scheduler
-        update_scheduler()
+        from .updater import start
+        start()

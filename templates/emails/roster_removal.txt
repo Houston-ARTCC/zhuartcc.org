@@ -3,7 +3,7 @@
 {% block message %}
 Hello {{ user.first_name }},
 
-We regret to inform you that because you did not fulfill activity requirements for {% now 'F Y' %}, you have been removed from the Houston ARTCC active controller roster. You will be automatically transferred to VATUSA academy.
+We regret to inform you that because you did not fulfill activity requirements for {% now 'F Y' %}, you have been removed from the Houston ARTCC active controller roster. If you are a home controller, you will be automatically transferred to VATUSA academy. If you are a visiting controller, reapply if you wish to visit again.
 
 If you believe there has been an error, please contact atm@zhuartcc.org or datm@zhuartcc.org immediately!
 {% endblock %}

@@ -46,13 +46,13 @@ def view_roster(request):
     active_controllers = User.objects.exclude(status=2)
     home_controllers = active_controllers.filter(main_role='HC').order_by('first_name')
     visiting_controllers = active_controllers.filter(main_role='VC').order_by('first_name')
-    mvap_controllers = active_controllers.filter(main_role='MC').order_by('first_name')
+    mavp_controllers = active_controllers.filter(main_role='MC').order_by('first_name')
 
     return render(request, 'roster.html', {
         'page_title': 'Roster',
         'home': sort_controllers(home_controllers),
         'visiting': sort_controllers(visiting_controllers),
-        'mvap': sort_controllers(mvap_controllers),
+        'mavp': sort_controllers(mavp_controllers),
     })
 
 

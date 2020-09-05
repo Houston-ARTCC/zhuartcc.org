@@ -4,7 +4,7 @@
 {% block tabs %}
 <a class="tab active" data-target="#home">Home</a>
 <a class="tab" data-target="#visiting">Visiting</a>
-<a class="tab" data-target="#mvap">MVAP</a>
+<a class="tab" data-target="#mavp">MAVP</a>
 {% endblock %}
 
 {% block body %}
@@ -195,8 +195,8 @@
     {% endif %}
     {% endfor %}
 </div>
-<div id="mvap" style="display: none">
-    {% for level, users in mvap.items %}
+<div id="mavp" style="display: none">
+    {% for level, users in mavp.items %}
     {% if users %}
     <div class="text-center">
         <h3 class="heading-row text-primary my-3">{{ level }}</h3>

@@ -42,14 +42,19 @@ def view_session(request, id):
 @require_member
 def request_training(request):
     if request.method == 'POST':
-        TrainingRequest(
-            student=User.objects.get(cid=request.session['cid']),
-            start=pytz.utc.localize(datetime.fromisoformat(request.POST['start'])),
-            end=pytz.utc.localize(datetime.fromisoformat(request.POST['end'])),
-            type=request.POST['type'],
-            level=request.POST['level'],
-            remarks=request.POST.get('remarks', None)
-        ).save()
+        start = pytz.utc.localize(datetime.fromisoformat(request.POST['start']))
+        end = pytz.utc.localize(datetime.fromisoformat(request.POST['end']))
+        if start < end:
+            TrainingRequest(
+                student=User.objects.get(cid=request.session['cid']),
+                start=pytz.utc.localize(datetime.fromisoformat(request.POST['start'])),
+                end=pytz.utc.localize(datetime.fromisoformat(request.POST['end'])),
+                type=request.POST['type'],
+                level=request.POST['level'],
+                remarks=request.POST.get('remarks', None)
+            ).save()
+        else:
+            return HttpResponse('The start time must be before the end time.', status=400)
 
         return redirect(f'/training/')
     else:

@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', '*(8x#v^ooemwe2y02xx3e^80@^ou24hqs@u$46t6s-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEV_ENV', '') == 'True'
 
-ALLOWED_HOSTS = ['localhost', os.getenv('WEBSITE_DOMAIN')]
+ALLOWED_HOSTS = ['localhost', os.getenv('WEBSITE_DOMAIN'), 'www.' + os.getenv('WEBSITE_DOMAIN')]
 
 SECURE_HSTS_SECONDS = os.getenv('DEV_ENV', '') == 'False'
 

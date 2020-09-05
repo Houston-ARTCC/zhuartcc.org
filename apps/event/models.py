@@ -15,32 +15,35 @@ class Event(models.Model):
     host = models.CharField(max_length=16)
     description = models.TextField(null=True, blank=True)
     hidden = models.BooleanField(default=False)
+    scored = models.BooleanField(default=False)
 
     @property
     def duration(self):
         return self.end - self.start
 
     def calculate_scores(self):
-        for position in self.positions.all():
-            if position.user is not None:
-                duration = timedelta()
+        if not self.scored:
+            for position in self.positions.all():
+                if position.user is not None:
+                    duration = timedelta()
 
-                sessions = ControllerSession.objects.filter(user=position.user)
-                for session in sessions:
-                    if session.callsign == position.name and session.start < self.end and session.end > self.start:
-                        duration += min([session.end, self.end]) - max([session.start, self.start])
+                    sessions = ControllerSession.objects.filter(user=position.user)
+                    for session in sessions:
+                        if session.callsign == position.name and session.start < self.end and session.end > self.start:
+                            duration += min([session.end, self.end]) - max([session.start, self.start])
 
-                session_seconds, event_seconds = duration.total_seconds(), self.duration.total_seconds()
-                if event_seconds - session_seconds <= 60:
-                    session_seconds = event_seconds
+                    session_seconds, event_seconds = duration.total_seconds(), self.duration.total_seconds()
+                    if event_seconds - session_seconds <= 60:
+                        session_seconds = event_seconds
 
-                score = (session_seconds / event_seconds) * 100
+                    score = (session_seconds / event_seconds) * 100
 
-                EventScore(
-                    user=position.user,
-                    event=self,
-                    score=score,
-                ).save()
+                    EventScore(
+                        user=position.user,
+                        event=self,
+                        score=score,
+                    ).save()
+            self.scored = True
 
     def __str__(self):
         return self.name

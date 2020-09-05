@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/broadcast/send/', administration.send_broadcast),       # Send Broadcast Email (POST / STAFF)
 
     # API
-    path('stats/', api.view_statistics),                                # View Statistics
+    path('statistics/', api.view_statistics),                           # View Statistics
 
     # Event
     path('events/', event.view_all_events),                             # View Upcoming Events

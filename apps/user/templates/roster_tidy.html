@@ -33,7 +33,7 @@
                                     {% if not user.user_obj.is_staff and not user.user_obj.activity_exempt and not user.user_obj.status == 1 and not user.user_obj.loa_last_month %}
                                         <tr>
                                             <td style="width: 4%" class="text-center align-middle"><input class="mb-0" type="checkbox" name="{{ user.user_obj.id }}"></td>
-                                            <td class="pl-0">{{ user.user_obj.full_name }} {% if user.user_obj.main_role == 'VC' %}<span class="badge badge-sm badge-info">Visitor</span>{% endif %}</td>
+                                            <td class="pl-0">{{ user.user_obj.full_name }} {% if user.user_obj.main_role == 'VC' %}<span class="badge badge-sm badge-info">Visitor from {{ user.user_obj.home_facility }}</span>{% endif %}</td>
                                             <td class="text-center">{{ user.user_obj.cid }}</td>
                                             <td class="text-center">{{ user.user_obj.rating }}</td>
                                             <td class="border-left">{{ user.hours.previous1|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>

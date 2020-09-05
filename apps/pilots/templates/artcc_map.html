@@ -39,20 +39,20 @@
             let airports = map.querySourceFeatures('composite', {
                 'sourceLayer': 'Houston_ARTCC_-_Airports'
             })
-            let url = 'https://cors-anywhere.herokuapp.com/https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&stationString='
+
             airports.forEach(function(airport) {
-                url += airport.properties.ICAO + '%20'
-            })
-            $.get(url)
-            .done(function(data) {
-                metars_xml = data.getElementsByTagName('data')[0].children
-                for (let metar of metars_xml) {
-                    all_metars.push({
-                        icao: metar.getElementsByTagName('station_id')[0].textContent,
-                        metar: metar.getElementsByTagName('raw_text')[0].textContent,
-                        category: metar.getElementsByTagName('flight_category')[0]?.textContent
-                    })
-                }
+                let url = 'https://cors-anywhere.herokuapp.com/https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=3&mostRecent=true&stationString=' + airport.properties.ICAO
+                $.get(url)
+                .done(function(data) {
+                    metars_xml = data.getElementsByTagName('data')[0].children
+                    for (let metar of metars_xml) {
+                        all_metars.push({
+                            icao: metar.getElementsByTagName('station_id')[0].textContent,
+                            metar: metar.getElementsByTagName('raw_text')[0].textContent,
+                            category: metar.getElementsByTagName('flight_category')[0]?.textContent
+                        })
+                    }
+                })
             })
             $('#overlay').fadeOut('fast', function() {
                 $(this).remove()
@@ -81,8 +81,8 @@
             let html = `<div class="mapboxgl-popup-header"><span class="mb-1 badge badge-light">${icao}</span><br>
                         ${e.features[0].properties.Name}</div>
                         <div class="mapboxgl-popup-body">
-                        <h5>Metar <small><span class="text-${(clicked_metar.category === 'VFR' ? 'success' : clicked_metar.category === 'MVFR' ? 'info' : clicked_metar.category === 'IFR' ? 'warning' : clicked_metar.category === 'LIFR' ? 'danger' : 'muted')}">&lt;${clicked_metar.category ? clicked_metar.category : 'N/A'}&gt;</span></small></h5>
-                        <p>${clicked_metar.metar}</p>
+                        <h5>Metar <small><span class="text-${clicked_metar ? (clicked_metar.category === 'VFR' ? 'success' : clicked_metar.category === 'MVFR' ? 'info' : clicked_metar.category === 'IFR' ? 'warning' : clicked_metar.category === 'LIFR' ? 'danger' : 'muted') : 'muted'}">&lt;${clicked_metar ? clicked_metar.category : 'N/A'}&gt;</span></small></h5>
+                        <p>${clicked_metar ? clicked_metar.metar : 'No weather data available.'}</p>
                         <a href="https://simcharts.info/?search=${icao}" target="_blank"><button class="btn btn-secondary">View Charts</button></a></div>`
             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) { coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360 }
             map.getCanvas().style.cursor = 'pointer';

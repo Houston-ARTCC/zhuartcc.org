@@ -256,29 +256,32 @@
                 )
             })
             $(function() {
-                $.get('https://cors-anywhere.herokuapp.com/' +
-                        'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&stationString=KIAH%20KHOU%20KMSY%20KCRP%20KAUS%20KSAT%20KLCH'
-                )
-                .done(function(data) {
-                    let metar_list = data.getElementsByTagName('data')[0].children
-                    for (let metar of metar_list) {
-                        let id = metar.getElementsByTagName('station_id')[0].textContent
-                        let raw = metar.getElementsByTagName('raw_text')[0].textContent
-                        let category = metar.getElementsByTagName('flight_category')[0]?.textContent
-                        $('#metars').append(
-                            `<tr>
-                                <td class="py-2">${id}</td>
-                                <td class="py-2" data-toggle="popover" data-placement="top" data-content="${raw}">
-                                    <span class="badge badge-${(category === 'VFR' ? 'success' : category === 'MVFR' ? 'info' : category === 'IFR' ? 'warning' : category === 'LIFR' ? 'danger' : 'muted')}">${category ? category : 'N/A'}</span>
-                                </td>
-                            </tr>`
-                        )
-                    }
-                    $('[data-toggle="popover"]').hover(function() { $(this).popover('show') }, function() { $(this).popover('hide') })
-                    $('#weather-loader').fadeOut('fast', function() {
-                        $(this).remove()
-                        $('#weather').fadeIn('fast')
+                let airports = ['KIAH', 'KHOU', 'KMSY', 'KCRP', 'KAUS', 'KSAT', 'KLCH']
+                for (let airport of airports) {
+                    $.get('https://cors-anywhere.herokuapp.com/' +
+                            'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=3&mostRecent=true&stationString=' + airport
+                    )
+                    .done(function(data) {
+                        let metar_list = data.getElementsByTagName('data')[0].children
+                        for (let metar of metar_list) {
+                            let id = metar.getElementsByTagName('station_id')[0].textContent
+                            let raw = metar.getElementsByTagName('raw_text')[0].textContent
+                            let category = metar.getElementsByTagName('flight_category')[0]?.textContent
+                            $('#metars').append(
+                                `<tr>
+                                    <td class="py-2">${id}</td>
+                                    <td class="py-2" data-toggle="popover" data-placement="top" data-content="${raw}">
+                                        <span class="badge badge-${(category === 'VFR' ? 'success' : category === 'MVFR' ? 'info' : category === 'IFR' ? 'warning' : category === 'LIFR' ? 'danger' : 'muted')}">${category ? category : 'N/A'}</span>
+                                    </td>
+                                </tr>`
+                            )
+                        }
                     })
+                }
+                $('[data-toggle="popover"]').hover(function() { $(this).popover('show') }, function() { $(this).popover('hide') })
+                $('#weather-loader').fadeOut('fast', function() {
+                    $(this).remove()
+                    $('#weather').fadeIn('fast')
                 })
                 $.get('https://cors-anywhere.herokuapp.com/https://api.denartcc.org/live/ZHU')
                 .done(function(data) {

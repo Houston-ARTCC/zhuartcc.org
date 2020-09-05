@@ -238,14 +238,11 @@
                 launchErrorModal('Error ' + error.status + ': ' + error.responseText)
             })
         })
+        $('.position-input').keyup(function(event) {
+            addPos($(this).val())
+        })
         $('[data-action="add-position"]').click(function() {
-            $.post('/events/new/{{ event.id }}/', {position: $('.position-input').val()})
-            .done(function() {
-                location.reload()
-            })
-            .fail(function(error) {
-                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-            })
+            addPos($(this).closest('.position-input').val())
         })
         $('select').change(function() {
             $.post('/events/assign/' + $(this).val() + '/')
@@ -256,5 +253,14 @@
                 launchErrorModal('Error ' + error.status + ': ' + error.responseText)
             })
         })
+        function addPos(position) {
+            $.post('/events/new/{{ event.id }}/', {position: position})
+            .done(function() {
+                location.reload()
+            })
+            .fail(function(error) {
+                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
+            })
+        }
     </script>
 {% endblock %}

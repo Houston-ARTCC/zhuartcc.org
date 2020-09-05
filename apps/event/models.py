@@ -55,7 +55,7 @@ class EventPosition(models.Model):
     def category(self):
         if '_DEL' in self.name or '_GND' in self.name or '_TWR' in self.name:
             return 'cab'
-        elif 'APP' in self.name or '_DEP' in self.name:
+        elif '_APP' in self.name or '_DEP' in self.name:
             return 'tracon'
         else:
             return 'center'

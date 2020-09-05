@@ -8,7 +8,7 @@
         <meta name="author" content="Michael Romashov">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Error 404 :: Houston ARTCC</title>
+        <title>Error {% block title %}{% endblock %} :: Houston ARTCC</title>
         <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 
 	    <link href="https://fonts.googleapis.com/css?family=Kanit:200" rel="stylesheet">
@@ -105,7 +105,7 @@
                 <div class="notfound-404">
                     <h1>{% block code %}{% endblock %}</h1>
                 </div>
-                <h2>{% block title %}{% endblock %}</h2>
+                <h2>{% block headline %}{% endblock %}</h2>
                 <p>{% block message %}{% endblock %} <a href="https://zhuartcc.org">Return to homepage</a></p>
             </div>
         </div>

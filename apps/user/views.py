@@ -170,7 +170,8 @@ def remove_users(request):
     for id in request.POST.keys():
         if id != 'csrfmiddlewaretoken':
             user = User.objects.get(id=id)
-            requests.delete(f'https://api.vatusa.net/v2/facility/ZHU/roster/{user.cid}')
+            if user.main_role == 'HC':
+                requests.delete(f'https://api.vatusa.net/v2/facility/ZHU/roster/{user.cid}')
             user.status = 2
             user.save()
             send_mail(

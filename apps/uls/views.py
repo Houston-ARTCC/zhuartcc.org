@@ -51,6 +51,7 @@ def login(request):
                     oper_init=assign_oper_init(data['fname'][0], data['lname'][0]),
                     rating=data['rating_short'],
                     main_role='MC',
+                    home_facility=data['facility']['id'],
                 )
                 new_user.save()
                 new_user.assign_initial_cert()

@@ -36,12 +36,16 @@ class Event(models.Model):
                     if event_seconds - session_seconds <= 60:
                         session_seconds = event_seconds
 
-                    score = (session_seconds / event_seconds) * 100
+                    score = [(session_seconds / event_seconds) * 100]
+
+                    event_feedback = self.feedback.filter(user=position.user)
+                    for feedback in event_feedback:
+                        score += [(feedback.rating / 5) * 100]
 
                     EventScore(
                         user=position.user,
                         event=self,
-                        score=score,
+                        score=int(sum(score) / len(score)),
                     ).save()
             self.scored = True
 

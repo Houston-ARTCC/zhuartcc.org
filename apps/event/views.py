@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -41,8 +42,8 @@ def view_archived_events(request):
     })
 
 
-def view_event(request, id):
-    event = Event.objects.get(id=id)
+def view_event(request, event_id):
+    event = Event.objects.get(id=event_id)
     if event.hidden and request.session['staff'] or not event.hidden:
         positions = {'center': [], 'tracon': [], 'cab': []}
         for position in event.positions.all():
@@ -81,7 +82,7 @@ def add_event(request):
         if request.POST['preset']:
             PositionPreset.objects.get(id=request.POST['preset']).add_to_event(event)
 
-        return redirect(f'/events/{event.id}')
+        return redirect(reverse('event', args=[event.id]))
     else:
         return render(request, 'new_event.html', {
             'page_title': 'New Event',
@@ -92,8 +93,8 @@ def add_event(request):
 
 
 @require_staff
-def edit_event(request, id):
-    event = Event.objects.get(id=id)
+def edit_event(request, event_id):
+    event = Event.objects.get(id=event_id)
     if event.end >= timezone.now():
         if request.method == 'POST':
             event.name = request.POST['name']
@@ -108,7 +109,7 @@ def edit_event(request, id):
             user = User.objects.get(cid=request.session['cid'])
             ActionLog(action=f'Event "{event.name}" modified by {user.full_name}.').save()
 
-            return redirect(f'/events/{id}/')
+            return redirect(reverse('event', args=[event.id]))
         else:
             positions = {'center': [], 'tracon': [], 'cab': []}
             for position in event.positions.all():
@@ -124,22 +125,22 @@ def edit_event(request, id):
 
 @require_staff
 @require_POST
-def delete_event(request, id):
-    event = Event.objects.get(id=id)
+def delete_event(request, event_id):
+    event = Event.objects.get(id=event_id)
 
     user = User.objects.get(cid=request.session['cid'])
     ActionLog(action=f'Event "{event.name}" deleted by {user.full_name}.').save()
 
     event.delete()
 
-    return redirect('/events')
+    return redirect(reverse('events'))
 
 
 @require_staff
 @require_POST
-def add_position(request, id):
+def add_position(request, event_id):
     EventPosition(
-        event=Event.objects.get(id=id),
+        event=Event.objects.get(id=event_id),
         name=request.POST['position'],
     ).save()
 
@@ -148,8 +149,8 @@ def add_position(request, id):
 
 @require_staff
 @require_POST
-def delete_position(request, id):
-    EventPosition.objects.get(id=id).delete()
+def delete_position(request, position_id):
+    EventPosition.objects.get(id=position_id).delete()
 
     return HttpResponse(status=200)
 
@@ -157,13 +158,13 @@ def delete_position(request, id):
 @require_member
 @require_POST
 @csrf_exempt
-def request_position(request, id):
+def request_position(request, position_id):
     user = User.objects.get(cid=request.session['cid'])
     if user.prevent_event_signup:
         return HttpResponse('You are not allowed to sign up for events!', status=403)
     else:
         EventPositionRequest(
-            position=EventPosition.objects.get(id=id),
+            position=EventPosition.objects.get(id=position_id),
             user=user,
         ).save()
 
@@ -173,8 +174,8 @@ def request_position(request, id):
 @require_member
 @require_POST
 @csrf_exempt
-def unrequest_position(request, id):
-    position_request = EventPositionRequest.objects.get(id=id)
+def unrequest_position(request, request_id):
+    position_request = EventPositionRequest.objects.get(id=request_id)
     if position_request.user.id == User.objects.get(cid=request.session['cid']).id:
         position_request.delete()
         return HttpResponse(status=200)
@@ -184,16 +185,16 @@ def unrequest_position(request, id):
 
 @require_staff
 @require_POST
-def assign_position(request, id):
-    EventPositionRequest.objects.get(id=id).assign()
+def assign_position(request, request_id):
+    EventPositionRequest.objects.get(id=request_id).assign()
 
     return HttpResponse(status=200)
 
 
 @require_staff
 @require_POST
-def unassign_position(request, id):
-    position = EventPosition.objects.get(id=id)
+def unassign_position(request, position_id):
+    position = EventPosition.objects.get(id=position_id)
     position.user = None
     position.save()
 
@@ -219,13 +220,13 @@ def add_preset(request):
     user = User.objects.get(cid=request.session['cid'])
     ActionLog(action=f'Position preset "{preset.name}" created by {user.full_name}.').save()
 
-    return HttpResponse(status=200)
+    return redirect(reverse('presets'))
 
 
 @require_staff
 @require_POST
-def edit_preset(request, id):
-    preset = PositionPreset.objects.get(id=id)
+def edit_preset(request, preset_id):
+    preset = PositionPreset.objects.get(id=preset_id)
     preset.positions_json = request.POST['positions']
     preset.save()
 
@@ -237,8 +238,8 @@ def edit_preset(request, id):
 
 @require_staff
 @require_POST
-def delete_preset(request, id):
-    preset = PositionPreset.objects.get(id=id)
+def delete_preset(request, preset_id):
+    preset = PositionPreset.objects.get(id=preset_id)
 
     user = User.objects.get(cid=request.session['cid'])
     ActionLog(action=f'Position preset "{preset.name}" deleted by {user.full_name}.').save()

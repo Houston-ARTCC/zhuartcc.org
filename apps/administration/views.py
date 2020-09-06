@@ -4,7 +4,7 @@ import requests
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.views.decorators.http import require_POST
+from django.urls import reverse
 
 from zhuartcc.overrides import send_mass_html_mail
 from .models import ActionLog, Announcement
@@ -43,20 +43,14 @@ def view_announcement(request):
 
         ActionLog(action=f'User {admin.full_name} created announcement "{request.POST["subject"]}".').save()
 
-        return redirect('/')
+        return redirect(reverse('home'))
     else:
         return render(request, 'announcement.html', {'page_title': 'Announcement'})
 
 
 @require_staff
 def view_broadcast(request):
-    return render(request, 'broadcast.html', {'page_title': 'Broadcast'})
-
-
-@require_staff
-@require_POST
-def send_broadcast(request):
-    try:
+    if request.method == 'POST':
         admin = User.objects.get(cid=request.session['cid'])
         recipients = User.objects.filter(rating__in=request.POST)
 
@@ -85,5 +79,5 @@ def send_broadcast(request):
         ActionLog(action=f'User {admin.full_name} sent broadcast "{request.POST["subject"]}".').save()
 
         return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+    else:
+        return render(request, 'broadcast.html', {'page_title': 'Broadcast'})

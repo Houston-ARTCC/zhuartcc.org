@@ -61,9 +61,8 @@
                     launchCustomModal(
                         'info',
                         'Editing Scenery',
-                        `<form id="editForm" action="/resources/edit/" method="POST">
+                        `<form id="editForm" action="${'{% url 'edit_scenery' scenery_id=0 %}'.replace(/0/, $this.data('id'))}" method="POST">
                             {% csrf_token %}
-                            <input name="id" value="` + $this.data('id') + `" hidden>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="col-8 label-group mx-auto">
@@ -104,28 +103,12 @@
                         <button class="btn btn-danger" onClick="deleteScenery(` + $this.data('id') + `)"><i class="far fa-trash-alt"></i> Delete</button>`
                     )
                     $('#customModal select[name="simulator"]').val($this.data('simulator'))
-                    $('#editForm').submit(function(e) {
-                        e.preventDefault()
-                        $.post({
-                            url: 'edit/',
-                            data: new FormData(this),
-                            processData: false,
-                            contentType: false,
-                        })
-                        .done(function() {
-                            location.reload()
-                        })
-                        .fail(function(error) {
-                            $('#customModal').modal('hide')
-                            launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                        })
-                    })
                 })
                 $('[data-action="add-scenery"]').click(function() {
                     launchCustomModal(
                         'info',
                         'Adding Scenery',
-                        `<form id="addForm">
+                        `<form id="addForm" action="{% url 'new_scenery' %}" method="POST">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-12">
@@ -164,37 +147,13 @@
                             <button class="btn btn-primary">Save Changes</button>
                         </form>`
                     )
-                    $('#addForm').submit(function(e) {
-                        e.preventDefault()
-                        $.post({
-                            url: 'new/',
-                            data: new FormData(this),
-                            processData: false,
-                            contentType: false,
-                        })
-                        .done(function() {
-                            location.reload()
-                        })
-                        .fail(function(error) {
-                            $('#customModal').modal('hide')
-                            launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                        })
-                    })
                 })
             })
 
             function deleteScenery(id) {
-                $.post({
-                    url: 'delete/',
-                    data: {'id': id}
-                })
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
+                $.post('{% url 'delete_scenery' scenery_id=0 %}'.replace(/0/, id))
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             }
         </script>
     {% endif %}

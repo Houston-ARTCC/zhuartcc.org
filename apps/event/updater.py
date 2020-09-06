@@ -16,5 +16,5 @@ def start():
 def update_event_scores():
     past_events = Event.objects.filter(end__gte=timezone.now() - timedelta(hours=1))
     if past_events.exists():
-        for event in past_events():
+        for event in past_events:
             event.calculate_scores()

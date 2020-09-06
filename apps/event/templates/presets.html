@@ -80,19 +80,16 @@
             $('tbody[data-id="' + id + '"] tr').each(function() {
                 positions.push($(this).find('[data-type="name"]').text())
             })
-            $.post('edit/' + id + '/', {positions: JSON.stringify(positions)})
-            .done(function() {
-                launchSuccessModal('Your changes were successfully saved!')
-            })
-            .fail(function(error) {
-                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-            })
+            $.post('{% url 'edit_preset' preset_id=0 %}'.replace(/0/, id), {positions: JSON.stringify(positions)})
+            .done(function() { launchSuccessModal() })
+            .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
         })
         $('#add-preset').click(function() {
             launchCustomModal(
                 'info',
                 'Adding Position Preset',
-                `<form id="newPreset">
+                `<form id="newPreset" action="{% url 'new_preset' %}" method="POST">
+                    {% csrf_token %}
                     <div class="col-12">
                         <div class="label-group">
                             <input name="name" type="text" required>
@@ -104,22 +101,6 @@
                     <button class="btn btn-primary">Submit</button>
                 </form>`
             )
-            $('#newPreset').submit(function(e) {
-                e.preventDefault()
-                $.post({
-                    url: 'new/',
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                })
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
-            })
         })
 
         $('[data-action="delete-preset"]').click(function() {
@@ -132,14 +113,9 @@
                 <button class="btn btn-primary" data-action="confirm">Confirm</button>`
             )
             $('#customModal button[data-action="confirm"]').click(function() {
-                $.post('delete/' + $this.data('id') + '/')
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
+                $.post('{% url 'delete_preset' preset_id=0 %}'.replace(/0/, $this.data('id')))
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
         })
     </script>

@@ -75,7 +75,7 @@
                     launchCustomModal(
                         'info',
                         'Creating New Event',
-                        `<form id="new-event" action="/events/new/" method="POST">
+                        `<form id="new-event" action="{% url 'new_event' %}" method="POST">
                             {% csrf_token %}
                             <div class="row mb-2">
                                 <div class="col-12">

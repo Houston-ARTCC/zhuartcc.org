@@ -1,7 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-import pytz
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
 
 from .models import Feedback
@@ -29,7 +29,7 @@ def add_feedback(request):
             comments=request.POST['comments'],
         ).save()
 
-        return redirect('/feedback')
+        return redirect(reverse('feedback'))
     else:
         return render(request, 'add_feedback.html', {
             'page_title': 'Submit Feedback',

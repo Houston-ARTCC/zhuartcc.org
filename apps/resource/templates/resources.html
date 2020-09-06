@@ -57,9 +57,8 @@
                     launchCustomModal(
                         'info',
                         'Editing Resource',
-                        `<form id="editForm" action="/resources/edit/" method="POST" enctype="multipart/form-data">
+                        `<form action="${'{% url 'edit_resource' resource_id=0 %}'.replace(/0/, $this.data('id'))}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <input name="id" value="` + $this.data('id') + `" hidden>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="col-8 label-group mx-auto">
@@ -101,28 +100,12 @@
                         <button class="btn btn-danger" onClick="deleteResource(` + $this.data('id') + `)"><i class="far fa-trash-alt"></i> Delete</button>`
                     )
                     $('#customModal select[name="category"]').val($this.data('category'))
-                    $('#editForm').submit(function(e) {
-                        e.preventDefault()
-                        $.post({
-                            url: 'edit/',
-                            data: new FormData(this),
-                            processData: false,
-                            contentType: false,
-                        })
-                        .done(function() {
-                            location.reload()
-                        })
-                        .fail(function(error) {
-                            $('#customModal').modal('hide')
-                            launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                        })
-                    })
                 })
                 $('[data-action="add-resource"]').click(function() {
                     launchCustomModal(
                         'info',
                         'Adding Resource',
-                        `<form id="addForm" enctype="multipart/form-data">
+                        `<form action="{% url 'new_resource' %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-12">
@@ -161,37 +144,13 @@
                             <button class="btn btn-primary" type="submit">Save Resource</button>
                         </form>`
                     )
-                    $('#addForm').submit(function(e) {
-                        e.preventDefault()
-                        $.post({
-                            url: 'new/',
-                            data: new FormData(this),
-                            processData: false,
-                            contentType: false,
-                        })
-                        .done(function() {
-                            location.reload()
-                        })
-                        .fail(function(error) {
-                            $('#customModal').modal('hide')
-                            launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                        })
-                    })
                 })
             })
 
             function deleteResource(id) {
-                $.post({
-                    url: 'delete/',
-                    data: {'id': id}
-                })
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
+                $.post('{% url 'delete_resource' resource_id=0 %}'.replace(/0/, id))
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             }
         </script>
     {% endif %}

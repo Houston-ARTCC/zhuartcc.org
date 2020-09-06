@@ -3,14 +3,14 @@
 {% block body %}
     {% if request.session.staff %}
         <div class="text-center">
-            <a href="/events/new"><button class="btn btn-lg btn-primary mb-4"><i class="far fa-plus"></i> Create New Event</button></a>
+            <a href="{% url 'new_event' %}"><button class="btn btn-lg btn-primary mb-4"><i class="far fa-plus"></i> Create New Event</button></a>
         </div>
     {% endif %}
     <div class="row">
         {% for event in events %}
             {% if event.hidden and request.session.staff or not event.hidden %}
                 <div class="col-6">
-                    <a href="/events/{{ event.id }}/">
+                    <a href="{% url 'event' event_id=event.id %}">
                         <div class="card">
                             <div class="card-header bg-secondary">
                                 <h4 style="font-size: 40px">{{ event.name }} {% if event.hidden %}<i class="far fa-eye-slash text-danger"></i>{% endif %}</h4>

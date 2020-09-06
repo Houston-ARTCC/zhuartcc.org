@@ -1,7 +1,7 @@
 {% extends 'mainTemplate.html' %}
 
 {% block body %}
-<form action="/feedback/new/" method="POST">
+<form action="{% url 'new_feedback' %}" method="POST">
     {% csrf_token %}
     <div class="row">
         <div class="col-md-12 col-xl-5 d-flex align-content-stretch">
@@ -93,7 +93,7 @@
             </div>
         </div>
     </div>
-    <a href="/"><button class="btn btn-secondary" type="button">Cancel</button></a>
+    <a href="{% url 'home' %}"><button class="btn btn-secondary" type="button">Cancel</button></a>
     <button type="submit" class="btn btn-primary">Submit Feedback</button>
 </form>
 {% endblock %}

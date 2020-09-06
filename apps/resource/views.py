@@ -1,7 +1,8 @@
 from itertools import groupby
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from .models import Resource
@@ -21,58 +22,49 @@ def view_resources(request):
     })
 
 
-# Accepts form data and updates database entry
-@require_staff
-@require_POST
-def edit_resource(request):
-    try:
-        resource = Resource.objects.get(id=request.POST['id'])
-        resource.name = request.POST['name']
-        resource.category = request.POST['category']
-        if 'file' in request.FILES:
-            resource.path = request.FILES['file']
-        resource.save()
-
-        user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Resource "{resource.name}" modified by {user.full_name}.').save()
-
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
-
-
 # Accepts form data and adds database entry
 @require_staff
 @require_POST
 def add_resource(request):
-    try:
-        resource = Resource(
-            path=request.FILES['file'],
-            name=request.POST['name'],
-            category=request.POST['category'],
-        )
-        resource.save()
+    resource = Resource(
+        path=request.FILES['file'],
+        name=request.POST['name'],
+        category=request.POST['category'],
+    )
+    resource.save()
 
-        user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Resource "{resource.name}" created by {user.full_name}.').save()
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Resource "{resource.name}" created by {user.full_name}.').save()
 
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+    return redirect(reverse('resources'))
+
+
+# Accepts form data and updates database entry
+@require_staff
+@require_POST
+def edit_resource(request, resource_id):
+    resource = Resource.objects.get(id=resource_id)
+    resource.name = request.POST['name']
+    resource.category = request.POST['category']
+    if 'file' in request.FILES:
+        resource.path = request.FILES['file']
+    resource.save()
+
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Resource "{resource.name}" modified by {user.full_name}.').save()
+
+    return redirect(reverse('resources'))
 
 
 # Accepts resource ID and deletes database entry
 @require_staff
 @require_POST
-def delete_resource(request):
-    try:
-        resource = Resource.objects.get(id=request.POST['id'])
+def delete_resource(request, resource_id):
+    resource = Resource.objects.get(id=resource_id)
 
-        user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Resource "{resource.name}" deleted by {user.full_name}.').save()
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Resource "{resource.name}" deleted by {user.full_name}.').save()
 
-        resource.delete()
+    resource.delete()
 
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+    return HttpResponse(status=200)

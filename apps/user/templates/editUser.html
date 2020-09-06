@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-<form action="/roster/{{ user.cid }}/edit/" method="POST">
+<form action="{% url 'edit_user' cid=user.cid %}" method="POST">
     {% csrf_token %}
     <div class="row">
         <div class="col-sm-12 col-md-6 col-xl-4">
@@ -335,7 +335,7 @@
             </div>
         </div>
     </div>
-    <a href="/roster"><button class="btn btn-secondary" type="button">Cancel</button></a>
+    <a href="{% url 'roster' %}"><button class="btn btn-secondary" type="button">Cancel</button></a>
     <button class="btn btn-primary" type="submit">Save Changes</button>
 </form>
 {% endblock %}
@@ -355,8 +355,8 @@
                 deselect($('#VC'))
             }
         })
-        $('#active').click(function() { postStatusUpdate({'id': {{ user.id }}, 'status': 0}) })
-        $('#inactive').click(function() { postStatusUpdate({'id': {{ user.id }}, 'status': 2}) })
+        $('#active').click(function() { postStatusUpdate({status: 0}) })
+        $('#inactive').click(function() { postStatusUpdate({status: 2}) })
         $('#loa').click(function() {
             launchCustomModal(
                 'info',
@@ -418,23 +418,14 @@
     function submitLOA() {
         let loa_until = $('.datepicker').data('datepicker').getFormattedDate('yyyy-mm-dd')
         if (loa_until) {
-            postStatusUpdate({'id': {{ user.id }}, 'status': 1, 'loa_until': loa_until})
+            postStatusUpdate({status: 1, loa_until: loa_until})
             $('#customModal').modal('hide')
         }
     }
     function postStatusUpdate(data) {
-        $.post({
-            url: '/roster/update/status/',
-            data: data
-        })
-        .done(function() {
-            location.reload()
-        })
-        .fail(function(error) {
-            $('#customModal').modal('hide')
-            console.log(error)
-            launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-        })
+        $.post('{% url 'edit_status' cid=user.cid %}', data)
+        .done(function() { launchSuccessModal() })
+        .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
     }
     function select(el) {
         el.attr('required', 'required').removeAttr('disabled')

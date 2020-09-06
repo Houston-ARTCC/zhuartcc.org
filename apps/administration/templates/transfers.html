@@ -47,13 +47,8 @@
                         type: 'PUT',
                         data: {'action': 'accept'}
                     })
-                    .done(function() {
-                        location.reload()
-                    })
-                    .fail(function(error) {
-                        $('#customModal').modal('hide')
-                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                    })
+                    .done(function() { launchSuccessModal() })
+                    .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
                 })
             } else {
                 launchCustomModal(
@@ -80,13 +75,8 @@
                             'reason': $('#customModal [name="reason"]').val()
                         }
                     })
-                    .done(function() {
-                        location.reload()
-                    })
-                    .fail(function(error) {
-                        $('#customModal').modal('hide')
-                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                    })
+                    .done(function() { launchSuccessModal() })
+                    .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
                 })
             }
         })

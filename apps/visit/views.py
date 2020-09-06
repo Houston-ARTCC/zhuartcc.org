@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
@@ -41,7 +42,7 @@ def submit_visiting_request(request):
                 html_message=render_to_string('emails/visiting_request_received.html', context),
             )
 
-            return redirect('/')
+            return redirect(reverse('home'))
         except:
             return HttpResponse('Something was wrong your request!', status=400)
 
@@ -61,8 +62,8 @@ def view_visiting_requests(request):
 # Creates User object from visiting request with CID specified in POST
 @require_staff
 @require_POST
-def accept_visiting_request(request):
-    visiting_request = Visit.objects.get(id=request.POST['id'])
+def accept_visiting_request(request, visit_id):
+    visiting_request = Visit.objects.get(id=visit_id)
 
     # If user is visiting the ARTCC after being marked inactive
     if User.objects.filter(cid=visiting_request.cid).exists():
@@ -112,8 +113,8 @@ def accept_visiting_request(request):
 # Deletes visiting request with CID specified in POST
 @require_staff
 @require_POST
-def reject_visiting_request(request):
-    visiting_request = Visit.objects.get(id=request.POST['id'])
+def reject_visiting_request(request, visit_id):
+    visiting_request = Visit.objects.get(id=visit_id)
 
     admin = User.objects.get(cid=request.session['cid'])
     ActionLog(action=f'{visiting_request.full_name}\'s visiting request was rejected by {admin.full_name}.').save()
@@ -131,4 +132,4 @@ def reject_visiting_request(request):
     )
 
     visiting_request.delete()
-    return HttpResponse(status=200)
+    return redirect(reverse('visit_requests'))

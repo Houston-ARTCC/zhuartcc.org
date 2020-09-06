@@ -106,7 +106,7 @@
                     <h1>{% block code %}{% endblock %}</h1>
                 </div>
                 <h2>{% block headline %}{% endblock %}</h2>
-                <p>{% block message %}{% endblock %} <a href="https://zhuartcc.org">Return to homepage</a></p>
+                <p>{% block message %}{% endblock %} <a href="{% url 'home' %}">Return to homepage</a></p>
             </div>
         </div>
     </body>

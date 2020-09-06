@@ -113,7 +113,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <a href="schedule"><button class="btn btn-primary" type="submit">Request Training</button></a>
+                    <a href="{% url 'request_training' %}"><button class="btn btn-primary" type="submit">Request Training</button></a>
                 </div>
             </div>
         </div>
@@ -174,7 +174,7 @@
             })
         })
         $('#sessions tr[data-type="href"]').click(function() {
-            window.location.href = `session/${$(this).data('session')}/`
+            window.location.href = '{% url 'training_session' session_id=0 %}'.replace(/0/, $(this).data('session'))
         })
         $('[data-action="cancel"]').click(function() {
             let $this = $(this)
@@ -186,14 +186,9 @@
                 <button class="btn btn-primary" data-action="confirm">Confirm</button>`
             )
             $('#customModal button[data-action="confirm"]').click(function() {
-                $.post('/training/requests/' + $this.data('id') + '/cancel/')
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
+                $.post('{% url 'cancel_training' request_id=0 %}'.replace(/0/, $(this).data('id')))
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
         })
     </script>

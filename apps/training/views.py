@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
 import pytz
-from django.db.models import Sum, Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
@@ -56,7 +56,7 @@ def request_training(request):
         else:
             return HttpResponse('The start time must be before the end time.', status=400)
 
-        return redirect(f'/training/')
+        return redirect(reverse('training'))
     else:
         return render(request, 'request_training.html', {
             'page_title': 'Request Training',
@@ -105,7 +105,7 @@ def accept_training_request(request, id):
     ActionLog(action=f'{admin.full_name} accepted {training_request.student.full_name}\'s training request.').save()
     training_request.delete()
 
-    return HttpResponse(status=200)
+    return redirect(reverse('training_requests'))
 
 
 @require_POST
@@ -117,7 +117,7 @@ def reject_training_request(request, id):
     ActionLog(action=f'{admin.full_name} rejected {training_request.student.full_name}\'s training request.').save()
     training_request.delete()
 
-    return HttpResponse(status=200)
+    return redirect(reverse('training_requests'))
 
 
 @require_POST

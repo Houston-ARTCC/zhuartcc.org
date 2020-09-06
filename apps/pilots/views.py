@@ -2,6 +2,7 @@ from itertools import groupby
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from apps.administration.models import ActionLog
@@ -27,54 +28,45 @@ def view_scenery(request):
 
 @require_staff
 @require_POST
-def edit_scenery(request):
-    try:
-        scenery = Scenery.objects.get(id=request.POST['id'])
-        scenery.name = request.POST['name']
-        scenery.simulator = request.POST['simulator']
-        scenery.link = request.POST['link']
-        scenery.payware = True if 'payware' in request.POST else False
-        scenery.save()
-
-        user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Scenery "{scenery.name}" modified by {user.full_name}.').save()
-
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
-
-
-@require_staff
-@require_POST
 def add_scenery(request):
-    try:
-        scenery = Scenery(
-            name=request.POST['name'],
-            simulator=request.POST['simulator'],
-            link=request.POST['link'],
-            payware=True if 'payware' in request.POST else False
-        )
-        scenery.save()
+    scenery = Scenery(
+        name=request.POST['name'],
+        simulator=request.POST['simulator'],
+        link=request.POST['link'],
+        payware=True if 'payware' in request.POST else False
+    )
+    scenery.save()
 
-        user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Scenery "{scenery.name}" created by {user.full_name}.').save()
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Scenery "{scenery.name}" created by {user.full_name}.').save()
 
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+    return redirect(reverse('scenery'))
 
 
 @require_staff
 @require_POST
-def delete_scenery(request):
-    try:
-        scenery = Scenery.objects.get(id=request.POST['id'])
+def edit_scenery(request, scenery_id):
+    scenery = Scenery.objects.get(id=scenery_id)
+    scenery.name = request.POST['name']
+    scenery.simulator = request.POST['simulator']
+    scenery.link = request.POST['link']
+    scenery.payware = True if 'payware' in request.POST else False
+    scenery.save()
 
-        user = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Scenery "{scenery.name}" deleted by {user.full_name}.').save()
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Scenery "{scenery.name}" modified by {user.full_name}.').save()
 
-        scenery.delete()
+    return redirect(reverse('scenery'))
 
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+
+@require_staff
+@require_POST
+def delete_scenery(request, scenery_id):
+    scenery = Scenery.objects.get(id=scenery_id)
+
+    user = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Scenery "{scenery.name}" deleted by {user.full_name}.').save()
+
+    scenery.delete()
+
+    return HttpResponse(status=200)

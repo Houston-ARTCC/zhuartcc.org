@@ -4,6 +4,8 @@ import requests
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 
 from django.shortcuts import redirect
+from django.urls import reverse
+
 from ..user.models import User
 
 
@@ -40,10 +42,10 @@ def login(request):
                 request.session['staff'] = False
                 request.session['mentor'] = False
 
-    return redirect('/')
+    return redirect(reverse('home'))
 
 
 def logout(request):
     request.session.flush()
 
-    return redirect('/')
+    return redirect(reverse('home'))

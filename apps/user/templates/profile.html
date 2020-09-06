@@ -30,7 +30,7 @@
                 <div class="blockquote-footer">{{ user.staff_comment_author.full_name }}</div>
             </div>
         {% endif %}
-        <a href="edit"><button class="btn btn-secondary mb-4">Edit User</button></a><button class="btn btn-secondary mb-4" onclick="addComment()">Add Staff Comment</button>
+        <a href="{% url 'edit_user' cid=user.cid %}"><button class="btn btn-secondary mb-4">Edit User</button></a><button class="btn btn-secondary mb-4" onclick="addComment()">Add Staff Comment</button>
     {% endif %}
     <div class="row">
         <div class="col-4">
@@ -188,7 +188,7 @@
                 launchCustomModal(
                     'info',
                     'Adding Staff Comment',
-                    `<form id="commentForm">
+                    `<form action="{% url 'add_comment' cid=user.cid %}" method="POST">
                         {% csrf_token %}
                         <div class="label-group">
                             <textarea name="comment" rows="2" required></textarea>
@@ -197,33 +197,11 @@
                         <button class="btn btn-primary">Submit</button>
                     </form>`
                 )
-                $('#commentForm').submit(function(e) {
-                    e.preventDefault()
-                    $.post({
-                        url: 'addcomment/',
-                        data: new FormData(this),
-                        processData: false,
-                        contentType: false,
-                    })
-                    .done(function() {
-                        location.reload()
-                    })
-                    .fail(function(error) {
-                        $('#customModal').modal('hide')
-                        console.log(error)
-                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                    })
-                })
             }
             $('[data-action="remove-comment"]').click(function() {
-                $.post('removecomment/')
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
+                $.post('{% url 'remove_comment' cid=user.cid %}')
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
         {% endif %}
     </script>

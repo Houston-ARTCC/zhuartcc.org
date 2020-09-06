@@ -45,7 +45,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <a href="/roster"><button class="btn btn-secondary mb-0" type="button">Cancel</button></a>
+                        <a href="{% url 'roster' %}"><button class="btn btn-secondary mb-0" type="button">Cancel</button></a>
                         <button class="btn btn-primary mb-0" type="submit">Remove Selected Users</button>
                     </form>
                 </div>
@@ -80,20 +80,13 @@
 
         function postRemovals() {
             $.post({
-                url: '/roster/remove/',
+                url: '{% url 'remove_user' %}',
                 data: new FormData(document.getElementById('tidyForm')),
                 processData: false,
                 contentType: false,
             })
-            .done(function () {
-                $('#customModal').modal('hide')
-                launchSuccessModal('')
-            })
-            .fail(function (error) {
-                $('#customModal').modal('hide')
-                console.log(error)
-                launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-            })
+            .done(function() { launchSuccessModal() })
+            .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
         }
     </script>
 {% endblock %}

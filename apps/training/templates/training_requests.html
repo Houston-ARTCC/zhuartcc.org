@@ -45,8 +45,8 @@
             let $this = $(this)
             launchCustomModal(
                 'info',
-                'Scheduling Training Session with ' + $this.data('name'),
-                `<form id="acceptRequest">
+                'Scheduling Training Session with ' + $(this).data('name'),
+                `<form id="${'{% url 'accept_training' request_id=0 %}'.replace(/0/, $(this).data('id'))}">
                     {% csrf_token %}
                     <p>Drag the slider to set the start and end times for the training session. The limits are automatically set to what the student indicated as their availability.</p>
                     <input name="start" id="start" type="datetime-local" hidden>
@@ -61,22 +61,6 @@
                     <button class="btn btn-primary">Submit</button>
                 </form>`
             )
-            $('#customModal #acceptRequest').submit(function(e) {
-                e.preventDefault()
-                $.post({
-                    url: $this.data('id') + '/accept/',
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                })
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
-            })
             let $slider = $('.slider-range')
             let start = $this.data('start')
             let duration = $this.data('duration')
@@ -102,28 +86,15 @@
             $('input#end').val(static_max.format('YYYY-MM-DD[T]HH:mm:ss.SS'))
         })
         $('[data-action="reject"]').click(function() {
-            let $this = $(this)
             launchCustomModal(
                 'info',
-                `Reject ${$this.data('name')}'s Training Request?`,
-                `<form id="rejectForm">
+                `Reject ${$(this).data('name')}'s Training Request?`,
+                `<form id="${'{% url 'reject_training' request_id=0 %}'.replace(/0/, $(this).data('id'))}">
                     <p>Are you sure you would like to reject this training request? This action cannot be undone!</p>
                     <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-primary">Confirm</button>
                 </form>`
             )
-            $('#customModal #rejectForm').submit(function(e) {
-                e.preventDefault()
-                $.post($this.data('id') + '/reject/')
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    $('#customModal').modal('hide')
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
-            })
-
         })
     </script>
 {% endblock %}

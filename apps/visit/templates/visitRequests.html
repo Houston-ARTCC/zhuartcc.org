@@ -42,23 +42,15 @@
                     <button class="btn btn-primary" data-action="confirm">Confirm</button>`
                 )
                 $('#customModal [data-action="confirm"]').click(function() {
-                    $.post({
-                        url: 'accept/',
-                        data: {'id': $this.data('id')}
-                    })
-                    .done(function() {
-                        location.reload()
-                    })
-                    .fail(function(error) {
-                        $('#customModal').modal('hide')
-                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                    })
+                    $.post('{% url 'accept_visit' visit_id=0 %}'.replace(/0/, $this.data('id')))
+                    .done(function() { launchSuccessModal() })
+                    .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
                 })
             } else {
                 launchCustomModal(
                     'info',
                     `Reject ${$this.data('name')}'s Visiting Request?`,
-                    `<form id="rejectForm">
+                    `<form action="${'{% url 'reject_visit' visit_id=0 %}'.replace(/0/, $this.data('id'))}" method="POST">
                         <div class="label-group">
                             <textarea name="reason" rows="2" required></textarea>
                             <label>Reason for Rejection</label>
@@ -69,23 +61,6 @@
                         <button class="btn btn-primary">Confirm</button>
                     </form>`
                 )
-                $('#customModal #rejectForm').submit(function(e) {
-                    e.preventDefault()
-                    $.post({
-                        url: 'reject/',
-                        data: {
-                            'id': $this.data('id'),
-                            'reason': $('#customModal [name="reason"]').val()
-                        }
-                    })
-                    .done(function() {
-                        location.reload()
-                    })
-                    .fail(function(error) {
-                        $('#customModal').modal('hide')
-                        launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                    })
-                })
             }
         })
     </script>

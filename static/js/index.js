@@ -32,7 +32,8 @@ $(function() {
             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'))
             }
-        }
+        },
+        complete: function() { $('#customModal').modal('hide') }
     })
 })
 
@@ -59,16 +60,16 @@ function checkValue() {
 }
 
 // Launching pre-made modals
-function launchSuccessModal(content) {
+function launchSuccessModal() {
     $('.page-container').append(`
     <div id="successModal" class="modal" tabindex="2000">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center">
                     <i class="icon-success"></i>
-                    <h3 class="modal-title">Success!</h3>
-                    <p>` + content + `</p>
-                    <button class="btn btn-primary" data-dismiss="modal">Okay</button>
+                    <h3 class="modal-title">Yay!</h3>
+                    <p>Your request was processed successfully! The page will reload once you close this popup.</p>
+                    <button class="btn btn-secondary" data-dismiss="modal">Okay</button>
                 </div>
             </div>
         </div>
@@ -86,7 +87,7 @@ function launchErrorModal(error) {
                     <h3 class="modal-title">Oops!</h3>
                     <p>Something went wrong, maybe this error message can help:</p>
                     <p><code>` + error + `</code></p>
-                    <button class="btn btn-primary" data-dismiss="modal">Okay</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Okay</button>
                 </div>
             </div>
         </div>
@@ -122,7 +123,7 @@ function bindModalEvents(modal) {
     modal.on('hidden.bs.modal', function() {
         modal.remove()
     })
-    $('#successModal, #errorModal').on('hidden.bs.modal', function() {
+    $('#successModal').on('hidden.bs.modal', function() {
         location.reload()
     })
     $('#customModal input, #customModal select, #customModal textarea').change(checkValue).each(checkValue)

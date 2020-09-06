@@ -14,7 +14,7 @@
     {% if event.hidden %}
         <div class="alert alert-primary">
             <h4 class="alert-heading">Event Hidden</h4>
-            <p class="mb-0">This event is currently hidden and is only visibile by ARTCC staff members. To make this event visible, <a href="edit/" class="alert-link">edit the event</a>.</p>
+            <p class="mb-0">This event is currently hidden and is only visibile by ARTCC staff members. To make this event visible, <a href="{% url 'edit_event' event_id=event.id %}" class="alert-link">edit the event</a>.</p>
         </div>
     {% endif %}
     {% if event.end <= time_now %}
@@ -24,7 +24,7 @@
         </div>
     {% endif %}
     {% if request.session.staff and event.end >= time_now %}
-        <a href="edit/"><button class="btn btn-secondary mb-4"><i class="far fa-pencil-ruler"></i> Edit Event</button></a>
+        <a href="{% url 'edit_event' event_id=event.id %}"><button class="btn btn-secondary mb-4"><i class="far fa-pencil-ruler"></i> Edit Event</button></a>
     {% endif %}
     <div class="card">
         <div class="card-body">
@@ -167,22 +167,12 @@
 
         {% if allowed_to_signup %}
             $('[data-action="request"]').click(function() {
-                $.post('/events/request/' + $(this).data('id') + '/')
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
+                $.post('{% url 'request_position' position_id=0 %}'.replace(/0/, $(this).data('id')))
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
             $('[data-action="unrequest"]').click(function() {
-                $.post('/events/unrequest/' + $(this).data('id') + '/')
-                .done(function() {
-                    location.reload()
-                })
-                .fail(function(error) {
-                    launchErrorModal('Error ' + error.status + ': ' + error.responseText)
-                })
+                $.post('{% url 'unrequest_position' request_id=0 %}'.replace(/0/, $(this).data('id')))
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
         {% endif %}
     </script>

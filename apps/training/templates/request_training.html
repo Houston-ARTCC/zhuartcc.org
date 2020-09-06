@@ -87,7 +87,7 @@
                     launchCustomModal(
                         'info',
                         'Requesting Training',
-                        `<form id="requestTraining" method="POST">
+                        `<form id="{% url 'request_training' %}" method="POST">
                             {% csrf_token %}
                             <div class="row mb-2">
                                 <div class="col-6">

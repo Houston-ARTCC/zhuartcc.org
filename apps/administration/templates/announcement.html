@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <form id="announcementForm" method="POST">
+    <form id="announcementForm" action="{% url 'announcement' %}" method="POST">
         {% csrf_token %}
         <div class="label-group">
             <input name="subject" type="text" required>
@@ -14,7 +14,7 @@
         </div>
         <textarea name="message" hidden></textarea>
         <div class="quill mb-2" id="editor"></div>
-        <a href="/admin"><button class="btn btn-secondary" type="button">Cancel</button></a>
+        <a href="{% url 'admin' %}"><button class="btn btn-secondary" type="button">Cancel</button></a>
         <button class="btn btn-primary">Confirm</button>
     </form>
 {% endblock %}

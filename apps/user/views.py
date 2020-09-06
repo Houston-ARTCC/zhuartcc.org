@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
@@ -124,16 +125,16 @@ def edit_user(request, cid):
 
         admin = User.objects.get(cid=request.session['cid'])
         ActionLog(action=f'User {user.full_name} modified by {admin.full_name}.').save()
-        return redirect('/roster')
+        return redirect(reverse('roster'))
 
     return render(request, 'editUser.html', {'page_title': f'Editing {user.full_name}', 'user': user})
 
 
 @require_staff
 @require_POST
-def update_status(request):
+def update_status(request, cid):
     try:
-        user = User.objects.get(id=request.POST['id'])
+        user = User.objects.get(cid=cid)
         user.status = int(request.POST['status'])
         if request.POST['status'] == '1':
             user.loa_until = pytz.utc.localize(datetime.strptime(request.POST['loa_until'], '%Y-%m-%d'))

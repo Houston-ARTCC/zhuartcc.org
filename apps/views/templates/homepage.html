@@ -24,40 +24,40 @@
         <div class="home-wrapper">
             <!-- START Navbar -->
             <nav class="navbar navbar-expand-md navbar-shrink fixed-top">
-                <a class="navbar-brand" href="/"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-light.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
+                <a class="navbar-brand" href="{% url 'home %}"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-light.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown ml-5">
                         <a class="nav-link" href="#" data-toggle="dropdown">Events</a>
                         <div class="dropdown-menu mt-3">
-                            <a class="dropdown-item" href="/events/">Events</a>
-                            <a class="dropdown-item" href="/events/archived/">Archived Events</a>
-                            <a class="dropdown-item" href="/events/score/">Event Score</a>
+                            <a class="dropdown-item" href="{% url 'events' %}">Events</a>
+                            <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
+                            <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
                             {% if request.session.staff %}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/events/new/">New Event</a>
-                                <a class="dropdown-item" href="/events/presets/">Position Presets</a>
+                                <a class="dropdown-item" href="{% url 'new_event' %}">New Event</a>
+                                <a class="dropdown-item" href="{% url 'presets' %}">Position Presets</a>
                             {% endif %}
                         </div>
                     </li>
                     <li class="nav-item dropdown ml-5">
                         <a class="nav-link" href="#" data-toggle="dropdown">Pilots</a>
                         <div class="dropdown-menu mt-3">
-                            <a class="dropdown-item" href="/map/">ARTCC Map</a>
+                            <a class="dropdown-item" href="{% url 'map' %}">ARTCC Map</a>
                             <a class="dropdown-item" href="https://simcharts.info/" target="_blank">Charts</a>
                             <a class="dropdown-item" href="http://www.flightaware.com/statistics/ifr-route/" target="_blank">Routing</a>
-                            <a class="dropdown-item" href="/scenery/">Scenery</a>
+                            <a class="dropdown-item" href="{% url 'scenery' %}">Scenery</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/feedback/">Feedback</a>
+                            <a class="dropdown-item" href="{% url 'feedback' %}">Feedback</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown ml-5">
                         <a class="nav-link" href="#" data-toggle="dropdown">Controllers</a>
                         <div class="dropdown-menu mt-3">
-                            <a class="dropdown-item" href="/roster/">Roster</a>
-                            <a class="dropdown-item" href="/staff/">Staff</a>
+                            <a class="dropdown-item" href="{% url 'roster' %}">Roster</a>
+                            <a class="dropdown-item" href="{% url 'staff' %}">Staff</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/resources/">Resources</a>
-                            <a class="dropdown-item" href="/statistics/">Statistics</a>
+                            <a class="dropdown-item" href="{% url 'resources' %}">Resources</a>
+                            <a class="dropdown-item" href="{% url 'statistics' %}">Statistics</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown ml-5">
@@ -65,16 +65,16 @@
                             <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
                             <div class="dropdown-menu mt-3">
                                 {% if request.session.guest %}
-                                    <a class="dropdown-item" href="/visit/">Become a Visitor</a>
+                                    <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
                                 {% else %}
-                                    <a class="dropdown-item" href="/roster/{{ request.session.vatsim_data.cid }}/">My Profile</a>
-                                    <a class="dropdown-item" href="/training/">Training Center</a>
+                                    <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
+                                    <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
                                     {% if request.session.staff %}
-                                        <a class="dropdown-item" href="/admin/">Administration Panel</a>
+                                        <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
                                     {% endif %}
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout/">Log Out</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                             </div>
                         {% else %}
                             <a class="nav-link" href="https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1">Log In</a>
@@ -149,7 +149,7 @@
                             <div class="card-header"><i class="far fa-calendar"></i> Events</div>
                             <div class="card-body">
                                 {% for event in events %}
-                                    <a href="/events/{{ event.id }}/"><img src="{{ event.banner }}" width="100%"></a>
+                                    <a href="{% url 'event' event_id=event.id %}"><img src="{{ event.banner }}" width="100%"></a>
                                 {% empty %}
                                     No events were found...
                                 {% endfor %}
@@ -234,8 +234,8 @@
                 <p class="mb-1"><b>
                     <a href="https://vatsim.net" target="_blank">VATSIM</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
                     <a href="https://vatusa.net" target="_blank">VATUSA</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
-                    <a href="/privacy/" target="_blank">Privacy Policy</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
-                    <a href="/feedback/" target="_blank">Feedback</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
+                    <a href="{% url 'privacy' %}">Privacy Policy</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
+                    <a href="{% url 'feedback' %}">Feedback</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
                     <a href="http://discord.gg/Ag2cdZz" target="_blank">Discord</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
                     <a href="https://github.com/MikeRomaa/zhuartcc.org" target="_blank">GitHub</a>
                 </b></p>

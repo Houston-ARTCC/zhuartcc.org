@@ -19,89 +19,88 @@ from apps.visit import views as visit
 
 urlpatterns = [
     # Administration
-    path('admin/', administration.view_admin_panel),                    # View Admin Panel (STAFF)
-    path('admin/log/', administration.view_action_log),                 # View Action Log (STAFF)
-    path('admin/transfers/', administration.view_transfers),            # View VATUSA Transfer Requests (STAFF)
-    path('admin/announcement/', administration.view_announcement),      # View Announcement Page (STAFF)
-    path('admin/broadcast/', administration.view_broadcast),            # View Broadcast Page (STAFF)
-    path('admin/broadcast/send/', administration.send_broadcast),       # Send Broadcast Email (POST / STAFF)
+    path('admin/', administration.view_admin_panel, name='admin'),
+    path('admin/log/', administration.view_action_log, name='log'),
+    path('admin/transfers/', administration.view_transfers, name='transfer_requests'),
+    path('admin/announcement/', administration.view_announcement, name='announcement'),
+    path('admin/broadcast/', administration.view_broadcast, name='broadcast'),
 
     # API
-    path('statistics/', api.view_statistics),                           # View Statistics
+    path('statistics/', api.view_statistics, name='statistics'),
 
     # Event
-    path('events/', event.view_all_events),                             # View Upcoming Events
-    path('events/score/', event.view_event_score),                      # View Event Score
-    path('events/score/<int:cid>/', event.view_event_score),            # View User's Event Score (OWN / STAFF)
-    path('events/new/', event.add_event),                               # Add Event (POST / STAFF)
-    path('events/archived/', event.view_archived_events),               # View Archived Events
-    path('events/<int:id>/', event.view_event),                         # View Event
-    path('events/<int:id>/edit/', event.edit_event),                    # Edit Event (STAFF)
-    path('events/<int:id>/delete/', event.delete_event),                # Delete Event (POST / STAFF)
-    path('events/request/<int:id>/', event.request_position),           # Request Position (POST / MEMBER)
-    path('events/unrequest/<int:id>/', event.unrequest_position),       # Unrequest Postiion (POST / MEMBER)
-    path('events/assign/<int:id>/', event.assign_position),             # Assign Positions (POST / STAFF)
-    path('events/unassign/<int:id>/', event.unassign_position),         # Unassign Position Request (POST / STAFF)
-    path('events/delete/<int:id>/', event.delete_position),             # Delete Position (POST / STAFF)
-    path('events/add/<int:id>/', event.add_position),                   # Add Position (POST / STAFF)
-    path('events/presets/', event.view_presets),                        # View Position Presets (STAFF)
-    path('events/presets/new/', event.add_preset),                      # Add Position Preset (POST / STAFF)
-    path('events/presets/edit/<int:id>/', event.edit_preset),           # Edit Position Preset (POST / STAFF)
-    path('events/presets/delete/<int:id>/', event.delete_preset),       # Delete Position Preset (POST / STAFF)
+    path('events/', event.view_all_events, name='events'),
+    path('events/archived/', event.view_archived_events, name='archived_events'),
+    path('events/new/', event.add_event, name='new_event'),
+    path('events/score/', event.view_event_score, name='event_score'),
+    path('events/score/<int:cid>/', event.view_event_score, name='event_score_cid'),
+    path('events/<int:event_id>/', event.view_event, name='event'),
+    path('events/<int:event_id>/edit/', event.edit_event, name='edit_event'),
+    path('events/<int:event_id>/delete/', event.delete_event, name='delete_event'),
+    path('events/<int:event_id>/add/', event.add_position, name='add_position'),
+    path('events/position/<int:position_id>/request/', event.request_position, name='request_position'),
+    path('events/position/<int:request_id>/unrequest/', event.unrequest_position, name='unrequest_position'),
+    path('events/position/<int:request_id>/assign/', event.assign_position, name='assign_position'),
+    path('events/position/<int:position_id>/unassign/', event.unassign_position, name='unassign_position'),
+    path('events/position/<int:position_id>/delete/', event.delete_position, name='delete_position'),
+    path('events/presets/', event.view_presets, name='presets'),
+    path('events/presets/new/', event.add_preset, name='new_preset'),
+    path('events/presets/edit/<int:preset_id>/', event.edit_preset, name='edit_preset'),
+    path('events/presets/delete/<int:preset_id>/', event.delete_preset, name='delete_preset'),
 
     # Feedback
-    path('feedback/', feedback.view_all_feedback),                      # View All Feedback
-    path('feedback/new/', feedback.add_feedback),                       # Add New Feedback
+    path('feedback/', feedback.view_all_feedback, name='feedback'),
+    path('feedback/new/', feedback.add_feedback, name='new_feedback'),
 
     # Pilots
-    path('map/', pilots.view_artcc_map),                                # View ARTCC Map
-    path('scenery/', pilots.view_scenery),                              # View Scenery
-    path('scenery/new/', pilots.add_scenery),                           # Add Scenery (POST / STAFF)
-    path('scenery/edit/', pilots.edit_scenery),                         # Edit Scenery (POST / STAFF)
-    path('scenery/delete/', pilots.delete_scenery),                     # Delete Scenery (POST / STAFF)
+    path('map/', pilots.view_artcc_map, name='map'),
+    path('scenery/', pilots.view_scenery, name='scenery'),
+    path('scenery/new/', pilots.add_scenery, name='new_scenery'),
+    path('scenery/<int:scenery_id>/edit/', pilots.edit_scenery, name='edit_scenery'),
+    path('scenery/<int:scenery_id>/delete/', pilots.delete_scenery, name='delete_scenery'),
 
     # Resource
-    path('resources/', resource.view_resources),                        # View Resources
-    path('resources/new/', resource.add_resource),                      # Add Resource (POST / STAFF)
-    path('resources/edit/', resource.edit_resource),                    # Edit Resource (POST / STAFF)
-    path('resources/delete/', resource.delete_resource),                # Delete Resource (POST / STAFF)
+    path('resources/', resource.view_resources, name='resources'),
+    path('resources/new/', resource.add_resource, name='new_resource'),
+    path('resources/<int:resource_id>/edit/', resource.edit_resource, name='edit_resource'),
+    path('resources/<int:resource_id>/delete/', resource.delete_resource, name='delete_resource'),
 
     # Training
-    path('training/', training.view_training_center),                   # View Training Center
-    path('training/schedule/', training.request_training),              # Request Training Session (MEMBER)
-    path('training/requests/', training.view_training_requests),        # View Training Requests (STAFF)
-    path('training/requests/<int:id>/accept/', training.accept_training_request),
-    path('training/requests/<int:id>/reject/', training.reject_training_request),
-    path('training/requests/<int:id>/cancel/', training.cancel_training_request),
-    path('training/session/<int:id>/', training.view_session),          # View Training Session (OWN)
-    path('training/mentors/', training.view_mentor_history),            # View Mentor History (STAFF)
+    path('training/', training.view_training_center, name='training'),
+    path('training/schedule/', training.request_training, name='request_training'),
+    path('training/requests/', training.view_training_requests, name='training_requests'),
+    path('training/requests/<int:request_id>/accept/', training.accept_training_request, name='accept_training'),
+    path('training/requests/<int:request_id>/reject/', training.reject_training_request, name='reject_training'),
+    path('training/requests/<int:request_id>/cancel/', training.cancel_training_request, name='cancel_training'),
+    path('training/session/<int:session_id>/', training.view_session, name='training_session'),
+    path('training/mentors/', training.view_mentor_history, name='mentor_history'),
 
     # ULS (Auth)
-    path('login/', uls.login),                                          # Login via VATUSA ULS
-    path('logout/', uls.logout),                                        # Logout + Delete Session Data
+    path('login/', uls.login, name='login'),
+    path('logout/', uls.logout, name='logout'),
 
     # User
-    path('staff/', user.view_staff),                                    # View Staff
-    path('roster/', user.view_roster),                                  # View Roster
-    path('roster/<int:cid>/', user.view_profile),                       # View User Profile
-    path('roster/<int:cid>/edit/', user.edit_user),                     # Edit User (STAFF)
-    path('roster/update/status/', user.update_status),                  # Change User Status (POST / STAFF)
-    path('roster/tidy/', user.view_inactive_users),                     # Roster Tody (STAFF)
-    path('roster/remove/', user.remove_users),                          # Remove Users (POST / STAFF)
-    path('roster/<int:cid>/addcomment/', user.add_comment),             # Add Staff Comment (POST / STAFF)
-    path('roster/<int:cid>/removecomment/', user.remove_comment),       # Remove Staff Comment (POST / STAFF)
+    path('staff/', user.view_staff, name='staff'),
+    path('roster/', user.view_roster, name='roster'),
+    path('roster/<int:cid>/', user.view_profile, name='view_user'),
+    path('roster/<int:cid>/edit/', user.edit_user, name='edit_user'),
+    path('roster/<int:cid>/status/', user.update_status, name='edit_status'),
+    path('roster/<int:cid>/addcomment/', user.add_comment, name='add_comment'),
+    path('roster/<int:cid>/removecomment/', user.remove_comment, name='remove_comment'),
+    path('roster/tidy/', user.view_inactive_users, name='roster_tidy'),
+    path('roster/remove/', user.remove_users, name='remove_user'),
 
     # Views
-    path('', views.view_homepage),                                      # View Homepage
-    path('privacy/', views.view_privacy_policy),                        # View Privacy Policy
+    path('', views.view_homepage, name='home'),
+    path('privacy/', views.view_privacy_policy, name='privacy'),
 
     # Visit
-    path('visit/', visit.submit_visiting_request),                      # Submit Visiting Request (LOGGED IN)
-    path('admin/visits/', visit.view_visiting_requests),                # View All Visiting Requests (STAFF)
-    path('admin/visits/accept/', visit.accept_visiting_request),        # Accept Visiting Request (POST / STAFF)
-    path('admin/visits/reject/', visit.reject_visiting_request),        # Reject Visiting Request (POST / STAFF)
+    path('visit/', visit.submit_visiting_request, name='visit'),
+    path('visit/requests/', visit.view_visiting_requests, name='visit_requests'),
+    path('visit/<int:visit_id>/accept/', visit.accept_visiting_request, name='accept_visit'),
+    path('visit/<int:visit_id>/reject/', visit.reject_visiting_request, name='reject_visit'),
 
-    path('django/', admin.site.urls),                                   # django Admin Panel
+    path('django/', admin.site.urls),
 ]
 
 # Allows access of media files such as documents and user profiles

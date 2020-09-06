@@ -304,24 +304,24 @@
         $('.tab').removeClass('active')
         let home = $('#home')
         let visiting = $('#visiting')
-        let mvap = $('#mvap')
+        let mavp = $('#mavp')
         if ($(this).data('target') === '#home') {
             if (visiting.is(':visible')) {
                 showHide(home, visiting)
             } else {
-                showHide(home, mvap)
+                showHide(home, mavp)
             }
         } else if ($(this).data('target') === '#visiting') {
             if (home.is(':visible')) {
                 showHide(visiting, home)
             } else {
-                showHide(visiting, mvap)
+                showHide(visiting, mavp)
             }
         } else {
             if (home.is(':visible')) {
-                showHide(mvap, home)
+                showHide(mavp, home)
             } else {
-                showHide(mvap, visiting)
+                showHide(mavp, visiting)
             }
         }
         $(this).addClass('active')

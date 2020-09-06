@@ -4,6 +4,7 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from .models import Event, EventPosition, PositionPreset, EventPositionRequest
@@ -155,6 +156,7 @@ def delete_position(request, id):
 
 @require_member
 @require_POST
+@csrf_exempt
 def request_position(request, id):
     user = User.objects.get(cid=request.session['cid'])
     if user.prevent_event_signup:
@@ -170,6 +172,7 @@ def request_position(request, id):
 
 @require_member
 @require_POST
+@csrf_exempt
 def unrequest_position(request, id):
     position_request = EventPositionRequest.objects.get(id=id)
     if position_request.user.id == User.objects.get(cid=request.session['cid']).id:

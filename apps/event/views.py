@@ -48,7 +48,7 @@ def view_event(request, event_id):
         positions = {'center': [], 'tracon': [], 'cab': []}
         for position in event.positions.all():
             positions[position.category] += [position]
-        user = User.objects.get(cid=request.session['cid']) if 'cid' in request.session else None
+        user = User.objects.get(cid=request.session['cid']) if not request.session['guest'] else None
         return render(request, 'view_event.html', {
             'page_title': event.name,
             'event': event,

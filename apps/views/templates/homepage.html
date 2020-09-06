@@ -31,7 +31,9 @@
                         <div class="dropdown-menu mt-3">
                             <a class="dropdown-item" href="{% url 'events' %}">Events</a>
                             <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
-                            <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
+                            {% if not request.session.guest %}
+                                <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
+                            {% endif %}
                             {% if request.session.staff %}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'new_event' %}">New Event</a>

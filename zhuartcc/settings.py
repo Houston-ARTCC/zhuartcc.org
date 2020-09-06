@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'apps.administration',
     'apps.api.apps.ApiConfig',
     'apps.event.apps.EventConfig',
@@ -94,6 +93,36 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'zhuartcc.wsgi.application'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'logfile': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'maxBytes': 5242880,
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['logfile'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'zhuartcc': {
+            'handlers': ['logfile'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+    }
+}
 
 
 # Database

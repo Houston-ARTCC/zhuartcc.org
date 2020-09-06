@@ -18,4 +18,3 @@ def update_event_scores():
     if past_events.exists():
         for event in past_events():
             event.calculate_scores()
-            event.save()

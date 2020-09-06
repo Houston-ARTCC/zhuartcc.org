@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, EventPosition, PositionPreset, EventPositionRequest
+from .models import Event, EventPosition, PositionPreset, EventPositionRequest, EventScore
 
 
 @admin.register(Event)
@@ -20,3 +20,8 @@ class EventPositionRequestAdmin(admin.ModelAdmin):
 @admin.register(PositionPreset)
 class PositionPresetAdmin(admin.ModelAdmin):
     list_display = ('name', 'positions_json')
+
+
+@admin.register(EventScore)
+class EventScoreAdmin(admin.ModelAdmin):
+    list_display = ('user', 'event', 'score')

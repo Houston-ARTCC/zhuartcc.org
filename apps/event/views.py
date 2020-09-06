@@ -1,6 +1,5 @@
 import pytz
 from datetime import datetime
-from itertools import groupby
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -11,7 +10,20 @@ from .models import Event, EventPosition, PositionPreset, EventPositionRequest
 from ..administration.models import ActionLog
 from ..training.models import TrainingSession
 from ..user.models import User
-from zhuartcc.decorators import require_staff, require_member
+from zhuartcc.decorators import require_staff, require_member, require_logged_in
+
+
+@require_logged_in
+def view_event_score(request, cid=None):
+    user_cid = cid or request.session['cid']
+
+    if cid and not request.session['staff'] and cid != request.session['cid']:
+        return HttpResponse(status=403)
+
+    return render(request, 'event_score.html', {
+        'page_title': 'Event Score History',
+        'user': User.objects.get(cid=user_cid),
+    })
 
 
 def view_all_events(request):

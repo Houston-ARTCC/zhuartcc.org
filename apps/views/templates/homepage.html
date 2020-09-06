@@ -31,6 +31,7 @@
                         <div class="dropdown-menu mt-3">
                             <a class="dropdown-item" href="/events/">Events</a>
                             <a class="dropdown-item" href="/events/archived/">Archived Events</a>
+                            <a class="dropdown-item" href="/events/score/">Event Score</a>
                             {% if request.session.staff %}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/events/new/">New Event</a>
@@ -278,10 +279,10 @@
                         }
                     })
                 }
-                $('[data-toggle="popover"]').hover(function() { $(this).popover('show') }, function() { $(this).popover('hide') })
                 $('#weather-loader').fadeOut('fast', function() {
                     $(this).remove()
                     $('#weather').fadeIn('fast')
+                    $('[data-toggle="popover"]').popover().hover(function() { $(this).popover('show') }, function() { $(this).popover('hide') })
                 })
                 $.get('https://cors-anywhere.herokuapp.com/https://api.denartcc.org/live/ZHU')
                 .done(function(data) {

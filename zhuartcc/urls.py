@@ -31,6 +31,8 @@ urlpatterns = [
 
     # Event
     path('events/', event.view_all_events),                             # View Upcoming Events
+    path('events/score/', event.view_event_score),                      # View Event Score
+    path('events/score/<int:cid>/', event.view_event_score),            # View User's Event Score (OWN / STAFF)
     path('events/new/', event.add_event),                               # Add Event (POST / STAFF)
     path('events/archived/', event.view_archived_events),               # View Archived Events
     path('events/<int:id>/', event.view_event),                         # View Event

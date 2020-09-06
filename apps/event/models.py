@@ -37,17 +37,25 @@ class Event(models.Model):
                         session_seconds = event_seconds
 
                     score = [(session_seconds / event_seconds) * 100]
+                    comments = f'Controlled for <b>{duration}</b> out of <b>{self.duration}</b> event duration ({int(score[0])}%).'
 
-                    event_feedback = self.feedback.filter(user=position.user)
+                    event_feedback = self.feedback.filter(controller=position.user)
                     for feedback in event_feedback:
-                        score += [(feedback.rating / 5) * 100]
+                        feedback_score = (feedback.rating / 5) * 100
+                        score += [feedback_score]
+
+                        color = "danger" if feedback.rating < 3 else "warning" if feedback.rating < 5 else "success"
+                        comments += f'<br><b><span class="text-{color}">Feedback: {feedback.rating} / 5 ' \
+                                    f'({int(feedback_score)}%).</span></b>'
 
                     EventScore(
                         user=position.user,
                         event=self,
                         score=int(sum(score) / len(score)),
+                        comments=comments
                     ).save()
             self.scored = True
+            self.save()
 
     def __str__(self):
         return self.name
@@ -107,3 +115,4 @@ class EventScore(models.Model):
     user = models.ForeignKey(User, models.CASCADE, related_name='event_scores')
     event = models.ForeignKey(Event, models.CASCADE, related_name='scores')
     score = models.IntegerField()
+    comments = models.TextField(null=True, blank=True)

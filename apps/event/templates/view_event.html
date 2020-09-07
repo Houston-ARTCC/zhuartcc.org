@@ -2,7 +2,7 @@
 {% load filters %}
 
 {% block header %}
-    <div class="text-right float-right">
+    <div class="text-left text-lg-right float-none float-lg-right">
         <h1 style="font-size: 65px" id="countdown">N/A</h1>
         <h2 style="font-size: 40px" id="countdown-sub">Until Event</h2>
     </div>
@@ -24,17 +24,19 @@
         </div>
     {% endif %}
     {% if request.session.staff and event.end >= time_now %}
-        <a href="{% url 'edit_event' event_id=event.id %}"><button class="btn btn-secondary mb-4"><i class="far fa-pencil-ruler"></i> Edit Event</button></a>
+        <div class="text-center text-lg-left">
+            <a href="{% url 'edit_event' event_id=event.id %}"><button class="btn btn-secondary mb-4"><i class="far fa-pencil-ruler"></i> Edit Event</button></a>
+        </div>
     {% endif %}
     <div class="card">
         <div class="card-body">
-            <img class="d-inline float-right ml-4 mb-4" src="{{ event.banner }}" style="max-width: 50%">
+            <img class="d-lg-inline float-lg-right ml-lg-4 mb-3 mb-lg-4 event-banner" src="{{ event.banner }}" style="max-width: 50%">
             <h3>Presented by {{ event.host }}</h3>
             <p>{{ event.description|linebreaks }}</p>
         </div>
     </div>
     <div class="row">
-        <div class="col-4">
+        <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-header bg-secondary">
                     <h5>Center Assignments</h5>
@@ -68,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-header bg-secondary">
                     <h5>TRACON Assignments</h5>
@@ -102,7 +104,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-header bg-secondary">
                     <h5>Cab Assignments</h5>

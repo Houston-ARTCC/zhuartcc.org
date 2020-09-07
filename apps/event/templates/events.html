@@ -9,7 +9,7 @@
     <div class="row">
         {% for event in events %}
             {% if event.hidden and request.session.staff or not event.hidden %}
-                <div class="col-6">
+                <div class="col-12 col-lg-6">
                     <a href="{% url 'event' event_id=event.id %}">
                         <div class="card">
                             <div class="card-header bg-secondary">

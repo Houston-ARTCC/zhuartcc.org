@@ -108,6 +108,7 @@ d888888P                                                                dP
 }
 body {
     font: 16px/26px Gilroy-Regular, Helvetica, sans-serif;
+    overflow: overlay;
 }
 h1 {
     font: 100px Gilroy-ExtraBold, Helvetica, sans-serif;
@@ -132,12 +133,12 @@ hr {
     border-width: 3px;
     margin: 30px 0;
 }
-a {
+a, a div {
     color: #5ec2fa;
     transition: 400ms;
     cursor: pointer;
 }
-a:hover {
+a:hover, a:hover div {
     opacity: 70%;
     color: #5ec2fa;
     transition: 400ms;
@@ -721,7 +722,7 @@ dP                                              dP
     height: 100vh;
 }
 .page-header {
-    height: 400px;
+    height: 300px;
 }
 .secondary-page-header {
     padding: 11% 10% 2% 10%;
@@ -732,7 +733,7 @@ dP                                              dP
 .title-block {
     padding-left: 10%;
     position: absolute;
-    top: 250px;
+    bottom: 15px;
 }
 
 
@@ -889,6 +890,7 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
 .navbar {
     padding: 2% 9%;
     transition: 400ms;
+    margin-right: -8px;
 }
 .nav-link {
     position: relative;
@@ -982,6 +984,54 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
 .list-group-item.active * {
     color: white!important;
 }
+.nav .nav-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+.nav .nav-content .background {
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+}
+.nav .nav-content .portion {
+  background-color: #e3e3e3;
+}
+.nav .nav-content .portion:not(:first-child) {
+  margin-top: -1px;
+}
+.nav .nav-content .background .portion {
+  flex: 1 1 100%;
+}
+.nav .nav-content .background .portion:nth-child(odd) {
+  transform: translateX(-100%);
+}
+.nav .nav-content .background .portion:nth-child(even) {
+  transform: translateX(100%);
+}
+.nav.open .nav-content {
+  z-index: 1;
+}
+.nav.open .nav-content .background .portion {
+  transform: translateX(0%);
+}
+.nav.open .nav-content .background .portion {
+  transition: transform 0.2s ease-in-out 0.3s;
+}
+.nav .nav-content {
+  transition: z-index 0.01s ease-in-out 0.2s;
+}
+.nav .nav-content .background .portion {
+  transition: transform 0.2s ease-in-out;
+}
 
 
 /*
@@ -1066,4 +1116,81 @@ dP   dP   dP `88888P8 88Y888P' `88888P'
 .quill.broadcast h5,
 .quill.broadcast p {
     all: unset;
+}
+
+
+/*
+
+8888ba.88ba           dP       oo dP
+88  `8b  `8b          88          88
+88   88   88 .d8888b. 88d888b. dP 88 .d8888b.
+88   88   88 88'  `88 88'  `88 88 88 88ooood8
+88   88   88 88.  .88 88.  .88 88 88 88.  ...
+dP   dP   dP `88888P' 88Y8888' dP dP `88888P'
+
+*/
+@media only screen and (max-width: 992px) {
+    .home-title-block {
+        text-align: center;
+    }
+    .home-title {
+        font-size: 80px;
+        padding: 0;
+        top: calc(100vh / 1.7);
+    }
+    .home-subtitle {
+        font-size: 22px;
+        padding: 0;
+    }
+    .scroll-arrow {
+        display: none;
+    }
+    .event-banner {
+        max-width: 100%!important;
+    }
+    .btn {
+        margin: 5px
+    }
+    .title-block {
+        text-align: center;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        padding: 0;
+    }
+    .title {
+        font-size: 15vw;
+    }
+    .navbar-logo-gray, .navbar-logo-color {
+        height: 60px;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .home-title {
+        font-size: 55px;
+        padding-top: calc(100vh / 1.6);
+    }
+}
+
+/*
+
+.d88888b                             dP dP dP
+88.    "'                            88 88 88
+`Y88888b. .d8888b. 88d888b. .d8888b. 88 88 88d888b. .d8888b. 88d888b.
+      `8b 88'  `"" 88'  `88 88'  `88 88 88 88'  `88 88'  `88 88'  `88
+d8'   .8P 88.  ... 88       88.  .88 88 88 88.  .88 88.  .88 88
+ Y88888P  `88888P' dP       `88888P' dP dP 88Y8888' `88888P8 dP
+
+*/
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #d6d6d6;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #bebebe;
 }

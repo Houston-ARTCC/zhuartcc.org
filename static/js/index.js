@@ -37,6 +37,12 @@ $(function() {
     })
 })
 
+// Mobile navbar
+$('#toggleNavbar').click(function() {
+    $('.nav').toggleClass('open')
+    $('body').toggleClass('position-fixed')
+})
+
 // Sticky navbar
 function stickyNav() {
     if ($(document).scrollTop() > 10) {

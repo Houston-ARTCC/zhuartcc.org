@@ -3,9 +3,9 @@
 {% load filters %}
 
 {% block header %}
-    <div class="d-flex align-items-center">
+    <div class="d-lg-flex text-center text-lg-left align-items-center">
         <img class="rounded-circle mb-2" src="{% static 'img/placeholder-profile.png' %}" height="130px">
-        <div class="ml-4">
+        <div class="ml-lg-4">
             <h1 style="font-size: 65px">{{ user.full_name }}</h1>
             <h2 style="font-size: 40px">
                 {% if user.main_role == 'HC' %}
@@ -30,13 +30,15 @@
                 <div class="blockquote-footer">{{ user.staff_comment_author.full_name }}</div>
             </div>
         {% endif %}
-        <a href="{% url 'edit_user' cid=user.cid %}"><button class="btn btn-secondary mb-4">Edit User</button></a><button class="btn btn-secondary mb-4" onclick="addComment()">Add Staff Comment</button>
+        <div class="text-center text-lg-left mb-4">
+            <a href="{% url 'edit_user' cid=user.cid %}"><button class="btn btn-secondary">Edit User</button></a><button class="btn btn-secondary" onclick="addComment()">Add Staff Comment</button>
+        </div>
     {% endif %}
     <div class="row">
-        <div class="col-4">
+        <div class="col-12 col-lg-6 col-xl-4">
             <div class="card">
                 <div class="card-header">User Details</div>
-                <div class="card-body px-5 d-flex justify-content-between">
+                <div class="card-body px-5 d-block d-lg-flex justify-content-between">
                     <div class="text-center">
                         <h2 style="font-size: 25px">CID</h2>
                         <h1 style="font-size: 35px">{{ user.cid }}</h1>
@@ -52,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-12 col-lg-6 col-xl-4">
             <div class="card">
                 <div class="card-header">Biography</div>
                 <div class="card-body">
@@ -60,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-12 col-xl-4">
             <div class="card">
                 <div class="card-header">Endorsements</div>
                 <div class="card-body">
@@ -123,10 +125,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-xl-6">
             <div class="card">
                 <div class="card-header">Statistics</div>
-                <div class="card-body px-5 d-flex justify-content-between">
+                <div class="card-body px-5 d-block d-lg-flex justify-content-between">
                     <div class="text-center">
                         <h2 style="font-size: 25px">{% now 'F' %} Hours</h2>
                         <h1 style="font-size: 35px">{{ stats.month|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
@@ -142,7 +144,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-xl-6">
             <div class="card">
                 <div class="card-header">Controller Connections</div>
                 <div class="card-body text-center pt-1">

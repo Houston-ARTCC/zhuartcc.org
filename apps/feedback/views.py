@@ -34,5 +34,5 @@ def add_feedback(request):
         return render(request, 'add_feedback.html', {
             'page_title': 'Submit Feedback',
             'controllers': User.objects.filter(status=0),
-            'events': Event.objects.filter(start__gte=timezone.now() - timedelta(days=30)),
+            'events': Event.objects.filter(start__gte=timezone.now() - timedelta(days=30)).filter(hidden=False),
         })

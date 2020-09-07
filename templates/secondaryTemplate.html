@@ -8,12 +8,7 @@
     </head>
     <body>
         <div class="page-wrapper">
-            <nav class="navbar navbar-expand-md navbar-shrink fixed-top">
-                <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-dark.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
-                <ul class="navbar-nav ml-auto navbar-dark">
-                    {% include 'partials/navbar.html' %}
-                </ul>
-            </nav>
+            {% include 'partials/navbar.html' with dark=True %}
 
 
             <!-- START Header -->

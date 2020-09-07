@@ -1,56 +1,74 @@
-<li class="nav-item dropdown ml-5">
-    <a class="nav-link" href="#" data-toggle="dropdown">Events</a>
-    <div class="dropdown-menu mt-3">
-        <a class="dropdown-item" href="{% url 'events' %}">Events</a>
-        <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
-        {% if not request.session.guest %}
-            <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
-        {% endif %}
-        {% if request.session.staff %}
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'new_event' %}">New Event</a>
-            <a class="dropdown-item" href="{% url 'presets' %}">Position Presets</a>
-        {% endif %}
-    </div>
-</li>
-<li class="nav-item dropdown ml-5">
-    <a class="nav-link" href="#" data-toggle="dropdown">Pilots</a>
-    <div class="dropdown-menu mt-3">
-        <a class="dropdown-item" href="{% url 'map' %}">ARTCC Map</a>
-        <a class="dropdown-item" href="https://simcharts.info/" target="_blank">Charts</a>
-        <a class="dropdown-item" href="http://www.flightaware.com/statistics/ifr-route/" target="_blank">Routing</a>
-        <a class="dropdown-item" href="{% url 'scenery' %}">Scenery</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{% url 'feedback' %}">Feedback</a>
-    </div>
-</li>
-<li class="nav-item dropdown ml-5">
-    <a class="nav-link" href="#" data-toggle="dropdown">Controllers</a>
-    <div class="dropdown-menu mt-3">
-        <a class="dropdown-item" href="{% url 'roster' %}">Roster</a>
-        <a class="dropdown-item" href="{% url 'staff' %}">Staff</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{% url 'resources' %}">Resources</a>
-        <a class="dropdown-item" href="{% url 'statistics' %}">Statistics</a>
-    </div>
-</li>
-<li class="nav-item dropdown ml-5">
-    {% if request.session.vatsim_data %}
-        <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
-        <div class="dropdown-menu mt-3">
-            {% if request.session.guest %}
-                <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
-            {% else %}
-                <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
-                <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
-                {% if request.session.staff %}
-                    <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
+{% load static %}
+
+<nav class="navbar navbar-expand-md navbar-shrink fixed-top">
+    <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-logo-gray" src=" {% if dark %}{% static 'img/zhulogo-dark.png' %}{% else %}{% static 'img/zhulogo-light.png' %}{% endif %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
+    <ul class="navbar-nav ml-auto {% if dark %}navbar-dark{% endif %} d-none d-lg-flex">
+        <li class="nav-item dropdown ml-5">
+            <a class="nav-link" href="#" data-toggle="dropdown">Events</a>
+            <div class="dropdown-menu mt-3">
+                <a class="dropdown-item" href="{% url 'events' %}">Events</a>
+                <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
+                {% if not request.session.guest %}
+                    <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
                 {% endif %}
+                {% if request.session.staff %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'new_event' %}">New Event</a>
+                    <a class="dropdown-item" href="{% url 'presets' %}">Position Presets</a>
+                {% endif %}
+            </div>
+        </li>
+        <li class="nav-item dropdown ml-5">
+            <a class="nav-link" href="#" data-toggle="dropdown">Pilots</a>
+            <div class="dropdown-menu mt-3">
+                <a class="dropdown-item" href="{% url 'map' %}">ARTCC Map</a>
+                <a class="dropdown-item" href="https://simcharts.info/" target="_blank">Charts</a>
+                <a class="dropdown-item" href="http://www.flightaware.com/statistics/ifr-route/" target="_blank">Routing</a>
+                <a class="dropdown-item" href="{% url 'scenery' %}">Scenery</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'feedback' %}">Feedback</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown ml-5">
+            <a class="nav-link" href="#" data-toggle="dropdown">Controllers</a>
+            <div class="dropdown-menu mt-3">
+                <a class="dropdown-item" href="{% url 'roster' %}">Roster</a>
+                <a class="dropdown-item" href="{% url 'staff' %}">Staff</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'resources' %}">Resources</a>
+                <a class="dropdown-item" href="{% url 'statistics' %}">Statistics</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown ml-5">
+            {% if request.session.vatsim_data %}
+                <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
+                <div class="dropdown-menu mt-3">
+                    {% if request.session.guest %}
+                        <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
+                        <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
+                        {% if request.session.staff %}
+                            <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
+                        {% endif %}
+                    {% endif %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                </div>
+            {% else %}
+                <a class="nav-link" href="https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1">Log In</a>
             {% endif %}
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
-        </div>
-    {% else %}
-        <a class="nav-link" href="https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1">Log In</a>
-    {% endif %}
-</li>
+        </li>
+    </ul>
+    <div class="nav-hamburger d-block d-lg-none">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</nav>
+<div class="nav">
+    <div class="mobile-nav-content">
+        <ul class="mobile-nav-list">
+        </ul>
+    </div>
+</div>

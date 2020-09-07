@@ -8,23 +8,7 @@
     </head>
     <body>
         <div class="page-wrapper">
-            <nav class="navbar navbar-expand-md navbar-shrink fixed-top">
-                <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-light.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
-                <ul class="navbar-nav ml-auto d-none d-lg-flex">
-                    {% include 'partials/navbar.html' %}
-                </ul>
-            </nav>
-            <div class="float-right d-flex d-lg-none">
-                <div class='nav'>
-                    <div class='nav-content'>
-                        <div class='background'>
-                            <div class='portion'></div>
-                            <div class='portion'></div>
-                            <div class='portion'></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'partials/navbar.html' with dark=False %}
 
 
             <!-- START Header -->
@@ -38,7 +22,6 @@
 
             <!-- START Nav Tabs -->
             <div class="tab-container">
-                <button class="btn btn-light d-flex d-lg-none" id="toggleNavbar">Toggle</button>
                 {% block tabs %}{% endblock %}
             </div>
             <!-- END Nav Tabs -->

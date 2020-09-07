@@ -38,9 +38,8 @@ $(function() {
 })
 
 // Mobile navbar
-$('#toggleNavbar').click(function() {
-    $('.nav').toggleClass('open')
-    $('body').toggleClass('position-fixed')
+$('.nav-hamburger').click(function() {
+    $('body').toggleClass('nav-active')
 })
 
 // Sticky navbar

@@ -79,12 +79,15 @@ def view_mentor_history(request):
     })
 
 
-@require_staff
+@require_member
 def view_training_requests(request):
-    return render(request, 'training_requests.html', {
-        'page_title': 'Training Requests',
-        'requests': TrainingRequest.objects.all().order_by('start'),
-    })
+    if request.session.get('mentor') or request.session.get('staff'):
+        return render(request, 'training_requests.html', {
+            'page_title': 'Training Requests',
+            'requests': TrainingRequest.objects.all().order_by('start'),
+        })
+    else:
+        return HttpResponse(status=403)
 
 
 @require_POST

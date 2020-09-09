@@ -133,25 +133,22 @@ def edit_user(request, cid):
 @require_staff
 @require_POST
 def update_status(request, cid):
-    try:
-        user = User.objects.get(cid=cid)
-        user.status = int(request.POST['status'])
-        if request.POST['status'] == '1':
-            user.loa_until = pytz.utc.localize(datetime.strptime(request.POST['loa_until'], '%Y-%m-%d'))
-            status = 'LOA until ' + request.POST['loa_until']
-        if request.POST['status'] == '2':
-            status = 'inactive'
-        else:
-            status = 'active'
-            user.loa_until = None
-        user.save()
+    user = User.objects.get(cid=cid)
+    user.status = int(request.POST['status'])
+    if request.POST['status'] == '1':
+        user.loa_until = pytz.utc.localize(datetime.strptime(request.POST['loa_until'], '%Y-%m-%d'))
+        status = 'LOA until ' + request.POST['loa_until']
+    if request.POST['status'] == '2':
+        status = 'inactive'
+    else:
+        status = 'active'
+        user.loa_until = None
+    user.save()
 
-        admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'User {user.full_name} set as {status} by {admin.full_name}.').save()
+    admin = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'User {user.full_name} set as {status} by {admin.full_name}.').save()
 
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+    return HttpResponse(status=200)
 
 
 @require_staff
@@ -192,32 +189,26 @@ def remove_users(request):
 @require_staff
 @require_POST
 def add_comment(request, cid):
-    try:
-        user = User.objects.get(cid=cid)
-        user.staff_comment = request.POST['comment']
-        user.staff_comment_author = User.objects.get(cid=request.session['cid'])
-        user.save()
+    user = User.objects.get(cid=cid)
+    user.staff_comment = request.POST['comment']
+    user.staff_comment_author = User.objects.get(cid=request.session['cid'])
+    user.save()
 
-        admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Staff comment for {user.full_name} added by {admin.full_name}.').save()
+    admin = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Staff comment for {user.full_name} added by {admin.full_name}.').save()
 
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+    return redirect(reverse('view_user', args=[user.cid]))
 
 
 @require_staff
 @require_POST
 def remove_comment(request, cid):
-    try:
-        user = User.objects.get(cid=cid)
-        user.staff_comment = None
-        user.staff_comment_author = None
-        user.save()
+    user = User.objects.get(cid=cid)
+    user.staff_comment = None
+    user.staff_comment_author = None
+    user.save()
 
-        admin = User.objects.get(cid=request.session['cid'])
-        ActionLog(action=f'Staff comment for {user.full_name} removed by {admin.full_name}.').save()
+    admin = User.objects.get(cid=request.session['cid'])
+    ActionLog(action=f'Staff comment for {user.full_name} removed by {admin.full_name}.').save()
 
-        return HttpResponse(status=200)
-    except:
-        return HttpResponse('Something was wrong your request!', status=400)
+    return redirect(reverse('view_user', args=[user.cid]))

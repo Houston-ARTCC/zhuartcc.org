@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="beta.zhuartcc.org" uuid="84552c95-b7dc-4886-b5c1-d08b68b45a06">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\miker\Documents\Projects\Houston ARTCC\beta.zhuartcc.org\db.sqlite3</jdbc-url>
+      <driver-properties>
+        <property name="date_string_format" value="yyyy-MM-dd HH:mm:ss.SSS" />
+      </driver-properties>
+    </data-source>
+  </component>
+</project>

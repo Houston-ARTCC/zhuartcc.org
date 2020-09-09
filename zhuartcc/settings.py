@@ -194,3 +194,5 @@ EMAIL_HOST_USER = os.getenv('EMAIL_USERNAME')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+
+ADMINS = [('Webmaster', 'wm@' + os.getenv('WEBSITE_DOMAIN'))]

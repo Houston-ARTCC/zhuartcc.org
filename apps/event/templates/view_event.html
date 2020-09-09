@@ -170,10 +170,12 @@
         {% if allowed_to_signup %}
             $('[data-action="request"]').click(function() {
                 $.post('{% url 'request_position' position_id=0 %}'.replace(/0/, $(this).data('id')))
+                .done(function() { location.reload() })
                 .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
             $('[data-action="unrequest"]').click(function() {
                 $.post('{% url 'unrequest_position' request_id=0 %}'.replace(/0/, $(this).data('id')))
+                .done(function() { location.reload() })
                 .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
         {% endif %}

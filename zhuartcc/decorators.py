@@ -35,7 +35,7 @@ def require_logged_in(function):
 def require_member(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if not request.session.get('guest'):
+        if request.session.get('member'):
             return function(request, *args, **kwargs)
         else:
             return HttpResponse('You must be an active Houston controller to access this endpoint!', status=403)

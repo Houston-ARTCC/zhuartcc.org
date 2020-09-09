@@ -31,7 +31,7 @@
                         <div class="dropdown-menu mt-3">
                             <a class="dropdown-item" href="{% url 'events' %}">Events</a>
                             <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
-                            {% if not request.session.guest %}
+                            {% if request.session.member %}
                                 <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
                             {% endif %}
                             {% if request.session.staff %}
@@ -66,9 +66,7 @@
                         {% if request.session.vatsim_data %}
                             <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
                             <div class="dropdown-menu mt-3">
-                                {% if request.session.guest %}
-                                    <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
-                                {% else %}
+                                {% if request.session.member %}
                                     <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
                                     <a class="dropdown-item" href="https://sites.google.com/view/vzhuids/home">Houston IDS</a>
                                     <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
@@ -77,6 +75,8 @@
                                     {% elif request.session.mentor %}
                                         <a class="dropdown-item" href="{% url 'training_requests' %}">Training Requests</a>
                                     {% endif %}
+                                {% else %}
+                                    <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>

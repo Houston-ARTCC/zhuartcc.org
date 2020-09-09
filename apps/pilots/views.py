@@ -37,7 +37,7 @@ def add_scenery(request):
     )
     scenery.save()
 
-    user = User.objects.get(cid=request.session['cid'])
+    user = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Scenery "{scenery.name}" created by {user.full_name}.').save()
 
     return redirect(reverse('scenery'))
@@ -53,7 +53,7 @@ def edit_scenery(request, scenery_id):
     scenery.payware = True if 'payware' in request.POST else False
     scenery.save()
 
-    user = User.objects.get(cid=request.session['cid'])
+    user = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Scenery "{scenery.name}" modified by {user.full_name}.').save()
 
     return redirect(reverse('scenery'))
@@ -64,7 +64,7 @@ def edit_scenery(request, scenery_id):
 def delete_scenery(request, scenery_id):
     scenery = Scenery.objects.get(id=scenery_id)
 
-    user = User.objects.get(cid=request.session['cid'])
+    user = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Scenery "{scenery.name}" deleted by {user.full_name}.').save()
 
     scenery.delete()

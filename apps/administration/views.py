@@ -34,7 +34,7 @@ def view_transfers(request):
 @require_staff
 def view_announcement(request):
     if request.method == 'POST':
-        admin = User.objects.get(cid=request.session['cid'])
+        admin = User.objects.get(cid=request.session.get('cid'))
         Announcement(
             author=admin,
             subject=request.POST['subject'],
@@ -51,7 +51,7 @@ def view_announcement(request):
 @require_staff
 def view_broadcast(request):
     if request.method == 'POST':
-        admin = User.objects.get(cid=request.session['cid'])
+        admin = User.objects.get(cid=request.session.get('cid'))
         recipients = User.objects.filter(rating__in=request.POST)
 
         if request.POST['main_role'] != 'AC':

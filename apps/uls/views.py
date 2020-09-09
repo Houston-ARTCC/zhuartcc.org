@@ -38,10 +38,12 @@ def login(request):
 
             if user_query.exists() and user_query[0].status != 2:
                 user = User.objects.get(cid=data['cid'])
-                request.session['guest'] = False
+                request.session['member'] = True
                 request.session['staff'] = user.is_staff
                 request.session['mentor'] = user.is_mentor
             elif data['facility']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
+                request.session['member'] = True
+
                 new_user = User(
                     first_name=data['fname'].capitalize(),
                     last_name=data['lname'].capitalize(),
@@ -54,15 +56,8 @@ def login(request):
                 )
                 new_user.save()
                 new_user.assign_initial_cert()
-                ActionLog(action=f'User {new_user.full_name} was created by system.').save()
 
-                request.session['guest'] = False
-                request.session['staff'] = False
-                request.session['mentor'] = False
-            else:
-                request.session['guest'] = True
-                request.session['staff'] = False
-                request.session['mentor'] = False
+                ActionLog(action=f'User {new_user.full_name} was created by system.').save()
         else:
             return HttpResponseServerError()
 

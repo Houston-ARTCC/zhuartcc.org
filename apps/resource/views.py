@@ -33,7 +33,7 @@ def add_resource(request):
     )
     resource.save()
 
-    user = User.objects.get(cid=request.session['cid'])
+    user = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Resource "{resource.name}" created by {user.full_name}.').save()
 
     return redirect(reverse('resources'))
@@ -50,7 +50,7 @@ def edit_resource(request, resource_id):
         resource.path = request.FILES['file']
     resource.save()
 
-    user = User.objects.get(cid=request.session['cid'])
+    user = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Resource "{resource.name}" modified by {user.full_name}.').save()
 
     return redirect(reverse('resources'))
@@ -62,7 +62,7 @@ def edit_resource(request, resource_id):
 def delete_resource(request, resource_id):
     resource = Resource.objects.get(id=resource_id)
 
-    user = User.objects.get(cid=request.session['cid'])
+    user = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Resource "{resource.name}" deleted by {user.full_name}.').save()
 
     resource.delete()

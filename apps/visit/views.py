@@ -92,7 +92,7 @@ def accept_visiting_request(request, visit_id):
         new_user.assign_initial_cert()
         new_user.save()
 
-    admin = User.objects.get(cid=request.session['cid'])
+    admin = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'{visiting_request.full_name}\'s visiting request was accepted by {admin.full_name}.').save()
 
     context = {
@@ -116,7 +116,7 @@ def accept_visiting_request(request, visit_id):
 def reject_visiting_request(request, visit_id):
     visiting_request = Visit.objects.get(id=visit_id)
 
-    admin = User.objects.get(cid=request.session['cid'])
+    admin = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'{visiting_request.full_name}\'s visiting request was rejected by {admin.full_name}.').save()
 
     context = {

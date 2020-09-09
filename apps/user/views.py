@@ -9,7 +9,6 @@ from django.core.mail import send_mail
 from django.db.models import Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.conf import settings
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -123,7 +122,7 @@ def edit_user(request, cid):
         user.ocn_cert = int(post['ocn_cert'])
         user.save()
 
-        admin = User.objects.get(cid=request.session['cid'])
+        admin = User.objects.get(cid=request.session.get('cid'))
         ActionLog(action=f'User {user.full_name} modified by {admin.full_name}.').save()
         return redirect(reverse('roster'))
 
@@ -145,7 +144,7 @@ def update_status(request, cid):
         user.loa_until = None
     user.save()
 
-    admin = User.objects.get(cid=request.session['cid'])
+    admin = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'User {user.full_name} set as {status} by {admin.full_name}.').save()
 
     return HttpResponse(status=200)
@@ -180,7 +179,7 @@ def remove_users(request):
                 html_message=render_to_string('emails/roster_removal.html', {'user': user}),
             )
 
-            admin = User.objects.get(cid=request.session['cid'])
+            admin = User.objects.get(cid=request.session.get('cid'))
             ActionLog(action=f'User {user.full_name} set to inactive by {admin.full_name}.').save()
 
     return HttpResponse(status=200)
@@ -191,10 +190,10 @@ def remove_users(request):
 def add_comment(request, cid):
     user = User.objects.get(cid=cid)
     user.staff_comment = request.POST['comment']
-    user.staff_comment_author = User.objects.get(cid=request.session['cid'])
+    user.staff_comment_author = User.objects.get(cid=request.session.get('cid'))
     user.save()
 
-    admin = User.objects.get(cid=request.session['cid'])
+    admin = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Staff comment for {user.full_name} added by {admin.full_name}.').save()
 
     return redirect(reverse('view_user', args=[user.cid]))
@@ -208,7 +207,7 @@ def remove_comment(request, cid):
     user.staff_comment_author = None
     user.save()
 
-    admin = User.objects.get(cid=request.session['cid'])
+    admin = User.objects.get(cid=request.session.get('cid'))
     ActionLog(action=f'Staff comment for {user.full_name} removed by {admin.full_name}.').save()
 
     return redirect(reverse('view_user', args=[user.cid]))

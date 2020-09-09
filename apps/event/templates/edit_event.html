@@ -256,6 +256,11 @@
         $('[data-action="add-position"]').click(function() {
             addPosition($(this).parent().find('.position-input').val())
         })
+        $('select').change(function() {
+            $.post('{% url 'assign_position' request_id=0 %}'.replace(/0/, $(this).val()))
+                .done(function() { location.reload() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+        })
         function addPosition(pos) {
             $.post('{% url 'add_position' event_id=event.id %}', {position: pos})
             .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })

@@ -102,7 +102,7 @@
                                     <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
                                 </div>
                                 <b>{{ position.name }}</b>
-                                <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
+                                <select class="selectpicker show-tick" title="Select Controller ({{ position.requests.all|length }} Request{{ position.requests.all|length|pluralize }})" data-width="100%">
                                     {% if position.user %}
                                         <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
                                             {% if position.user.event_score >= 90 %}badge-success
@@ -144,7 +144,7 @@
                                     <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
                                 </div>
                                 <b>{{ position.name }}</b>
-                                <select class="selectpicker show-tick" title="Select Controller" data-width="100%">
+                                <select class="selectpicker show-tick" title="Select Controller ({{ position.requests.all|length }} Request{{ position.requests.all|length|pluralize }})" data-width="100%">
                                     {% if position.user %}
                                         <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
                                             {% if position.user.event_score >= 90 %}badge-success
@@ -186,7 +186,7 @@
                                     <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
                                 </div>
                                 <b>{{ position.name }}</b>
-                                <select data-action="assign" class="selectpicker show-tick" title="Select Controller" data-width="100%">
+                                <select data-action="assign" class="selectpicker show-tick" title="Select Controller ({{ position.requests.all|length }} Request{{ position.requests.all|length|pluralize }})" data-width="100%">
                                     {% if position.user %}
                                         <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
                                             {% if position.user.event_score >= 90 %}badge-success

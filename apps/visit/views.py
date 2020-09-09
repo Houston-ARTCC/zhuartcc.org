@@ -1,3 +1,5 @@
+import os
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
@@ -17,16 +19,17 @@ from zhuartcc.decorators import require_logged_in, require_staff
 @require_logged_in
 def submit_visiting_request(request):
     if request.method == 'POST':
-        try:
-            post = request.POST
+        if User.objects.filter(cid=request.POST.get('cid')).exclude(status=2).exists():
+            return HttpResponse('You are already a controller at Houston!', status=403)
+        else:
             visiting_request = Visit(
-                cid=int(post['cid']),
-                rating=post['rating'],
-                home_facility=post['home_facility'],
-                first_name=post['first_name'],
-                last_name=post['last_name'],
-                email=post['email'],
-                reason=post['reason'],
+                cid=int(request.POST.get('cid')),
+                rating=request.POST.get('rating'),
+                home_facility=request.POST.get('home_facility'),
+                first_name=request.POST.get('first_name'),
+                last_name=request.POST.get('last_name'),
+                email=request.POST.get('email'),
+                reason=request.POST.get('reason'),
                 submitted=timezone.now(),
             )
             visiting_request.save()
@@ -43,8 +46,6 @@ def submit_visiting_request(request):
             )
 
             return redirect(reverse('home'))
-        except:
-            return HttpResponse('Something was wrong your request!', status=400)
 
     return render(request, 'visit.html', {'page_title': 'Visit Houston'})
 

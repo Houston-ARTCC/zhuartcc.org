@@ -162,6 +162,8 @@ def request_position(request, position_id):
     user = User.objects.get(cid=request.session['cid'])
     if user.prevent_event_signup:
         return HttpResponse('You are not allowed to sign up for events!', status=403)
+    elif EventPositionRequest.objects.filter(user=user).filter(position_id=position_id).exists():
+        return HttpResponse('You already requested this position!', status=403)
     else:
         EventPositionRequest(
             position=EventPosition.objects.get(id=position_id),

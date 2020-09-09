@@ -14,7 +14,6 @@ from ..user.updater import assign_oper_init
 
 
 def login(request):
-    print(request.headers)
     # Checks if user has a token from VATUSA
     if request.GET.get('token'):
         raw_token = request.GET.get('token')

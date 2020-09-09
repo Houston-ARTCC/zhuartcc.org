@@ -19,7 +19,7 @@ def start():
 # Pulls the roster from VATUSA API and adds new members to local database. Updates emails and ratings of existing users
 def update_roster():
     roster = requests.get(
-        'https://api.vatusa.net/v2/facility/ZHU/roster',
+        f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster',
         params={'apikey': os.getenv('API_KEY')},
     ).json()
     del roster['testing']

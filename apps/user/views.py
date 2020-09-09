@@ -1,4 +1,5 @@
 import calendar
+import os
 from itertools import groupby
 
 import requests
@@ -168,7 +169,7 @@ def remove_users(request):
         if id != 'csrfmiddlewaretoken':
             user = User.objects.get(id=id)
             if user.main_role == 'HC':
-                requests.delete(f'https://api.vatusa.net/v2/facility/ZHU/roster/{user.cid}')
+                requests.delete(f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster/{user.cid}')
             user.status = 2
             user.save()
             send_mail(

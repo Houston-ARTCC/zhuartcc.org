@@ -18,14 +18,12 @@ def view_statistics(request):
         total=Sum('duration'),
     )
     main_users = [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC').order_by('first_name')]
-    mvap_users = [return_hour_aggregate(user) for user in User.objects.filter(main_role='MC').order_by('first_name')]
     months = [calendar.month_name[now.month - 2], calendar.month_name[now.month - 1], calendar.month_name[now.month]]
 
     return render(request, 'statistics.html', {
         'page_title': 'Statistics',
         'main_stats': main_stats,
         'main_users': main_users,
-        'mvap_users': mvap_users,
         'months': months,
     })
 

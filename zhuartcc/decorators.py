@@ -25,7 +25,7 @@ def require_mentor(function):
 def require_logged_in(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if request.session.get('vatsim-data'):
+        if request.session.get('vatsim_data'):
             return function(request, *args, **kwargs)
         else:
             return HttpResponse('You must be logged in to access this endpoint!', status=403)

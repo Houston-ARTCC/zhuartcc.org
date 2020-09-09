@@ -70,7 +70,7 @@ def view_broadcast(request):
                     'message': request.POST['message'],
                     'sender': admin.full_name
                 }),
-                'no-reply@zhuartcc.org',
+                os.getenv('NO_REPLY'),
                 [recipient.email],
             ) for recipient in recipients
         )

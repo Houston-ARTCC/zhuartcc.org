@@ -66,7 +66,7 @@ def warn_inactive_users():
         send_mail(
             'Controller Activity Warning',
             render_to_string('emails/activity_warning.txt', context),
-            'no-reply@zhuartcc.org',
+            os.getenv('NO_REPLY'),
             [aggregate['user_obj'].email],
             html_message=render_to_string('emails/activity_warning.html', context),
         )

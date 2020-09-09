@@ -37,7 +37,7 @@ def submit_visiting_request(request):
             send_mail(
                 '[vZHU] We have received your visiting request!',
                 render_to_string('emails/visiting_request_received.txt', context),
-                'no-reply@zhuartcc.org',
+                os.getenv('NO_REPLY'),
                 [visiting_request.email],
                 html_message=render_to_string('emails/visiting_request_received.html', context),
             )
@@ -101,7 +101,7 @@ def accept_visiting_request(request, visit_id):
     send_mail(
         '[vZHU] Welcome to the Houston ARTCC!',
         render_to_string('emails/visiting_request_accepted.txt', context),
-        'no-reply@zhuartcc.org',
+        os.getenv('NO_REPLY'),
         [visiting_request.email],
         html_message=render_to_string('emails/visiting_request_accepted.html', context),
     )
@@ -126,7 +126,7 @@ def reject_visiting_request(request, visit_id):
     send_mail(
         '[vZHU] Your Houston ARTCC Visiting Request...',
         render_to_string('emails/visiting_request_rejected.txt', context),
-        'no-reply@zhuartcc.org',
+        os.getenv('NO_REPLY'),
         [visiting_request.email],
         html_message=render_to_string('emails/visiting_request_rejected.html', context),
     )

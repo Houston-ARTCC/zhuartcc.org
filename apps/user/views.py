@@ -175,7 +175,7 @@ def remove_users(request):
             send_mail(
                 'Roster Removal Notification',
                 render_to_string('emails/roster_removal.txt', {'user': user}),
-                'no-reply@zhuartcc.org',
+                os.getenv('NO_REPLY'),
                 [user.email],
                 html_message=render_to_string('emails/roster_removal.html', {'user': user}),
             )

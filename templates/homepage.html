@@ -4,90 +4,11 @@
 <!DOCTYPE HTML>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta name="description" content="Virtual Houston ARTCC">
-        <meta name="keywords" content="VATSIM,VATUSA,ZHU,Houston,Austin,New Orleans,Houston ARTCC,Virtual ATC">
-        <meta name="author" content="Michael Romashov">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <title>Welcome to Houston ARTCC!</title>
-        <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
-
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
-        <link rel="stylesheet" href="{% static 'css/index.css' %}">
-
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        {% include 'partials/head.html' %}
     </head>
     <body>
         <div class="home-wrapper">
-            <!-- START Navbar -->
-            <nav class="navbar navbar-expand-md navbar-shrink fixed-top">
-                <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-logo-gray" src="{% static 'img/zhulogo-light.png' %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown ml-5">
-                        <a class="nav-link" href="#" data-toggle="dropdown">Events</a>
-                        <div class="dropdown-menu mt-3">
-                            <a class="dropdown-item" href="{% url 'events' %}">Events</a>
-                            <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
-                            {% if request.session.member %}
-                                <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
-                            {% endif %}
-                            {% if request.session.staff %}
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% url 'new_event' %}">New Event</a>
-                                <a class="dropdown-item" href="{% url 'presets' %}">Position Presets</a>
-                            {% endif %}
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown ml-5">
-                        <a class="nav-link" href="#" data-toggle="dropdown">Pilots</a>
-                        <div class="dropdown-menu mt-3">
-                            <a class="dropdown-item" href="{% url 'map' %}">ARTCC Map</a>
-                            <a class="dropdown-item" href="https://simcharts.info/" target="_blank">Charts</a>
-                            <a class="dropdown-item" href="http://www.flightaware.com/statistics/ifr-route/" target="_blank">Routing</a>
-                            <a class="dropdown-item" href="{% url 'scenery' %}">Scenery</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'feedback' %}">Feedback</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown ml-5">
-                        <a class="nav-link" href="#" data-toggle="dropdown">Controllers</a>
-                        <div class="dropdown-menu mt-3">
-                            <a class="dropdown-item" href="{% url 'roster' %}">Roster</a>
-                            <a class="dropdown-item" href="{% url 'staff' %}">Staff</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'resources' %}">Resources</a>
-                            <a class="dropdown-item" href="{% url 'statistics' %}">Statistics</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown ml-5">
-                        {% if request.session.vatsim_data %}
-                            <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
-                            <div class="dropdown-menu mt-3">
-                                {% if request.session.member %}
-                                    <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
-                                    <a class="dropdown-item" href="https://sites.google.com/view/vzhuids/home">Houston IDS</a>
-                                    <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
-                                    {% if request.session.staff %}
-                                        <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
-                                    {% elif request.session.mentor %}
-                                        <a class="dropdown-item" href="{% url 'training_requests' %}">Training Requests</a>
-                                    {% endif %}
-                                {% else %}
-                                    <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
-                                {% endif %}
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
-                            </div>
-                        {% else %}
-                            <a class="nav-link" href="https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1">Log In</a>
-                        {% endif %}
-                    </li>
-                </ul>
-            </nav>
-            <!-- END Navbar -->
+            {% include 'partials/navbar.html' with dark=False %}
 
 
             <!-- START Page Content -->
@@ -242,24 +163,9 @@
             <!-- END Page Content -->
 
 
-            <footer class="bg-secondary">
-                <p class="mb-1"><b>Copyright &copy; 2020 Virtual Houston ARTCC. All rights reserved.</b></p>
-                <p class="mb-1">All information on this website is for flight simulation use only and is not to be used for real world navigation or flight. This site is not affiliated with ICAO, the FAA, the actual Houston ARTCC, or any other real world aerospace entity.</p>
-                <p class="float-right"><b><a class="text-danger" href="https://github.com/MikeRomaa/zhuartcc.org/issues" target="_blank"><i class="far fa-bug"></i> Report a bug</a></b></p>
-                <p class="mb-1"><b>
-                    <a href="https://vatsim.net" target="_blank">VATSIM</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
-                    <a href="https://vatusa.net" target="_blank">VATUSA</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
-                    <a href="{% url 'privacy' %}">Privacy Policy</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
-                    <a href="{% url 'feedback' %}">Feedback</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
-                    <a href="http://discord.gg/Ag2cdZz" target="_blank">Discord</a>&nbsp; <i class="fas fa-angle-right"></i>&nbsp;
-                    <a href="https://github.com/MikeRomaa/zhuartcc.org" target="_blank">GitHub</a>
-                </b></p>
-            </footer>
+            {% include 'partials/footer.html' %}
         </div>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script src="{% static 'js/index.js' %}"></script>
+        {% include 'partials/scripts.html' %}
         <script>
             $('#weather, #pilots').hide()
             $('[data-action="announcement"]').click(function() {

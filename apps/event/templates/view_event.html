@@ -2,12 +2,12 @@
 {% load filters %}
 
 {% block header %}
-    <div class="text-left text-lg-right float-none float-lg-right">
+    <div class="text-left text-lg-right float-none float-lg-right ml-lg-5">
         <h1 style="font-size: 65px" id="countdown">N/A</h1>
         <h2 style="font-size: 40px" id="countdown-sub">Until Event</h2>
     </div>
     <h1 style="font-size: 65px">{{ event.name }}</h1>
-    <h2 style="font-size: 40px">{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
+    <h2 style="font-size: 40px">{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
 {% endblock %}
 
 {% block body %}

@@ -3,7 +3,7 @@
 
 {% block header %}
     <h1 style="font-size: 65px">{{ session.get_level_display }} Session</h1>
-    <h2 style="font-size: 40px">{{ session.start|date:'M j, Y @ Hi\z' }}
+    <h2 style="font-size: 40px">{{ session.start|date:'M j, Y @ Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ session.end|date:'Hi\z' }}
     <span class="badge badge-md
         {% if session.status == 0 %}badge-info
         {% elif session.status == 1 %}badge-success
@@ -14,15 +14,30 @@
 {% endblock %}
 
 {% block body %}
-    <h3>Position</h3>
-    <p>{{ session.position }}</p>
-    <h3>Type</h3>
-    <p>{{ session.get_type_display }}</p>
-    <h3>Instructor</h3>
-    <p>{{ session.instructor.full_name }}</p>
-    <h3>Duration</h3>
-    <p>{{ session.duration|duration }}</p>
-    {% if session.session_notes %}
-        <embed src="{{ session.session_notes.url }}" width="100%" height="600px" type="application/pdf">
+    <div class="row">
+        <div class="col-12 col-lg">
+            <div class="row">
+                <div class="col-lg">
+                    <h3>Position</h3>
+                    <p>{{ session.position }}</p>
+                    <h3>Type</h3>
+                    <p>{{ session.get_type_display }}</p>
+                </div>
+                <div class="col-lg">
+                    <h3>Instructor</h3>
+                    <p>{{ session.instructor.full_name }}</p>
+                    <h3>Duration</h3>
+                    <p>{{ session.duration|duration }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg">
+            <h3>Session Notes</h3>
+            <p>{{ session.session_notes|safe|default:'No notes provided.' }}</p>
+        </div>
+    </div>
+    {% if session.session_file %}
+        <hr>
+        <embed src="{{ session.session_file.url }}" width="100%" height="1000px" type="application/pdf">
     {% endif %}
 {% endblock %}

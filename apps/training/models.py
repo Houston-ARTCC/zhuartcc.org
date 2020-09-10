@@ -35,7 +35,8 @@ class TrainingSession(models.Model):
     type = models.IntegerField(choices=TYPES)
     level = models.IntegerField(choices=LEVELS)
     status = models.IntegerField(default=0, choices=STATUSES)
-    session_notes = models.FileField(upload_to='training/', null=True, blank=True)
+    session_notes = models.TextField(null=True, blank=True)
+    session_file = models.FileField(upload_to='training/', null=True, blank=True)
 
     @property
     def duration(self):

@@ -60,7 +60,7 @@ def request_training(request):
     else:
         return render(request, 'request_training.html', {
             'page_title': 'Request Training',
-            'events': Event.objects.all(),
+            'events': Event.objects.all().filter(hidden=False),
             'sessions': TrainingSession.objects.all(),
             'types': TrainingRequest._meta.get_field('type').choices,
             'levels': TrainingRequest._meta.get_field('level').choices,
@@ -93,7 +93,6 @@ def view_training_requests(request):
 @require_POST
 @require_mentor
 def accept_training_request(request, request_id):
-    print(request.POST)
     training_request = TrainingRequest.objects.get(id=request_id)
     admin = User.objects.get(cid=request.session.get('cid'))
     TrainingSession(

@@ -8,13 +8,21 @@ from django.urls import reverse
 
 from zhuartcc.overrides import send_mass_html_mail
 from .models import ActionLog, Announcement
+from ..training.models import TrainingRequest
 from ..user.models import User
 from zhuartcc.decorators import require_staff
+from ..visit.models import Visit
 
 
 @require_staff
 def view_admin_panel(request):
-    return render(request, 'admin_panel.html', {'page_title': 'Admin Panel'})
+    return render(request, 'admin_panel.html', {
+        'page_title': 'Admin Panel',
+        'notifications': {
+            'visit': Visit.objects.all().count(),
+            'training': TrainingRequest.objects.all().count()
+        }
+    })
 
 
 @require_staff

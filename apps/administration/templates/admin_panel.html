@@ -10,7 +10,7 @@
                 <div class="card-body text-center">
                     <button class="btn btn-secondary">Find User</button>
                     <a href="{% url 'roster_tidy' %}"><button class="btn btn-secondary">Roster Tidy</button></a>
-                    <a href="{% url 'visit_requests' %}"><button class="btn btn-secondary">Visiting Requests</button></a>
+                    <a href="{% url 'visit_requests' %}"><button class="btn btn-secondary">Visiting Requests</button> {% if notifications.visit %}<div class="notification">{{ notifications.visit }}</div>{% endif %}</a>
                     <a href="{% url 'transfer_requests' %}"><button class="btn btn-secondary">Transfer Requests</button></a>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                     <h5 class="mb-0">Training Management</h5>
                 </div>
                 <div class="card-body text-center">
-                    <a href="{% url 'training_requests' %}"><button class="btn btn-secondary">Training Requests</button></a>
+                    <a href="{% url 'training_requests' %}"><button class="btn btn-secondary">Training Requests</button> {% if notifications.training %}<div class="notification">{{ notifications.training }}</div>{% endif %}</a>
                     <a href="{% url 'mentor_history' %}"><button class="btn btn-secondary">Mentor History</button></a>
                 </div>
             </div>

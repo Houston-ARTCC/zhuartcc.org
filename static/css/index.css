@@ -139,6 +139,7 @@ a, a div {
 }
 a {
     color: #329ed6;
+    position: relative;
 }
 a:hover, a:hover div {
     opacity: 75%;
@@ -232,6 +233,17 @@ a:hover {
 }
 .tui-full-calendar-popup-detail .tui-full-calendar-popup-container {
     min-width: 350px!important;
+}
+.notification {
+    font: 12px Gilroy-ExtraBold, Helvetica, sans-serif;
+    color: white;
+    text-align: right;
+    background-color: #dc3545;
+    position: absolute;
+    top: -13px;
+    right: 5px;
+    padding: 4px 8px;
+    border-radius: 50px;
 }
 
 

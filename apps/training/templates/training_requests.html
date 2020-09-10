@@ -46,7 +46,7 @@
             launchCustomModal(
                 'info',
                 'Scheduling Training Session with ' + $(this).data('name'),
-                `<form id="${'{% url 'accept_training' request_id=0 %}'.replace(/0/, $(this).data('id'))}">
+                `<form action="${'{% url 'accept_training' request_id=0 %}'.replace(/0/, $(this).data('id'))}" method="POST">
                     {% csrf_token %}
                     <p>Drag the slider to set the start and end times for the training session. The limits are automatically set to what the student indicated as their availability.</p>
                     <input name="start" id="start" type="datetime-local" hidden>
@@ -89,7 +89,8 @@
             launchCustomModal(
                 'info',
                 `Reject ${$(this).data('name')}'s Training Request?`,
-                `<form id="${'{% url 'reject_training' request_id=0 %}'.replace(/0/, $(this).data('id'))}">
+                `<form action="${'{% url 'reject_training' request_id=0 %}'.replace(/0/, $(this).data('id'))}" method="POST">
+                    {% csrf_token %}
                     <p>Are you sure you would like to reject this training request? This action cannot be undone!</p>
                     <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-primary">Confirm</button>

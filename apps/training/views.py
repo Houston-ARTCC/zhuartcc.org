@@ -28,8 +28,8 @@ def view_training_center(request):
 
 
 @require_member
-def view_session(request, id):
-    session = TrainingSession.objects.get(id=id)
+def view_session(request, session_id):
+    session = TrainingSession.objects.get(id=session_id)
     if (
             request.session.get('cid') == session.student.cid
             or request.session.get('mentor') or request.session.get('staff')
@@ -92,9 +92,9 @@ def view_training_requests(request):
 
 @require_POST
 @require_staff
-def accept_training_request(request, id):
+def accept_training_request(request, request_id):
     print(request.POST)
-    training_request = TrainingRequest.objects.get(id=id)
+    training_request = TrainingRequest.objects.get(id=request_id)
     admin = User.objects.get(cid=request.session.get('cid'))
     TrainingSession(
         student=training_request.student,
@@ -113,8 +113,8 @@ def accept_training_request(request, id):
 
 @require_POST
 @require_staff
-def reject_training_request(request, id):
-    training_request = TrainingRequest.objects.get(id=id)
+def reject_training_request(request, request_id):
+    training_request = TrainingRequest.objects.get(id=request_id)
     admin = User.objects.get(cid=request.session.get('cid'))
 
     ActionLog(action=f'{admin.full_name} rejected {training_request.student.full_name}\'s training request.').save()
@@ -124,8 +124,8 @@ def reject_training_request(request, id):
 
 
 @require_POST
-def cancel_training_request(request, id):
-    training_request = TrainingRequest.objects.get(id=id)
+def cancel_training_request(request, request_id):
+    training_request = TrainingRequest.objects.get(id=request_id)
     user = User.objects.get(cid=request.session.get('cid'))
     if user == training_request.student:
         training_request.delete()

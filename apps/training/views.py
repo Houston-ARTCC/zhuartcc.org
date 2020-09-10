@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from zhuartcc.decorators import require_member, require_staff
+from zhuartcc.decorators import require_member, require_mentor
 from .models import TrainingSession, TrainingRequest
 from ..administration.models import ActionLog
 from ..event.models import Event
@@ -67,7 +67,7 @@ def request_training(request):
         })
 
 
-@require_staff
+@require_mentor
 def view_mentor_history(request):
     mentors = User.objects.filter(training_role__in=['MTR', 'INS'])
     return render(request, 'mentor_history.html', {
@@ -91,7 +91,7 @@ def view_training_requests(request):
 
 
 @require_POST
-@require_staff
+@require_mentor
 def accept_training_request(request, request_id):
     print(request.POST)
     training_request = TrainingRequest.objects.get(id=request_id)
@@ -112,7 +112,7 @@ def accept_training_request(request, request_id):
 
 
 @require_POST
-@require_staff
+@require_mentor
 def reject_training_request(request, request_id):
     training_request = TrainingRequest.objects.get(id=request_id)
     admin = User.objects.get(cid=request.session.get('cid'))

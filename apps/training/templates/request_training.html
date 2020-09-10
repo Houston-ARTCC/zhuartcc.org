@@ -35,6 +35,7 @@
     <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
     <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <script>
         let cal = null
         let dateOptions = {year: 'numeric', month: 'long', day: '2-digit'}
@@ -49,6 +50,22 @@
                 defaultView: 'week',
                 taskView: false,
                 useDetailPopup: true,
+                template: {
+                    popupDetailDate: function(isAllDay, start, end) {
+                        start = moment(start.toDate())
+                        end = moment(end.toDate())
+                        let start_utc = start.add(start.utcOffset(), 'm')
+                        let end_utc = end.add(end.utcOffset(), 'm')
+                        let isSameDate = start_utc.date() === end_utc.date()
+                        let endFormat = (isSameDate ? '' : 'MMM DD, YYYY ') + 'HHmm[z]'
+
+                        if (isAllDay) {
+                            return moment(start_utc).format('MMM DD, YYYY') + (isSameDate ? '' : ' - ' + moment(end_utc).format('MMM DD, YYYY'))
+                        }
+
+                        return (moment(start_utc).format('MMM DD, YYYY @ HHmm[z]') + ' - ' + moment(end_utc).format(endFormat))
+                    },
+                },
                 theme: {
                     'week.today.backgroundColor': 'rgba(221, 132, 37, 0.05)',
                     'week.currentTime.color': '#dd8425',

@@ -51,6 +51,7 @@
                     'info',
                     `Reject ${$this.data('name')}'s Visiting Request?`,
                     `<form action="${'{% url 'reject_visit' visit_id=0 %}'.replace(/0/, $this.data('id'))}" method="POST">
+                        {% csrf_token %}
                         <div class="label-group">
                             <textarea name="reason" rows="2" required></textarea>
                             <label>Reason for Rejection</label>

@@ -1,0 +1,118 @@
+{% extends 'mainTemplate.html' %}
+{% load filters %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.css">
+{% endblock %}
+
+
+{% block body %}
+    <div id="calendar-menu" class="text-center">
+        <button class="btn" data-action="prev" style="font-size: 20px">
+            <i class="fas fa-angle-left"></i>
+        </button>
+        <button class="btn" data-action="today" style="font-size: 20px">Today</button>
+        <button class="btn" data-action="next" style="font-size: 20px">
+            <i class="fas fa-angle-right"></i>
+        </button>
+    </div>
+    <p class="text-center" id="calendar-range"></p>
+
+    <div id="calendar" style="height: 800px"></div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>>
+    <script>
+        var cal = null
+        function setRange() {
+            $('#calendar-range').html('<b>' + cal.getDate().toDate().toLocaleString('default', {month: 'long', year: 'numeric'}) + '</b>')
+        }
+        $(function() {
+            cal = new tui.Calendar(document.getElementById('calendar'), {
+                defaultView: 'month',
+                isReadOnly: true,
+                taskView: false,
+                useDetailPopup: true,
+                template: {
+                },
+                timezones: [{
+                    timezoneOffset: 0,
+                    displayLabel: 'UTC',
+                    tooltip: 'UTC'
+                },
+                {
+                    timezoneOffset: -new Date().getTimezoneOffset(),
+                    displayLabel: 'Local',
+                    tooltip: 'Local'
+                }],
+                calendars: [
+                    {
+                        id: '1',
+                        name: 'Events',
+                        color: '#ffffff',
+                    },
+                    {
+                        id: '2',
+                        name: 'Training',
+                        color: '#ffffff',
+                    }
+                ]
+            })
+            setRange()
+            cal.createSchedules([
+                {% for event in events %}
+                    {
+                        id: '{{ event.id }}',
+                        calendarId: '1',
+                        title: '{{ event.name }}',
+                        body: '{{ event.description|escape|linebreaksbr }}',
+                        location: '{{ event.host }}',
+                        category: 'time',
+                        isReadOnly: true,
+                        bgColor: '#2d45a2',
+                        borderColor: '#091a6d',
+                        start: '{{ event.start|to_iso_format }}',
+                        end: '{{ event.end|to_iso_format }}',
+                    },
+                {% endfor %}
+                {% for session in sessions %}
+                    {
+                        id: '{{ session.id }}',
+                        calendarId: '2',
+                        title: '{{ session.student.full_name }}\'s {{ session.get_type_display }} Session',
+                        category: 'time',
+                        attendees: ['{{ session.student.full_name }}', '{{ session.instructor.full_name }}'],
+                        isReadOnly: true,
+                        bgColor: '#dd8425',
+                        borderColor: '#c6720b',
+                        start: '{{ session.start|to_iso_format }}',
+                        end: '{{ session.end|to_iso_format }}',
+                    },
+                {% endfor %}
+            ])
+        })
+        $('#calendar-menu button').click(function() {
+            switch ($(this).data('action')) {
+                case 'prev':
+                    cal.prev()
+                    break
+                case 'today':
+                    cal.today()
+                    break
+                case 'next':
+                    cal.next()
+                    break
+            }
+            setRange()
+        })
+    </script>
+{% endblock %}

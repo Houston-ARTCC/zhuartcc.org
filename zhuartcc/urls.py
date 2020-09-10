@@ -93,6 +93,7 @@ urlpatterns = [
     # Views
     path('', views.view_homepage, name='home'),
     path('privacy/', views.view_privacy_policy, name='privacy'),
+    path('calendar/', views.view_calendar, name='calendar'),
 
     # Visit
     path('visit/', visit.submit_visiting_request, name='visit'),

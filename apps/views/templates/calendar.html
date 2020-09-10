@@ -47,8 +47,8 @@
                 template: {
                     popupDetailDate: function(isAllDay, start, end) {
                         let tz = moment.tz.guess()
-                        start = moment(start.toDate()).tz(tz).utc()
-                        end = moment(end.toDate()).tz(tz).utc()
+                        start = moment(start.toDate()).tz(tz)
+                        end = moment(end.toDate()).tz(tz)
                         let isSameDate = start.date() === end.date()
                         if (isAllDay) {
                             return moment(start).format('MMM DD, YYYY') + (isSameDate ? '' : ' <i class="far fa-sm fa-long-arrow-right"></i> ' + moment(end).format('MMM DD, YYYY'))
@@ -59,10 +59,6 @@
                 },
                 timezones: [
                     {
-                        timezoneOffset: -new Date().getTimezoneOffset(),
-                        displayLabel: 'Local',
-                        tooltip: 'Local'
-                    }, {
                         timezoneOffset: 0,
                         displayLabel: 'UTC',
                         tooltip: 'UTC'

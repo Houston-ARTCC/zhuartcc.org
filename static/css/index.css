@@ -245,6 +245,9 @@ a:hover {
     padding: 4px 8px;
     border-radius: 50px;
 }
+.tui-full-calendar-weekday-grid-date-decorator {
+    background-color: #091a6d!important;
+}
 
 
 /*

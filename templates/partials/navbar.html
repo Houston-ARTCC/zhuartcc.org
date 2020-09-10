@@ -35,6 +35,7 @@
                 <a class="dropdown-item" href="{% url 'roster' %}">Roster</a>
                 <a class="dropdown-item" href="{% url 'staff' %}">Staff</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="https://sites.google.com/view/vzhuids/home">Houston IDS</a>
                 <a class="dropdown-item" href="{% url 'resources' %}">Resources</a>
                 <a class="dropdown-item" href="{% url 'statistics' %}">Statistics</a>
             </div>
@@ -45,7 +46,6 @@
                 <div class="dropdown-menu mt-3">
                     {% if request.session.member %}
                         <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
-                        <a class="dropdown-item" href="https://sites.google.com/view/vzhuids/home">Houston IDS</a>
                         <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
                         {% if request.session.staff %}
                             <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>

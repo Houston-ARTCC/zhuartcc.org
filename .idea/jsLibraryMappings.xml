@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{all, animate.css, bootstrap, bootstrap-datepicker, bootstrap-select, cropperjs, datatables, jquery-3.5.1, jquery-cropper, jquery-ui, jquery.dataTables, mapbox-gl, moment, popper.js, quill, quill.snow, tui-calendar, tui-code-snippet, tui-date-picker, tui-dom, tui-time-picker}" />
+    <file url="file://$PROJECT_DIR$" libraries="{all, animate.css, bootstrap, bootstrap-datepicker, bootstrap-select, cropperjs, datatables, jquery-3.5.1, jquery-cropper, jquery-ui, jquery.dataTables, mapbox-gl, moment, moment-timezone, moment-timezone-with-data, popper.js, quill, quill.snow, tui-calendar, tui-code-snippet, tui-date-picker, tui-dom, tui-time-picker}" />
   </component>
 </project>

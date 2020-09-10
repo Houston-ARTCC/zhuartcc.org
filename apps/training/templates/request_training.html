@@ -36,6 +36,7 @@
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
     <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
     <script>
         let cal = null
         let dateOptions = {year: 'numeric', month: 'long', day: '2-digit'}
@@ -52,18 +53,15 @@
                 useDetailPopup: true,
                 template: {
                     popupDetailDate: function(isAllDay, start, end) {
-                        start = moment(start.toDate())
-                        end = moment(end.toDate())
-                        let start_utc = start.add(start.utcOffset(), 'm')
-                        let end_utc = end.add(end.utcOffset(), 'm')
-                        let isSameDate = start_utc.date() === end_utc.date()
-                        let endFormat = (isSameDate ? '' : 'MMM DD, YYYY ') + 'HHmm[z]'
-
+                        let tz = moment.tz.guess()
+                        start = moment(start.toDate()).tz(tz).utc()
+                        end = moment(end.toDate()).tz(tz).utc()
+                        let isSameDate = start.date() === end.date()
                         if (isAllDay) {
-                            return moment(start_utc).format('MMM DD, YYYY') + (isSameDate ? '' : ' - ' + moment(end_utc).format('MMM DD, YYYY'))
+                            return moment(start).format('MMM DD, YYYY') + (isSameDate ? '' : ' <i class="far fa-sm fa-long-arrow-right"></i> ' + moment(end).format('MMM DD, YYYY'))
+                        } else {
+                            return moment(start).format('MMM DD, YYYY @ HHmm[z]') + ' <i class="far fa-sm fa-long-arrow-right"></i> ' + moment(end).format((isSameDate ? '' : 'MMM DD, YYYY @ ') + 'HHmm[z]')
                         }
-
-                        return (moment(start_utc).format('MMM DD, YYYY @ HHmm[z]') + ' - ' + moment(end_utc).format(endFormat))
                     },
                 },
                 theme: {
@@ -76,16 +74,17 @@
                     'common.creationGuide.backgroundColor': 'rgba(221, 132, 37, 0.05)',
                     'common.creationGuide.border': '1px solid #dd8425',
                 },
-                timezones: [{
-                    timezoneOffset: 0,
-                    displayLabel: 'UTC',
-                    tooltip: 'UTC'
-                },
-                {
-                    timezoneOffset: -new Date().getTimezoneOffset(),
-                    displayLabel: 'Local',
-                    tooltip: 'Local'
-                }],
+                timezones: [
+                    {
+                        timezoneOffset: -new Date().getTimezoneOffset(),
+                        displayLabel: 'Local',
+                        tooltip: 'Local'
+                    }, {
+                        timezoneOffset: 0,
+                        displayLabel: 'UTC',
+                        tooltip: 'UTC'
+                    }
+                ],
                 calendars: [
                     {
                         id: '1',
@@ -181,8 +180,8 @@
                         isReadOnly: true,
                         bgColor: '#2d45a2',
                         borderColor: '#091a6d',
-                        start: '{{ event.start|to_iso_format }}',
-                        end: '{{ event.end|to_iso_format }}',
+                        start: '{{ event.start|to_iso_format }}+00:00',
+                        end: '{{ event.end|to_iso_format }}+00:00',
                     },
                 {% endfor %}
                 {% for session in sessions %}

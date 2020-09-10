@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'apps.feedback',
     'apps.pilots',
     'apps.resource',
-    'apps.training',
+    'apps.training.apps.TrainingConfig',
     'apps.uls',
     'apps.user.apps.UserConfig',
     'apps.views',

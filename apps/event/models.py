@@ -22,40 +22,40 @@ class Event(models.Model):
         return self.end - self.start
 
     def calculate_scores(self):
-        if not self.scored:
-            for position in self.positions.all():
-                if position.user is not None:
-                    duration = timedelta()
+        for position in self.positions.all():
+            if position.user is not None:
+                duration = timedelta()
 
-                    sessions = ControllerSession.objects.filter(user=position.user)
-                    for session in sessions:
-                        if session.callsign == position.name and session.start < self.end and session.end > self.start:
-                            duration += min([session.end, self.end]) - max([session.start, self.start])
+                sessions = ControllerSession.objects.filter(user=position.user)
+                for session in sessions:
+                    if session.callsign == position.name and session.start < self.end and session.end > self.start:
+                        duration += min([session.end, self.end]) - max([session.start, self.start])
 
-                    session_seconds, event_seconds = duration.total_seconds(), self.duration.total_seconds()
-                    if event_seconds - session_seconds <= 60:
-                        session_seconds = event_seconds
+                session_seconds, event_seconds = duration.total_seconds(), self.duration.total_seconds()
+                if event_seconds - session_seconds <= 60:
+                    session_seconds = event_seconds
 
-                    score = [(session_seconds / event_seconds) * 100]
-                    comments = f'Controlled for <b>{duration}</b> out of <b>{self.duration}</b> event duration ({int(score[0])}%).'
+                score = [(session_seconds / event_seconds) * 100]
+                comments = f'Controlled for <b>{duration}</b> out of <b>{self.duration}</b> event duration ({int(score[0])}%).'
 
-                    event_feedback = self.feedback.filter(controller=position.user)
-                    for feedback in event_feedback:
-                        feedback_score = (feedback.rating / 5) * 100
-                        score += [feedback_score]
+                event_feedback = self.feedback.filter(controller=position.user)
+                for feedback in event_feedback:
+                    feedback_score = (feedback.rating / 5) * 100
+                    score += [feedback_score]
 
-                        color = "danger" if feedback.rating < 3 else "warning" if feedback.rating < 5 else "success"
-                        comments += f'<br><b><span class="text-{color}">Feedback: {feedback.rating} / 5 ' \
-                                    f'({int(feedback_score)}%).</span></b>'
+                    color = "danger" if feedback.rating < 3 else "warning" if feedback.rating < 5 else "success"
+                    comments += f'<br><b><span class="text-{color}">Feedback: {feedback.rating} / 5 ' \
+                                f'({int(feedback_score)}%).</span></b>'
 
-                    EventScore(
-                        user=position.user,
-                        event=self,
-                        score=int(sum(score) / len(score)),
-                        comments=comments
-                    ).save()
-            self.scored = True
-            self.save()
+                EventScore(
+                    user=position.user,
+                    event=self,
+                    score=int(sum(score) / len(score)),
+                    comments=comments
+                ).save()
+
+        self.scored = True
+        self.save()
 
     def __str__(self):
         return self.name

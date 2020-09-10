@@ -194,8 +194,8 @@
                         isReadOnly: true,
                         bgColor: '#dd8425',
                         borderColor: '#c6720b',
-                        start: '{{ session.start|to_iso_format }}',
-                        end: '{{ session.end|to_iso_format }}',
+                        start: '{{ session.start|to_iso_format }}+00:00',
+                        end: '{{ session.end|to_iso_format }}+00:00',
                     },
                 {% endfor %}
             ])

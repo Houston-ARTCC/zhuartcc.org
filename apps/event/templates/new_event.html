@@ -179,8 +179,8 @@
                         isReadOnly: true,
                         bgColor: '#2d45a2',
                         borderColor: '#091a6d',
-                        start: '{{ event.start|to_iso_format }}',
-                        end: '{{ event.end|to_iso_format }}',
+                        start: '{{ event.start|to_iso_format }}+00:00',
+                        end: '{{ event.end|to_iso_format }}+00:00',
                     },
                 {% endfor %}
                 {% for session in sessions %}
@@ -193,8 +193,8 @@
                         isReadOnly: true,
                         bgColor: '#dd8425',
                         borderColor: '#c6720b',
-                        start: '{{ session.start|to_iso_format }}',
-                        end: '{{ session.end|to_iso_format }}',
+                        start: '{{ session.start|to_iso_format }}+00:00',
+                        end: '{{ session.end|to_iso_format }}+00:00',
                     },
                 {% endfor %}
             ])

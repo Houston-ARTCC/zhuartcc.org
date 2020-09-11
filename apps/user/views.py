@@ -79,7 +79,12 @@ def sort_controllers(query_set):
 
 # Gets specified user from local database and serves 'profile.html' file
 def view_profile(request, cid):
-    user = User.objects.get(cid=cid)
+    user_query = User.objects.filter(cid=cid)
+    if user_query.exists():
+        user = user_query.first()
+    else:
+        return HttpResponse('User with specified CID was not found!', status=404)
+
     connections = ControllerSession.objects.filter(user=user).order_by('-start')
     now = timezone.now()
     stats = connections.aggregate(

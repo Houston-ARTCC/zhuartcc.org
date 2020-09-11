@@ -292,7 +292,7 @@ a88aaaa    .d8888b. 88d888b. 88d8b.d8b. .d8888b.
     width: 100%;
     padding: 0;
 }
-input[type="text"], input[type="datetime-local"], .file-upload, select, textarea {
+input[type="text"], input[type="number"], input[type="datetime-local"], .file-upload, select, textarea {
     font: 15px/24px Gilroy-Bold, Helvetica, sans-serif;
     color: #333;
     width: 100%;
@@ -307,7 +307,7 @@ input[type="file"] {
     opacity: 0;
     width: 100%;
 }
-input[type="text"]:focus, input[type="datetime-local"]:focus, select:focus, textarea:focus {
+input[type="text"]:focus, input[type="number"]:focus, input[type="datetime-local"]:focus, select:focus, textarea:focus {
     outline: none;
 }
 .input-hint {
@@ -331,6 +331,7 @@ textarea ~ .focus-border {
     bottom: 8px;
 }
 input[type="text"]:focus ~ .focus-border, input[type="text"].has-content ~ .focus-border,
+input[type="number"]:focus ~ .focus-border, input[type="number"].has-content ~ .focus-border,
 input[type="datetime-local"]:focus ~ .focus-border, input[type="datetime-local"].has-content ~ .focus-border,
 select.has-content ~ .focus-border,
 input[type="file"].has-content ~ .focus-border,
@@ -378,6 +379,7 @@ input:read-only ~ .focus-border {
     background-color: #aeaeae;
 }
 input[type="text"]:focus ~ label, input[type="text"].has-content ~ label,
+input[type="number"]:focus ~ label, input[type="number"].has-content ~ label,
 input[type="datetime-local"]:focus ~ label, input[type="datetime-local"].has-content ~ label,
 select.has-content ~ label,
 input[type="file"].has-content ~ label,

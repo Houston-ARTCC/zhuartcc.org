@@ -22,8 +22,6 @@ def view_training_center(request):
         'page_title': 'Training Center',
         'user': user,
         'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
-        'sessions': sessions,
-        'requests': user.training_requests.all(),
     })
 
 
@@ -34,7 +32,10 @@ def view_session(request, session_id):
             request.session.get('cid') == session.student.cid
             or request.session.get('mentor') or request.session.get('staff')
     ):
-        return render(request, 'session.html', {'session': session})
+        return render(request, 'session.html', {
+            'page_title': 'Training Session',
+            'session': session,
+        })
     else:
         return HttpResponse('You are unauthorized to view somebody else\'s training session!', status=401)
 
@@ -76,6 +77,25 @@ def view_mentor_history(request):
             mentor.full_name,
             mentor.instructor_sessions.filter(start__gte=timezone.now() - timedelta(days=30)).filter(status=1)
         ) for mentor in mentors]
+    })
+
+
+@require_staff_or_mentor
+def view_scheduled_sessions(request):
+    return render(request, 'scheduled_sessions.html', {
+        'page_title': 'Scheduled Sessions',
+        'sessions': TrainingSession.objects.filter(status=0),
+    })
+
+
+@require_staff_or_mentor
+def view_student_profile(request, cid):
+    student = User.objects.get(cid=request.session.get('cid'))
+    sessions = student.student_sessions.all()
+    return render(request, 'student_profile.html', {
+        'page_title': 'Student Profile',
+        'student': student,
+        'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
     })
 
 

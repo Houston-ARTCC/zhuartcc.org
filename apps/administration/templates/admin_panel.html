@@ -9,7 +9,7 @@
                         <h5 class="mb-0">User Management</h5>
                     </div>
                     <div class="card-body text-center">
-                        <button class="btn btn-secondary">Find User</button>
+                        <a data-action="find-user" data-redirect="profile"><button class="btn btn-secondary">Find User</button></a>
                         <a href="{% url 'roster_tidy' %}"><button class="btn btn-secondary">Roster Tidy</button></a>
                         <a href="{% url 'visit_requests' %}"><button class="btn btn-secondary">Visiting Requests</button> {% if notifications.visit %}<div class="notification">{{ notifications.visit }}</div>{% endif %}</a>
                         <a href="{% url 'transfer_requests' %}"><button class="btn btn-secondary">Transfer Requests</button></a>
@@ -25,6 +25,8 @@
                 <div class="card-body text-center">
                     <a href="{% url 'training_requests' %}"><button class="btn btn-secondary">Training Requests</button> {% if notifications.training %}<div class="notification">{{ notifications.training }}</div>{% endif %}</a>
                     <a href="{% url 'mentor_history' %}"><button class="btn btn-secondary">Mentor History</button></a>
+                    <a data-action="find-user" data-redirect="training"><button class="btn btn-secondary">Student Profile</button></a>
+                    <a href="{% url 'scheduled_sessions' %}"><button class="btn btn-secondary">Scheduled Sessions</button></a>
                 </div>
             </div>
         </div>
@@ -44,4 +46,45 @@
             </div>
         {% endif %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('[data-action="find-user"]').click(function() {
+            let redirect = $(this).data('redirect')
+            launchCustomModal(
+                'info',
+                'Find User',
+                `<p>Enter the CID of the user you wish to find:</p>
+                <form id="find">
+                    <div class="row">
+                        <div class="col-6 mx-auto">
+                            <div class="label-group">
+                                <input name="cid" type="number" required>
+                                <label>CID</label>
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                    <button class="btn btn-primary" type="submit"><i class="far fa-search" autofocus></i> Search</button>
+                </form>`
+            )
+            $('[name="cid"]').focus()
+            $('#find').submit(function(e) {
+                e.preventDefault()
+                let cid = $('[name="cid"]').val()
+                let url = '{% url 'view_user' cid=0 %}'.replace(/0/, cid)
+                $.get(url)
+                .done(function() {
+                    if (redirect === 'training') {
+                        location.href = '{% url 'student_profile' cid=0 %}'.replace(/0/, cid)
+                    } else if (redirect === 'profile') {
+                        location.href = url
+                    }
+                })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+            })
+        })
+    </script>
 {% endblock %}

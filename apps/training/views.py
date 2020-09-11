@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from zhuartcc.decorators import require_member, require_mentor
+from zhuartcc.decorators import require_member, require_mentor, require_staff_or_mentor
 from .models import TrainingSession, TrainingRequest
 from ..administration.models import ActionLog
 from ..event.models import Event
@@ -67,18 +67,16 @@ def request_training(request):
         })
 
 
+@require_staff_or_mentor
 def view_mentor_history(request):
-    if request.session.get('staff') or request.session.get('mentor'):
-        mentors = User.objects.filter(training_role__in=['MTR', 'INS'])
-        return render(request, 'mentor_history.html', {
-            'page_title': 'Mentor History',
-            'mentors': [(
-                mentor.full_name,
-                mentor.instructor_sessions.filter(start__gte=timezone.now() - timedelta(days=30)).filter(status=1)
-            ) for mentor in mentors]
-        })
-    else:
-        return HttpResponse(status=403)
+    mentors = User.objects.filter(training_role__in=['MTR', 'INS'])
+    return render(request, 'mentor_history.html', {
+        'page_title': 'Mentor History',
+        'mentors': [(
+            mentor.full_name,
+            mentor.instructor_sessions.filter(start__gte=timezone.now() - timedelta(days=30)).filter(status=1)
+        ) for mentor in mentors]
+    })
 
 
 @require_member

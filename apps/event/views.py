@@ -12,10 +12,10 @@ from .models import Event, EventPosition, PositionPreset, EventPositionRequest
 from ..administration.models import ActionLog
 from ..training.models import TrainingSession
 from ..user.models import User
-from zhuartcc.decorators import require_staff, require_member, require_logged_in
+from zhuartcc.decorators import require_staff, require_member, require_session
 
 
-@require_logged_in
+@require_session
 def view_event_score(request, cid=None):
     user_cid = cid or request.session.get('cid')
 

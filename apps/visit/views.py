@@ -12,11 +12,11 @@ from .models import Visit
 from ..administration.models import ActionLog
 from ..user.models import User
 from ..user.updater import assign_oper_init
-from zhuartcc.decorators import require_logged_in, require_staff
+from zhuartcc.decorators import require_session, require_staff
 
 
 # Serves 'visit.html' file. Saves request from form data on POST
-@require_logged_in
+@require_session
 def submit_visiting_request(request):
     if request.method == 'POST':
         if User.objects.filter(cid=request.POST.get('cid')).exclude(status=2).exists():

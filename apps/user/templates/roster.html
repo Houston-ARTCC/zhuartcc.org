@@ -115,8 +115,8 @@
                     <img class="rounded-circle mb-2" src="{% static 'img/placeholder-profile.png' %}" height="60px">
                     <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
                     <p>from {{ user.home_facility }}</p>
-                    {% if request.session.staff or request.session.mentor %}
-                    <a href="{% url 'edit_user' cid=user.cid %}"><i class="fas fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="fas fa-envelope"></i></a>
+                    {% if request.session.staff %}
+                        <a href="{% url 'edit_user' cid=user.cid %}"><i class="fas fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="fas fa-envelope"></i></a>
                     {% endif %}
                 </div>
                 <div class="card-body">

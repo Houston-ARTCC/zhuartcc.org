@@ -50,10 +50,8 @@
                     {% if request.session.member %}
                         <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
                         <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
-                        {% if request.session.staff %}
+                        {% if request.session.staff or request.session.mentor %}
                             <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
-                        {% elif request.session.mentor %}
-                            <a class="dropdown-item" href="{% url 'training_requests' %}">Training Requests</a>
                         {% endif %}
                     {% else %}
                         <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>

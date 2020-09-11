@@ -10,11 +10,11 @@ from zhuartcc.overrides import send_mass_html_mail
 from .models import ActionLog, Announcement
 from ..training.models import TrainingRequest
 from ..user.models import User
-from zhuartcc.decorators import require_staff
+from zhuartcc.decorators import require_staff, require_staff_or_mentor
 from ..visit.models import Visit
 
 
-@require_staff
+@require_staff_or_mentor
 def view_admin_panel(request):
     return render(request, 'admin_panel.html', {
         'page_title': 'Admin Panel',

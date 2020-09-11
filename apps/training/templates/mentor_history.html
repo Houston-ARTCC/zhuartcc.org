@@ -43,7 +43,7 @@
 {% block scripts %}
     <script>
         $('#sessions tr').click(function() {
-            window.location.href = '{% url 'training_session' session_id=0 %}'.replace(/0/, $(this).data('session'))
+            window.location.href = '{% url 'view_session' session_id=0 %}'.replace(/0/, $(this).data('session'))
         })
     </script>
 {% endblock %}

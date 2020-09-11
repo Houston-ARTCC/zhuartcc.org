@@ -1217,6 +1217,9 @@ dP   dP   dP `88888P8 88Y888P' `88888P'
 .quill.broadcast p {
     all: unset;
 }
+.ql-container {
+    height: 250px!important;
+}
 
 
 /*

@@ -1,0 +1,175 @@
+{% extends 'secondaryTemplate.html' %}
+{% load filters %}
+
+{% block stylesheets %}
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    <h2 style="font-size: 40px">You are now editing</h2>
+    <h1 style="font-size: 65px">{{ session.student.first_name }}'s {{ session.get_level_display }} Session</h1>
+{% endblock %}
+
+{% block body %}
+    <form id="sessionForm" action="{% url 'edit_session' session_id=session.id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Session Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input type="text" value="{{ session.student.full_name }}" readonly>
+                                    <label>Student</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <select name="instructor" required>
+                                        {% for instructor in instructors %}
+                                            <option value="{{ instructor.id }}" {% if instructor == session.instructor %}selected{% endif %}>{{ instructor.full_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label>Instructor</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="start" type="datetime-local" value="{{ session.start|to_iso_format }}" required>
+                                    <label>Start Time (Zulu)</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="end" type="datetime-local" value="{{ session.end|to_iso_format }}" required>
+                                    <label>End Time (Zulu)</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <select name="type" required>
+                                        <option value="0" {% if session.type == 0 %}selected{% endif %}>Classroom</option>
+                                        <option value="1" {% if session.type == 1 %}selected{% endif %}>Sweatbox</option>
+                                        <option value="2" {% if session.type == 2 %}selected{% endif %}>Online</option>
+                                        <option value="3" {% if session.type == 3 %}selected{% endif %}>OTS</option>
+                                    </select>
+                                    <label>Type</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <select name="level" required>
+                                        <option value="0" {% if session.level == 0 %}selected{% endif %}>Minor Ground</option>
+                                        <option value="1" {% if session.level == 1 %}selected{% endif %}>Major Ground</option>
+                                        <option value="2" {% if session.level == 2 %}selected{% endif %}>Minor Tower</option>
+                                        <option value="3" {% if session.level == 3 %}selected{% endif %}>Major Tower</option>
+                                        <option value="4" {% if session.level == 4 %}selected{% endif %}>Minor Approach</option>
+                                        <option value="5" {% if session.level == 5 %}selected{% endif %}>Major Approach</option>
+                                        <option value="6" {% if session.level == 6 %}selected{% endif %}>Center</option>
+                                        <option value="7" {% if session.level == 7 %}selected{% endif %}>Oceanic</option>
+                                    </select>
+                                    <label>Level</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="position" type="text" value="{{ session.position|default:'' }}">
+                                    <label>Position</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <select name="status" required>
+                                        <option value="0" {% if session.status == 0 %}selected{% endif %}>Scheduled</option>
+                                        <option value="1" {% if session.status == 1 %}selected{% endif %}>Completed</option>
+                                        <option value="2" {% if session.status == 2 %}selected{% endif %}>Cancelled</option>
+                                        <option value="3" {% if session.status == 3 %}selected{% endif %}>No-Show</option>
+                                    </select>
+                                    <label>Status</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="col-8 label-group mx-auto">
+                                    <div class="file-upload">
+                                        <input name="ots" type="file">
+                                        <label>OTS Form</label>
+                                        <span class="file-name"></span>
+                                        <div class="upload-btn">Upload</div>
+                                        <span class="focus-border"></span>
+                                        <div class="input-hint mt-1">Leave blank for none or no change.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Session Notes</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <textarea name="notes" hidden></textarea>
+                                <div class="quill mb-2" id="editor">{{ session.session_notes|safe }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'view_session' session_id=session.id %}"><button class="btn btn-secondary" type="button">Return to Session</button></a>
+        <button class="btn btn-primary">Save Changes</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        var quill = null
+        $(function() {
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline', 'strike'],
+
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+
+                        [{ 'size': ['small', false, 'large', 'huge'] }],
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'font': [] }],
+
+                        ['image'],
+
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Announcement message goes here...',
+            });
+        })
+        $('#sessionForm').submit(function(e) {
+            e.preventDefault()
+            $('textarea[name="notes"]').val(quill.root.innerHTML === '<p><br></p>' ? '' : quill.root.innerHTML)
+            this.submit()
+        })
+    </script>
+{% endblock %}

@@ -14,12 +14,17 @@
 {% endblock %}
 
 {% block body %}
+    {% if request.session.staff %}
+        <div class="text-center text-lg-left mb-4">
+            <a href="{% url 'edit_session' session_id=session.id %}"><button class="btn btn-secondary"><i class="far fa-pencil-ruler"></i> Edit Session</button></a>
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-12 col-lg">
             <div class="row">
                 <div class="col-lg">
                     <h3>Position</h3>
-                    <p>{{ session.position }}</p>
+                    <p>{{ session.position|default:'None' }}</p>
                     <h3>Type</h3>
                     <p>{{ session.get_type_display }}</p>
                 </div>

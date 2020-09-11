@@ -33,11 +33,36 @@ def view_session(request, session_id):
             or request.session.get('mentor') or request.session.get('staff')
     ):
         return render(request, 'session.html', {
-            'page_title': 'Training Session',
+            'page_title': 'View Session',
             'session': session,
         })
     else:
         return HttpResponse('You are unauthorized to view somebody else\'s training session!', status=401)
+
+
+@require_staff_or_mentor
+def edit_session(request, session_id):
+    session = TrainingSession.objects.get(id=session_id)
+
+    if request.method == 'POST':
+        session.instructor = User.objects.get(id=request.POST.get('instructor'))
+        session.start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
+        session.end = pytz.utc.localize(datetime.fromisoformat(request.POST.get('end')))
+        session.position = request.POST.get('position')
+        session.type = request.POST.get('type')
+        session.level = request.POST.get('level')
+        session.status = request.POST.get('status')
+        session.session_notes = request.POST.get('notes')
+        session.session_file = request.FILES.get('ots', session.session_file)
+        session.save()
+
+        return redirect(reverse('view_session', args=[session.id]))
+
+    return render(request, 'edit_session.html', {
+        'page_title': 'Edit Session',
+        'session': session,
+        'instructors': User.objects.filter(training_role__in=['MTR', 'INS'])
+    })
 
 
 @require_member

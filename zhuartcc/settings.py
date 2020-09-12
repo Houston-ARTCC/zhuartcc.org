@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'zhuartcc.middleware.UserMiddleware',
 ]
 
 ROOT_URLCONF = 'zhuartcc.urls'

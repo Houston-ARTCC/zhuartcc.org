@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="row">
-        {% if request.session.staff %}
+        {% if request.user_obj.is_staff %}
             <div class="col-12 col-lg-6 col-xl-4 mx-auto">
                 <div class="card">
                     <div class="card-header bg-secondary">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        {% if request.session.staff %}
+        {% if request.user_obj.is_staff %}
             <div class="col-12 col-lg-6 col-xl-4 mx-auto">
                 <div class="card">
                     <div class="card-header bg-secondary">
@@ -40,7 +40,7 @@
                         <a href="{% url 'broadcast' %}"><button class="btn btn-secondary">Broadcast Email</button></a>
                         <a href="{% url 'log' %}"><button class="btn btn-secondary">Action Log</button></a>
                         <a href="{% url 'announcement' %}"><button class="btn btn-secondary">Create Announcement</button></a>
-                        <a href="{% url 'admin:index' %}"><button class="btn btn-secondary">Django Panel</button></a>
+                        <a href="{% url 'feedback_approval' %}"><button class="btn btn-secondary">Feedback Approval</button></a>
                     </div>
                 </div>
             </div>

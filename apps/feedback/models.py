@@ -14,6 +14,7 @@ class Feedback(models.Model):
     comments = models.TextField()
     submitted = models.DateTimeField(auto_now_add=True)
     event = models.ForeignKey(Event, models.SET_NULL, null=True, blank=True, related_name='feedback')
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.submitted.strftime("%b %d, %Y @ %H%Mz")} | {self.controller.full_name}'

@@ -4,7 +4,7 @@ import hmac
 import requests
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 
-from django.http import HttpResponseServerError
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 
@@ -34,16 +34,7 @@ def login(request):
             request.session['vatsim_data'] = data
             request.session['cid'] = data['cid']
 
-            user_query = User.objects.filter(cid=data['cid'])
-
-            if user_query.exists() and user_query[0].status != 2:
-                user = User.objects.get(cid=data['cid'])
-                request.session['member'] = True
-                request.session['staff'] = user.is_staff
-                request.session['mentor'] = user.is_mentor
-            elif data['facility']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
-                request.session['member'] = True
-
+            if data['facility']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
                 new_user = User(
                     first_name=data['fname'].capitalize(),
                     last_name=data['lname'].capitalize(),
@@ -59,7 +50,7 @@ def login(request):
 
                 ActionLog(action=f'User {new_user.full_name} was created by system.').save()
         else:
-            return HttpResponseServerError()
+            return HttpResponse('Something was wrong with the token we got from VATUSA!', status=500)
 
     return redirect(reverse('home'))
 

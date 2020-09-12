@@ -17,14 +17,12 @@ from zhuartcc.decorators import require_staff, require_member, require_session
 
 @require_session
 def view_event_score(request, cid=None):
-    user_cid = cid or request.session.get('cid')
-
-    if cid and not request.session.get('staff') and cid != request.session.get('cid'):
+    if cid and not request.user_obj.is_staff and cid != request.user_obj.cid:
         return HttpResponse(status=403)
 
     return render(request, 'event_score.html', {
         'page_title': 'Event Score History',
-        'user': User.objects.get(cid=user_cid),
+        'user': User.objects.get(cid=cid) if cid else request.user_obj,
     })
 
 
@@ -44,11 +42,11 @@ def view_archived_events(request):
 
 def view_event(request, event_id):
     event = Event.objects.get(id=event_id)
-    if event.hidden and request.session.get('staff') or not event.hidden:
+    user = request.user_obj
+    if event.hidden and user.is_staff or not event.hidden:
         positions = {'center': [], 'tracon': [], 'cab': []}
         for position in event.positions.all():
             positions[position.category] += [position]
-        user = User.objects.get(cid=request.session.get('cid')) if request.session.get('member') else None
         return render(request, 'view_event.html', {
             'page_title': event.name,
             'event': event,
@@ -76,8 +74,7 @@ def add_event(request):
         )
         event.save()
 
-        user = User.objects.get(cid=request.session.get('cid'))
-        ActionLog(action=f'Event "{event.name}" created by {user.full_name}.').save()
+        ActionLog(action=f'Event "{event.name}" created by {request.user_obj}.').save()
 
         if request.POST['preset']:
             PositionPreset.objects.get(id=request.POST['preset']).add_to_event(event)
@@ -106,8 +103,7 @@ def edit_event(request, event_id):
             event.hidden = True if 'hidden' in request.POST else False
             event.save()
 
-            user = User.objects.get(cid=request.session.get('cid'))
-            ActionLog(action=f'Event "{event.name}" modified by {user.full_name}.').save()
+            ActionLog(action=f'Event "{event.name}" modified by {request.user_obj}.').save()
 
             return redirect(reverse('event', args=[event.id]))
         else:
@@ -128,8 +124,7 @@ def edit_event(request, event_id):
 def delete_event(request, event_id):
     event = Event.objects.get(id=event_id)
 
-    user = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Event "{event.name}" deleted by {user.full_name}.').save()
+    ActionLog(action=f'Event "{event.name}" deleted by {request.user_obj}.').save()
 
     event.delete()
 
@@ -159,15 +154,14 @@ def delete_position(request, position_id):
 @require_POST
 @csrf_exempt
 def request_position(request, position_id):
-    user = User.objects.get(cid=request.session.get('cid'))
-    if user.prevent_event_signup:
+    if request.user_obj.prevent_event_signup:
         return HttpResponse('You are not allowed to sign up for events!', status=403)
-    elif EventPositionRequest.objects.filter(user=user).filter(position_id=position_id).exists():
+    elif EventPositionRequest.objects.filter(user=request.user_obj).filter(position_id=position_id).exists():
         return HttpResponse('You already requested this position!', status=403)
     else:
         EventPositionRequest(
             position=EventPosition.objects.get(id=position_id),
-            user=user,
+            user=request.user_obj,
         ).save()
 
         return HttpResponse(status=200)
@@ -178,7 +172,7 @@ def request_position(request, position_id):
 @csrf_exempt
 def unrequest_position(request, request_id):
     position_request = EventPositionRequest.objects.get(id=request_id)
-    if position_request.user.id == User.objects.get(cid=request.session.get('cid')).id:
+    if position_request.user_obj.id == request.user_obj.id:
         position_request.delete()
         return HttpResponse(status=200)
     else:
@@ -219,8 +213,7 @@ def add_preset(request):
     )
     preset.save()
 
-    user = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Position preset "{preset.name}" created by {user.full_name}.').save()
+    ActionLog(action=f'Position preset "{preset}" created by {request.user_obj}.').save()
 
     return redirect(reverse('presets'))
 
@@ -232,8 +225,7 @@ def edit_preset(request, preset_id):
     preset.positions_json = request.POST['positions']
     preset.save()
 
-    user = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Position preset "{preset.name}" modified by {user.full_name}.').save()
+    ActionLog(action=f'Position preset "{preset}" modified by {request.user_obj}.').save()
 
     return HttpResponse(status=200)
 
@@ -243,8 +235,7 @@ def edit_preset(request, preset_id):
 def delete_preset(request, preset_id):
     preset = PositionPreset.objects.get(id=preset_id)
 
-    user = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Position preset "{preset.name}" deleted by {user.full_name}.').save()
+    ActionLog(action=f'Position preset "{preset}" deleted by {request.user_obj}.').save()
 
     preset.delete()
 

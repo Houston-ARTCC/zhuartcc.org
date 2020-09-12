@@ -50,11 +50,11 @@ def submit_visiting_request(request):
     return render(request, 'visit.html', {'page_title': 'Visit Houston'})
 
 
-# Gets all visiting requests from local database and serves 'visitRequests.html' file
+# Gets all visiting requests from local database and serves 'visiting_requests.html' file
 @require_staff
 def view_visiting_requests(request):
     visiting_requests = Visit.objects.all()
-    return render(request, 'visitRequests.html', {
+    return render(request, 'visiting_requests.html', {
         'page_title': 'Visiting Requests',
         'visiting_requests': visiting_requests
     })
@@ -80,21 +80,9 @@ def accept_visiting_request(request, visit_id):
         else:
             return HttpResponse('Visitor is already on the roster.', status=400)
     else:
-        new_user = User(
-            first_name=visiting_request.first_name.capitalize(),
-            last_name=visiting_request.last_name.capitalize(),
-            cid=visiting_request.cid,
-            email=visiting_request.email,
-            oper_init=assign_oper_init(visiting_request.first_name[0], visiting_request.last_name[0]),
-            home_facility=visiting_request.home_facility,
-            rating=visiting_request.rating,
-            main_role='VC',
-        )
-        new_user.assign_initial_cert()
-        new_user.save()
+        visiting_request.add_to_roster()
 
-    admin = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'{visiting_request.full_name}\'s visiting request was accepted by {admin.full_name}.').save()
+    ActionLog(action=f'{visiting_request}\'s visiting request was accepted by {request.user_obj}.').save()
 
     context = {
         'name': visiting_request.first_name,
@@ -117,8 +105,7 @@ def accept_visiting_request(request, visit_id):
 def reject_visiting_request(request, visit_id):
     visiting_request = Visit.objects.get(id=visit_id)
 
-    admin = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'{visiting_request.full_name}\'s visiting request was rejected by {admin.full_name}.').save()
+    ActionLog(action=f'{visiting_request}\'s visiting request was rejected by {request.user_obj}.').save()
 
     context = {
         'name': visiting_request.first_name,

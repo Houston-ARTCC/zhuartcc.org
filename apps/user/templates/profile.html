@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block body %}
-    {% if request.session.staff %}
+    {% if request.user_obj.is_staff %}
         {% if user.staff_comment %}
             <div class="alert alert-primary">
                 <a href="#" class="alert-link" data-action="remove-comment"><div class="float-right">Remove <i class="far fa-times"></i></div></a>
@@ -185,7 +185,7 @@
                 order: [[ 0, "desc" ]]
             })
         })
-        {% if request.session.staff %}
+        {% if request.user_obj.is_staff %}
             function addComment() {
                 launchCustomModal(
                     'info',

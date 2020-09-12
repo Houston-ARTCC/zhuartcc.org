@@ -1,7 +1,7 @@
 {% extends 'mainTemplate.html' %}
 
 {% block body %}
-    {% if request.session.staff %}
+    {% if request.user_obj.is_staff %}
         <div class="text-center mb-4">
             <button class="btn btn-lg btn-primary" data-action="add-scenery"><i class="far fa-plus"></i> Add Scenery</button>
         </div>
@@ -21,7 +21,7 @@
                                 <col style="width: 15%">
                             </colgroup>
                             <thead>
-                                {% if request.session.staff %}
+                                {% if request.user_obj.is_staff %}
                                     <th></th>
                                 {% endif %}
                                 <th>Name</th>
@@ -30,7 +30,7 @@
                             <tbody>
                                 {% for scenery in list %}
                                     <tr>
-                                        {% if request.session.staff %}
+                                        {% if request.user_obj.is_staff %}
                                             <td class="text-center"><a class="link-secondary" data-action="edit-scenery" data-id="{{ scenery.id }}" data-name="{{ scenery.name }}" data-simulator="{{ scenery.get_simulator_display }}" data-link="{{ scenery.link }}" data-payware="{{ scenery.payware|lower }}"><i class="fas fa-pencil-ruler"></i></a></td>
                                         {% endif %}
                                         <td><a href="{{ scenery.link }}" target="_blank">{{ scenery.name }}</a></td>
@@ -53,7 +53,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {% if request.session.staff %}
+    {% if request.user_obj.is_staff %}
         <script>
             $(function() {
                 $('[data-action="edit-scenery"]').click(function() {

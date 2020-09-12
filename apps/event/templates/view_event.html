@@ -23,7 +23,7 @@
             <p class="mb-0">This event has passed and is now in a read-only archived state.</p>
         </div>
     {% endif %}
-    {% if request.session.staff and event.end >= time_now %}
+    {% if request.user_obj.is_staff and event.end >= time_now %}
         <div class="text-center text-lg-left">
             <a href="{% url 'edit_event' event_id=event.id %}"><button class="btn btn-secondary mb-4"><i class="far fa-pencil-ruler"></i> Edit Event</button></a>
         </div>

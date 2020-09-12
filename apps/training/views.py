@@ -16,11 +16,10 @@ from ..user.models import User
 
 @require_member
 def view_training_center(request):
-    user = User.objects.get(cid=request.session.get('cid'))
-    sessions = user.student_sessions.all()
+    sessions = request.user_obj.student_sessions.all()
     return render(request, 'training_center.html', {
         'page_title': 'Training Center',
-        'user': user,
+        'user': request.user_obj,
         'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
     })
 
@@ -29,8 +28,8 @@ def view_training_center(request):
 def view_session(request, session_id):
     session = TrainingSession.objects.get(id=session_id)
     if (
-            request.session.get('cid') == session.student.cid
-            or request.session.get('mentor') or request.session.get('staff')
+            request.user_obj.cid == session.student.cid
+            or request.user_obj.is_mentor or request.user_obj.is_staff
     ):
         return render(request, 'session.html', {
             'page_title': 'View Session',
@@ -72,7 +71,7 @@ def request_training(request):
         end = pytz.utc.localize(datetime.fromisoformat(request.POST['end']))
         if start < end:
             TrainingRequest(
-                student=User.objects.get(cid=request.session.get('cid')),
+                student=request.user_obj,
                 start=pytz.utc.localize(datetime.fromisoformat(request.POST['start'])),
                 end=pytz.utc.localize(datetime.fromisoformat(request.POST['end'])),
                 type=request.POST['type'],
@@ -115,7 +114,7 @@ def view_scheduled_sessions(request):
 
 @require_staff_or_mentor
 def view_student_profile(request, cid):
-    student = User.objects.get(cid=request.session.get('cid'))
+    student = User.objects.get(cid=cid)
     sessions = student.student_sessions.all()
     return render(request, 'student_profile.html', {
         'page_title': 'Student Profile',
@@ -126,7 +125,7 @@ def view_student_profile(request, cid):
 
 @require_member
 def view_training_requests(request):
-    if request.session.get('mentor') or request.session.get('staff'):
+    if request.user_obj.is_mentor or request.user_obj.is_staff:
         return render(request, 'training_requests.html', {
             'page_title': 'Training Requests',
             'requests': TrainingRequest.objects.all().order_by('start'),
@@ -139,17 +138,16 @@ def view_training_requests(request):
 @require_mentor
 def accept_training_request(request, request_id):
     training_request = TrainingRequest.objects.get(id=request_id)
-    admin = User.objects.get(cid=request.session.get('cid'))
     TrainingSession(
         student=training_request.student,
-        instructor=admin,
+        instructor=request.user_obj,
         start=pytz.utc.localize(datetime.strptime(request.POST['start'], '%Y-%m-%dT%H:%M:%S.%f')),
         end=pytz.utc.localize(datetime.strptime(request.POST['end'], '%Y-%m-%dT%H:%M:%S.%f')),
         type=training_request.type,
         level=training_request.level,
     ).save()
 
-    ActionLog(action=f'{admin.full_name} accepted {training_request.student.full_name}\'s training request.').save()
+    ActionLog(action=f'{request.user_obj} accepted {training_request.student.full_name}\'s training request.').save()
     training_request.delete()
 
     return redirect(reverse('training_requests'))
@@ -159,9 +157,8 @@ def accept_training_request(request, request_id):
 @require_mentor
 def reject_training_request(request, request_id):
     training_request = TrainingRequest.objects.get(id=request_id)
-    admin = User.objects.get(cid=request.session.get('cid'))
 
-    ActionLog(action=f'{admin.full_name} rejected {training_request.student.full_name}\'s training request.').save()
+    ActionLog(action=f'{request.user_obj} rejected {training_request.student.full_name}\'s training request.').save()
     training_request.delete()
 
     return redirect(reverse('training_requests'))
@@ -170,8 +167,7 @@ def reject_training_request(request, request_id):
 @require_POST
 def cancel_training_request(request, request_id):
     training_request = TrainingRequest.objects.get(id=request_id)
-    user = User.objects.get(cid=request.session.get('cid'))
-    if user == training_request.student:
+    if request.user_obj == training_request.student:
         training_request.delete()
         return HttpResponse(status=200)
     else:

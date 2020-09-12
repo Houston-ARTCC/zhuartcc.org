@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from .models import ControllerSession
-from ..training.models import TrainingSession
 from ..user.models import User
 
 

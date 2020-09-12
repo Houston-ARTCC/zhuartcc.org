@@ -128,8 +128,7 @@ def edit_user(request, cid):
         user.ocn_cert = int(post['ocn_cert'])
         user.save()
 
-        admin = User.objects.get(cid=request.session.get('cid'))
-        ActionLog(action=f'User {user.full_name} modified by {admin.full_name}.').save()
+        ActionLog(action=f'User {user.full_name} modified by {request.user_obj}.').save()
         return redirect(reverse('roster'))
 
     return render(request, 'editUser.html', {'page_title': f'Editing {user.full_name}', 'user': user})
@@ -150,8 +149,7 @@ def update_status(request, cid):
         user.loa_until = None
     user.save()
 
-    admin = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'User {user.full_name} set as {status} by {admin.full_name}.').save()
+    ActionLog(action=f'User {user.full_name} set as {status} by {request.user_obj}.').save()
 
     return HttpResponse(status=200)
 
@@ -185,8 +183,7 @@ def remove_users(request):
                 html_message=render_to_string('emails/roster_removal.html', {'user': user}),
             )
 
-            admin = User.objects.get(cid=request.session.get('cid'))
-            ActionLog(action=f'User {user.full_name} set to inactive by {admin.full_name}.').save()
+            ActionLog(action=f'User {user.full_name} set to inactive by {request.user_obj}.').save()
 
     return HttpResponse(status=200)
 
@@ -196,11 +193,10 @@ def remove_users(request):
 def add_comment(request, cid):
     user = User.objects.get(cid=cid)
     user.staff_comment = request.POST['comment']
-    user.staff_comment_author = User.objects.get(cid=request.session.get('cid'))
+    user.staff_comment_author = request.user_obj
     user.save()
 
-    admin = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Staff comment for {user.full_name} added by {admin.full_name}.').save()
+    ActionLog(action=f'Staff comment for {user.full_name} added by {request.user_obj}.').save()
 
     return redirect(reverse('view_user', args=[user.cid]))
 
@@ -213,7 +209,6 @@ def remove_comment(request, cid):
     user.staff_comment_author = None
     user.save()
 
-    admin = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Staff comment for {user.full_name} removed by {admin.full_name}.').save()
+    ActionLog(action=f'Staff comment for {user.full_name} removed by {request.user_obj}.').save()
 
     return redirect(reverse('view_user', args=[user.cid]))

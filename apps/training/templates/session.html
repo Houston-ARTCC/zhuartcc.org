@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-    {% if request.session.staff %}
+    {% if request.user_obj.is_staff %}
         <div class="text-center text-lg-left mb-4">
             <a href="{% url 'edit_session' session_id=session.id %}"><button class="btn btn-secondary"><i class="far fa-pencil-ruler"></i> Edit Session</button></a>
         </div>

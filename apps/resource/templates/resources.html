@@ -2,7 +2,7 @@
 {% load filters %}
 
 {% block body %}
-    {% if request.session.staff %}
+    {% if request.user_obj.is_staff %}
         <div class="text-center mb-4">
             <button class="btn btn-lg btn-primary" data-action="add-resource"><i class="far fa-plus"></i> Add Resource</button>
         </div>
@@ -20,7 +20,7 @@
                         <div class="card-body">
                             <table class="table table-hover" style="width: 100%">
                                 <thead>
-                                    {% if request.session.staff %}
+                                    {% if request.user_obj.is_staff %}
                                         <th style="width: 7%"></th>
                                     {% endif %}
                                     <th style="width: 23%">Updated</th>
@@ -29,7 +29,7 @@
                                 <tbody>
                                     {% for resource in resources|get_value_from_dict:category.0 %}
                                         <tr style="height: 20px">
-                                            {% if request.session.staff %}
+                                            {% if request.user_obj.is_staff %}
                                                 <td><a class="link-secondary" data-action="edit-resource" data-id="{{ resource.id }}" data-name="{{ resource.name }}" data-category="{{ resource.category }}" data-description="{{ resource.description }}"><i class="fas fa-pencil-ruler"></i></a></td>
                                             {% endif %}
                                             <td>{{ resource.updated|date:'Y-m-d' }}</td>
@@ -49,7 +49,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {% if request.session.staff %}
+    {% if request.user_obj.is_staff %}
         <script>
             $(function() {
                 $('[data-action="edit-resource"]').click(function() {

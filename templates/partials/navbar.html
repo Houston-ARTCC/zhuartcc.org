@@ -11,10 +11,10 @@
             <div class="dropdown-menu mt-3">
                 <a class="dropdown-item" href="{% url 'events' %}">Events</a>
                 <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
-                {% if request.session.member %}
+                {% if request.user_obj %}
                     <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
                 {% endif %}
-                {% if request.session.staff %}
+                {% if request.user_obj.is_staff %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'new_event' %}">New Event</a>
                     <a class="dropdown-item" href="{% url 'presets' %}">Position Presets</a>
@@ -47,10 +47,10 @@
             {% if request.session.vatsim_data %}
                 <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
                 <div class="dropdown-menu mt-3">
-                    {% if request.session.member %}
-                        <a class="dropdown-item" href="{% url 'view_user' cid=request.session.vatsim_data.cid %}">My Profile</a>
+                    {% if request.user_obj %}
+                        <a class="dropdown-item" href="{% url 'view_user' cid=request.user_obj.cid %}">My Profile</a>
                         <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
-                        {% if request.session.staff or request.session.mentor %}
+                        {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
                             <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
                         {% endif %}
                     {% else %}

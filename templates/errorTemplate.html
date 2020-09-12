@@ -8,7 +8,7 @@
         <meta name="author" content="Michael Romashov">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Error {% block title %}{% endblock %} :: Houston ARTCC</title>
+        <title>Error {{ error }} :: Houston ARTCC</title>
         <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 
 	    <link href="https://fonts.googleapis.com/css?family=Kanit:200" rel="stylesheet">
@@ -54,7 +54,7 @@
                 transform: translate(-50%, -50%);
                 font-size: 186px;
                 font-weight: 200;
-                margin: 0px;
+                margin: 0;
                 background: linear-gradient(130deg, #4c0749, #2bbac8);
                 color:transparent;
                 -webkit-background-clip: text;
@@ -66,15 +66,13 @@
                 font-size: 33px;
                 font-weight: 200;
                 text-transform: uppercase;
-                margin-top: 0px;
-                margin-bottom: 25px;
+                margin-bottom: 15px;
                 letter-spacing: 3px;
             }
             .notfound p {
                 font-family: 'Kanit', sans-serif;
-                font-size: 16px;
+                font-size: 17px;
                 font-weight: 200;
-                margin-top: 0px;
                 margin-bottom: 25px;
             }
             .notfound a {
@@ -103,10 +101,10 @@
         <div id="notfound">
             <div class="notfound">
                 <div class="notfound-404">
-                    <h1>{% block code %}{% endblock %}</h1>
+                    <h1>{{ error }}</h1>
                 </div>
-                <h2>{% block headline %}{% endblock %}</h2>
-                <p>{% block message %}{% endblock %} <a href="{% url 'home' %}">Return to homepage</a></p>
+                <h2>{{ title }}</h2>
+                <p>{{ exception }} <a href="{% url 'home' %}">Return to homepage</a></p>
             </div>
         </div>
     </body>

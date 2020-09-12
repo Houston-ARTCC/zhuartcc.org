@@ -1,14 +1,14 @@
 {% extends 'mainTemplate.html' %}
 
 {% block body %}
-    {% if request.session.staff %}
+    {% if request.user_obj.is_staff %}
         <div class="text-center">
             <a href="{% url 'new_event' %}"><button class="btn btn-lg btn-primary mb-4"><i class="far fa-plus"></i> Create New Event</button></a>
         </div>
     {% endif %}
     <div class="row">
         {% for event in events %}
-            {% if event.hidden and request.session.staff or not event.hidden %}
+            {% if event.hidden and request.user_obj.is_staff or not event.hidden %}
                 <div class="col-12 col-lg-6">
                     <a href="{% url 'event' event_id=event.id %}">
                         <div class="card">

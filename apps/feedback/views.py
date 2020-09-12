@@ -3,7 +3,9 @@ from datetime import timedelta
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
+from zhuartcc.decorators import require_staff, require_session
 from .models import Feedback
 from ..event.models import Event
 from ..user.models import User
@@ -12,10 +14,11 @@ from ..user.models import User
 def view_all_feedback(request):
     return render(request, 'all_feedback.html', {
         'page_title': 'Feedback',
-        'all_feedback': Feedback.objects.all(),
+        'all_feedback': Feedback.objects.filter(approved=True),
     })
 
 
+@require_session
 def add_feedback(request):
     if request.method == 'POST':
         Feedback(
@@ -37,3 +40,26 @@ def add_feedback(request):
             'events': Event.objects.filter(start__gte=timezone.now() - timedelta(days=30))
                       .filter(start__lte=timezone.now()).filter(hidden=False),
         })
+
+
+@require_staff
+def view_feedback_approval(request):
+    return render(request, 'feedback_approval.html', {
+        'page_title': 'Feedback Approval',
+        'unapproved_feedback': Feedback.objects.filter(approved=False)
+    })
+
+
+@require_staff
+@require_POST
+def approve_feedback(request, feedback_id):
+    feedback = Feedback.objects.get(id=feedback_id)
+    feedback.approved = True
+    feedback.save()
+
+
+@require_staff
+@require_POST
+def reject_feedback(request, feedback_id):
+    feedback = Feedback.objects.get(id=feedback_id)
+    feedback.delete()

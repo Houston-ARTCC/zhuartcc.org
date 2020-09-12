@@ -18,4 +18,4 @@ class Announcement(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'"{self.subject}" by {self.author.full_name}'
+        return f'{self.subject}'

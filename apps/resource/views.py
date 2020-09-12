@@ -1,14 +1,11 @@
-from itertools import groupby
-
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from zhuartcc.decorators import require_staff
 from .models import Resource
 from ..administration.models import ActionLog
-from ..user.models import User
-from zhuartcc.decorators import require_staff
 
 
 def view_resources(request):
@@ -34,8 +31,7 @@ def add_resource(request):
     )
     resource.save()
 
-    user = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Resource "{resource.name}" created by {user.full_name}.').save()
+    ActionLog(action=f'Resource "{resource}" created by {request.user_obj}.').save()
 
     return redirect(reverse('resources'))
 
@@ -51,8 +47,7 @@ def edit_resource(request, resource_id):
         resource.path = request.FILES['file']
     resource.save()
 
-    user = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Resource "{resource.name}" modified by {user.full_name}.').save()
+    ActionLog(action=f'Resource "{resource}" modified by {request.user_obj}.').save()
 
     return redirect(reverse('resources'))
 
@@ -63,8 +58,7 @@ def edit_resource(request, resource_id):
 def delete_resource(request, resource_id):
     resource = Resource.objects.get(id=resource_id)
 
-    user = User.objects.get(cid=request.session.get('cid'))
-    ActionLog(action=f'Resource "{resource.name}" deleted by {user.full_name}.').save()
+    ActionLog(action=f'Resource "{resource}" deleted by {request.user_obj}.').save()
 
     resource.delete()
 

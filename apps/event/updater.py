@@ -1,6 +1,4 @@
-from datetime import timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-
 from django.utils import timezone
 
 from .models import Event

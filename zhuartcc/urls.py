@@ -51,6 +51,9 @@ urlpatterns = [
     # Feedback
     path('feedback/', feedback.view_all_feedback, name='feedback'),
     path('feedback/new/', feedback.add_feedback, name='new_feedback'),
+    path('feedback/approval/', feedback.view_feedback_approval, name='feedback_approval'),
+    path('feedback/<int:feedback_id>/approve/', feedback.approve_feedback, name='accept_feedback'),
+    path('feedback/<int:feedback_id>/reject/', feedback.reject_feedback, name='reject_feedback'),
 
     # Pilots
     path('map/', pilots.view_artcc_map, name='map'),
@@ -109,3 +112,8 @@ urlpatterns = [
 
 # Allows access of media files such as documents and user profiles
 urlpatterns += static(settings.MEDIA_URL, view=xframe_options_sameorigin(serve), document_root=settings.MEDIA_ROOT)
+
+handler404 = 'apps.views.views.error_404'
+handler500 = 'apps.views.views.error_500'
+handler403 = 'apps.views.views.error_403'
+handler400 = 'apps.views.views.error_400'

@@ -36,7 +36,8 @@ class Event(models.Model):
                     session_seconds = event_seconds
 
                 score = [(session_seconds / event_seconds) * 100]
-                comments = f'Controlled for <b>{duration}</b> out of <b>{self.duration}</b> event duration ({int(score[0])}%).'
+                comments = f'Controlled for <b>{duration}</b> out of ' \
+                           f'<b>{self.duration}</b> event duration ({int(score[0])}%).'
 
                 event_feedback = self.feedback.filter(controller=position.user)
                 for feedback in event_feedback:

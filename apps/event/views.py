@@ -172,7 +172,7 @@ def request_position(request, position_id):
 @csrf_exempt
 def unrequest_position(request, request_id):
     position_request = EventPositionRequest.objects.get(id=request_id)
-    if position_request.user_obj.id == request.user_obj.id:
+    if position_request.user.id == request.user_obj.id:
         position_request.delete()
         return HttpResponse(status=200)
     else:

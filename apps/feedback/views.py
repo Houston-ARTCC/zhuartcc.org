@@ -22,14 +22,14 @@ def view_all_feedback(request):
 def add_feedback(request):
     if request.method == 'POST':
         Feedback(
-            controller=User.objects.get(cid=request.POST['controller']),
-            controller_callsign=request.POST['controller_callsign'],
-            rating=int(request.POST['rating']),
+            controller=User.objects.get(cid=request.POST.get('controller')),
+            controller_callsign=request.POST.get('controller_callsign'),
+            rating=int(request.POST.get('rating')),
             pilot_name=request.POST.get('pilot_name', None),
             pilot_email=request.POST.get('pilot_email', None),
-            event=Event.objects.get(id=request.POST['event']) if 'event' in request.POST else None,
+            event=Event.objects.get(id=request.POST.get('event')) if request.POST.get('event') != '' else None,
             flight_callsign=request.POST.get('flight_callsign', None),
-            comments=request.POST['comments'],
+            comments=request.POST.get('comments'),
         ).save()
 
         return redirect(reverse('feedback'))

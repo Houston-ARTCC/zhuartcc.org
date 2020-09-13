@@ -64,11 +64,11 @@ def view_event(request, event_id):
 def add_event(request):
     if request.method == 'POST':
         event = Event(
-            name=request.POST['name'],
-            start=pytz.utc.localize(datetime.fromisoformat(request.POST['start'])),
-            end=pytz.utc.localize(datetime.fromisoformat(request.POST['end'])),
-            banner=request.POST['banner'],
-            host=request.POST['host'],
+            name=request.POST.get('name'),
+            start=pytz.utc.localize(datetime.fromisoformat(request.POST.get('start'))),
+            end=pytz.utc.localize(datetime.fromisoformat(request.POST.get('end'))),
+            banner=request.POST.get('banner'),
+            host=request.POST.get('host'),
             description=request.POST.get('description', None),
             hidden=True if 'hidden' in request.POST else False,
         )
@@ -76,8 +76,8 @@ def add_event(request):
 
         ActionLog(action=f'Event "{event.name}" created by {request.user_obj}.').save()
 
-        if request.POST['preset']:
-            PositionPreset.objects.get(id=request.POST['preset']).add_to_event(event)
+        if request.POST.get('preset'):
+            PositionPreset.objects.get(id=request.POST.get('preset')).add_to_event(event)
 
         return redirect(reverse('event', args=[event.id]))
     else:
@@ -94,11 +94,11 @@ def edit_event(request, event_id):
     event = Event.objects.get(id=event_id)
     if event.end >= timezone.now():
         if request.method == 'POST':
-            event.name = request.POST['name']
-            event.start = pytz.utc.localize(datetime.fromisoformat(request.POST['start']))
-            event.end = pytz.utc.localize(datetime.fromisoformat(request.POST['end']))
-            event.banner = request.POST['banner']
-            event.host = request.POST['host']
+            event.name = request.POST.get('name')
+            event.start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
+            event.end = pytz.utc.localize(datetime.fromisoformat(request.POST.get('end')))
+            event.banner = request.POST.get('banner')
+            event.host = request.POST.get('host')
             event.description = request.POST.get('description', None)
             event.hidden = True if 'hidden' in request.POST else False
             event.save()
@@ -136,7 +136,7 @@ def delete_event(request, event_id):
 def add_position(request, event_id):
     EventPosition(
         event=Event.objects.get(id=event_id),
-        name=request.POST['position'],
+        name=request.POST.get('position'),
     ).save()
 
     return HttpResponse(status=200)
@@ -209,7 +209,7 @@ def view_presets(request):
 @require_POST
 def add_preset(request):
     preset = PositionPreset(
-        name=request.POST['name']
+        name=request.POST.get('name')
     )
     preset.save()
 
@@ -222,7 +222,7 @@ def add_preset(request):
 @require_POST
 def edit_preset(request, preset_id):
     preset = PositionPreset.objects.get(id=preset_id)
-    preset.positions_json = request.POST['positions']
+    preset.positions_json = request.POST.get('positions')
     preset.save()
 
     ActionLog(action=f'Position preset "{preset}" modified by {request.user_obj}.').save()

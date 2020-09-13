@@ -67,15 +67,15 @@ def edit_session(request, session_id):
 @require_member
 def request_training(request):
     if request.method == 'POST':
-        start = pytz.utc.localize(datetime.fromisoformat(request.POST['start']))
-        end = pytz.utc.localize(datetime.fromisoformat(request.POST['end']))
+        start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
+        end = pytz.utc.localize(datetime.fromisoformat(request.POST.get('end')))
         if start < end:
             TrainingRequest(
                 student=request.user_obj,
-                start=pytz.utc.localize(datetime.fromisoformat(request.POST['start'])),
-                end=pytz.utc.localize(datetime.fromisoformat(request.POST['end'])),
-                type=request.POST['type'],
-                level=request.POST['level'],
+                start=pytz.utc.localize(datetime.fromisoformat(request.POST.get('start'))),
+                end=pytz.utc.localize(datetime.fromisoformat(request.POST.get('end'))),
+                type=request.POST.get('type'),
+                level=request.POST.get('level'),
                 remarks=request.POST.get('remarks', None)
             ).save()
         else:
@@ -141,8 +141,8 @@ def accept_training_request(request, request_id):
     TrainingSession(
         student=training_request.student,
         instructor=request.user_obj,
-        start=pytz.utc.localize(datetime.strptime(request.POST['start'], '%Y-%m-%dT%H:%M:%S.%f')),
-        end=pytz.utc.localize(datetime.strptime(request.POST['end'], '%Y-%m-%dT%H:%M:%S.%f')),
+        start=pytz.utc.localize(datetime.strptime(request.POST.get('start'), '%Y-%m-%dT%H:%M:%S.%f')),
+        end=pytz.utc.localize(datetime.strptime(request.POST.get('end'), '%Y-%m-%dT%H:%M:%S.%f')),
         type=training_request.type,
         level=training_request.level,
     ).save()

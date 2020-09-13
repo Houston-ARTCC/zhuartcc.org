@@ -138,11 +138,11 @@ def edit_user(request, cid):
 @require_POST
 def update_status(request, cid):
     user = User.objects.get(cid=cid)
-    user.status = int(request.POST['status'])
-    if request.POST['status'] == '1':
-        user.loa_until = pytz.utc.localize(datetime.strptime(request.POST['loa_until'], '%Y-%m-%d'))
-        status = 'LOA until ' + request.POST['loa_until']
-    if request.POST['status'] == '2':
+    user.status = int(request.POST.get('status'))
+    if request.POST.get('status') == '1':
+        user.loa_until = pytz.utc.localize(datetime.strptime(request.POST.get('loa_until'), '%Y-%m-%d'))
+        status = 'LOA until ' + request.POST.get('loa_until')
+    if request.POST.get('status') == '2':
         status = 'inactive'
     else:
         status = 'active'
@@ -192,7 +192,7 @@ def remove_users(request):
 @require_POST
 def add_comment(request, cid):
     user = User.objects.get(cid=cid)
-    user.staff_comment = request.POST['comment']
+    user.staff_comment = request.POST.get('comment')
     user.staff_comment_author = request.user_obj
     user.save()
 

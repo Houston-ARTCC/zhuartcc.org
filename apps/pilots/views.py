@@ -29,9 +29,9 @@ def view_scenery(request):
 @require_POST
 def add_scenery(request):
     scenery = Scenery(
-        name=request.POST['name'],
-        simulator=request.POST['simulator'],
-        link=request.POST['link'],
+        name=request.POST.get('name'),
+        simulator=request.POST.get('simulator'),
+        link=request.POST.get('link'),
         payware=True if 'payware' in request.POST else False
     )
     scenery.save()
@@ -45,9 +45,9 @@ def add_scenery(request):
 @require_POST
 def edit_scenery(request, scenery_id):
     scenery = Scenery.objects.get(id=scenery_id)
-    scenery.name = request.POST['name']
-    scenery.simulator = request.POST['simulator']
-    scenery.link = request.POST['link']
+    scenery.name = request.POST.get('name')
+    scenery.simulator = request.POST.get('simulator')
+    scenery.link = request.POST.get('link')
     scenery.payware = True if 'payware' in request.POST else False
     scenery.save()
 

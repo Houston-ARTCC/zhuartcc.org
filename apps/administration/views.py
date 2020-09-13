@@ -49,13 +49,14 @@ def view_transfers(request):
 @require_staff
 def view_announcement(request):
     if request.method == 'POST':
-        Announcement(
+        announcement = Announcement(
             author=request.user_obj,
-            subject=request.POST['subject'],
-            message=request.POST['message'],
-        ).save()
+            subject=request.POST.get('subject'),
+            message=request.POST.get('message'),
+        )
+        announcement.save()
 
-        ActionLog(action=f'User {request.user_obj} created announcement "{request.POST["subject"]}".').save()
+        ActionLog(action=f'User {request.user_obj} created announcement "{announcement.subject}".').save()
 
         return redirect(reverse('home'))
 
@@ -67,21 +68,21 @@ def view_broadcast(request):
     if request.method == 'POST':
         recipients = User.objects.filter(rating__in=request.POST)
 
-        if request.POST['main_role'] != 'AC':
-            recipients = recipients.filter(main_role=request.POST['main_role'])
+        if request.POST.get('main_role') != 'AC':
+            recipients = recipients.filter(main_role=request.POST.get('main_role'))
 
         send_mass_html_mail(
             (
                 (
-                    request.POST['subject'],
+                    request.POST.get('subject'),
                     render_to_string('emails/broadcast.txt', {
                         'user': recipient,
-                        'message': request.POST['message'],
+                        'message': request.POST.get('message'),
                         'sender': request.user_obj
                     }),
                     render_to_string('emails/broadcast.html', {
                         'user': recipient,
-                        'message': request.POST['message'],
+                        'message': request.POST.get('message'),
                         'sender': request.user_obj
                     }),
                     os.getenv('NO_REPLY'),
@@ -90,7 +91,7 @@ def view_broadcast(request):
             )
         )
 
-        ActionLog(action=f'User {request.user_obj} sent broadcast "{request.POST["subject"]}".').save()
+        ActionLog(action=f'User {request.user_obj} sent broadcast "{request.POST.get("subject")}".').save()
 
         return HttpResponse(status=200)
 

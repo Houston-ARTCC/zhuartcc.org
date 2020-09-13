@@ -25,9 +25,9 @@ def view_resources(request):
 @require_POST
 def add_resource(request):
     resource = Resource(
-        path=request.FILES['file'],
-        name=request.POST['name'],
-        category=request.POST['category'],
+        path=request.FILES.get('file'),
+        name=request.POST.get('name'),
+        category=request.POST.get('category'),
     )
     resource.save()
 
@@ -41,10 +41,9 @@ def add_resource(request):
 @require_POST
 def edit_resource(request, resource_id):
     resource = Resource.objects.get(id=resource_id)
-    resource.name = request.POST['name']
-    resource.category = request.POST['category']
-    if 'file' in request.FILES:
-        resource.path = request.FILES['file']
+    resource.name = request.POST.get('name')
+    resource.category = request.POST.get('category')
+    resource.path = request.FILES.get('file', resource.path)
     resource.save()
 
     ActionLog(action=f'Resource "{resource}" modified by {request.user_obj}.').save()

@@ -109,7 +109,7 @@ def reject_visiting_request(request, visit_id):
 
     context = {
         'name': visiting_request.first_name,
-        'reason': request.POST['reason']
+        'reason': request.POST.get('reason')
     }
     send_mail(
         '[vZHU] Your Houston ARTCC Visiting Request...',

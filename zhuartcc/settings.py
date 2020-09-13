@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from datetime import datetime
+
+from django.utils import timezone
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -97,29 +100,31 @@ WSGI_APPLICATION = 'zhuartcc.wsgi.application'
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
-        'standard': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
     },
     'handlers': {
-        'logfile': {
-            'class': 'logging.handlers.RotatingFileHandler',
+        'file': {
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'maxBytes': 5242880,
-            'formatter': 'standard',
+            'when': 'midnight',
+            'interval': 1,
+            'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['logfile'],
+            'handlers': ['file'],
             'level': 'ERROR',
             'propagate': False,
         },
-        'zhuartcc': {
-            'handlers': ['logfile'],
-            'level': 'DEBUG',
+        '': {
+            'handlers': ['file'],
+            'level': 'ERROR',
             'propagate': False
         },
     }

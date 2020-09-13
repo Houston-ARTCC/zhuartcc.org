@@ -1,8 +1,8 @@
 {% extends 'email_template.html' %}
 
 {% block content %}
-    <p>Hello {{ name }},</p>
-    <p>We thank you for your interest in visiting the virtual Houston ARTCC. However, your request to visit the ARTCC has been unfortunately denied due to the following reason:</p>
+    <p>Hello {{ feedback.pilot_name }},</p>
+    <p>We thank you for your submitting feedback for virtual Houston ARTCC. However, your feedback was been unfortunately rejected due to the following reason:</p>
     <p><i>{{ reason }}</i></p>
     <p>If you believe there has been an error or wish to appeal this decision, please contact <a href="mailto:atm@zhuartcc.org">atm@zhuartcc.org</a> or <a href="mailto:datm@zhuartcc.org">datm@zhuartcc.org</a> immediately!</p>
 {% endblock %}

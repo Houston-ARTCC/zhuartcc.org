@@ -1,0 +1,6 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    <p>Hello {{ request.student.first_name }},</p>
+    <p>Unfortunately your training request was rejected by a member of training staff. Please request another session if you believe this was an error.</p>
+{% endblock %}

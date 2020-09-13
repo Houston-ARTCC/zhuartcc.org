@@ -237,14 +237,17 @@
         })
         $('[data-action="unassign"]').click(function() {
             $.post('{% url 'unassign_position' position_id=0 %}'.replace(/0/, $(this).data('id')))
+            .done(function() { location.reload() })
             .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
         })
         $('[data-action="assign"]').change(function() {
             $.post('{% url 'assign_position' request_id=0 %}'.replace(/0/, $(this).val()))
+            .done(function() { location.reload() })
             .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
         })
         $('[data-action="delete"]').click(function() {
             $.post('{% url 'delete_position' position_id=0 %}'.replace(/0/, $(this).data('id')))
+            .done(function() { location.reload() })
             .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
         })
         $('.position-input').keyup(function(event) {
@@ -263,6 +266,7 @@
         })
         function addPosition(pos) {
             $.post('{% url 'add_position' event_id=event.id %}', {position: pos})
+            .done(function() { location.reload() })
             .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
         }
     </script>

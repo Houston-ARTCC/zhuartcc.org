@@ -1,14 +1,8 @@
-{% extends 'emailTemplate.html' %}
+{% extends 'email_template.html' %}
 
-
-{% block message %}
-    <p><b>Hello {{ name }},</b></p>
-    <p>The Houston Virtual ARTCC has successfully received your visiting request. You will received an email once a senior staff member has reviewed your visiting request.</p>
+{% block content %}
+    <p>Hello {{ name }},</p>
+    <p>The Virtual Houston ARTCC has successfully received your visiting request! You will receive an email once a senior staff member has reviewed your visiting request.</p>
     <p>Thank you for your interest in visiting Houston and good luck!</p>
     <p>If you believe there has been an error, please contact <a href="mailto:atm@zhuartcc.org">atm@zhuartcc.org</a> or <a href="mailto:datm@zhuartcc.org">datm@zhuartcc.org</a> immediately!</p>
-{% endblock %}
-
-
-{% block footer %}
-    This message was sent automatically from <a href="https://zhuartcc.org" target="_blank">zhuartcc.org</a> on {% now 'M d, Y \a\t H:i\z' %}.
 {% endblock %}

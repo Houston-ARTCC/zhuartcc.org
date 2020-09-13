@@ -1,0 +1,15 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    <p>Hello {{ feedback.pilot_name }},</p>
+    <p>The Virtual Houston ARTCC has successfully received your feedback! You will receive an email once a staff member has reviewed it.</p>
+    <p>Feedback Details:</p>
+    <ul>
+        <li><b>Controller:</b> {{ feedback.controller.full_name }} ({{ feedback.controller.cid }})</li>
+        <li><b>Controller Callsign:</b> {{ feedback.controller_callsign }}</li>
+        <li><b>Rating:</b> {{ feedback.rating }} / 5</li>
+        <li><b>Comments:</b> {{ feedback.comments }}</li>
+        <li><b>Event:</b> {{ feedback.event.name|default:'None' }}</li>
+    </ul>
+    <p>If you believe there has been an error, please contact <a href="mailto:atm@zhuartcc.org">atm@zhuartcc.org</a> or <a href="mailto:datm@zhuartcc.org">datm@zhuartcc.org</a>!</p>
+{% endblock %}

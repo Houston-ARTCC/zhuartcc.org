@@ -1,7 +1,0 @@
-Houston Virtual ARTCC
-=====================
-
-{% block message %}{% endblock %}
-
-
-{% block footer %}{% endblock %}

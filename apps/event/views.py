@@ -1,13 +1,16 @@
+import os
 import pytz
 from datetime import datetime
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
+from zhuartcc.overrides import send_mail
 from .models import Event, EventPosition, PositionPreset, EventPositionRequest
 from ..administration.models import ActionLog
 from ..training.models import TrainingSession
@@ -182,15 +185,39 @@ def unrequest_position(request, request_id):
 @require_staff
 @require_POST
 def assign_position(request, request_id):
-    EventPositionRequest.objects.get(id=request_id).assign()
+    position_request = EventPositionRequest.objects.get(id=request_id)
+    if position_request.position.user != position_request.user:
+        if position_request.position.user is not None:
+            send_mail(
+                'Event Position Unassigned',
+                render_to_string('emails/position_unassigned.html', {'position': position_request.position}),
+                os.getenv('NO_REPLY'),
+                [position_request.position.user.email],
+            )
+        position_request.assign()
 
-    return HttpResponse(status=200)
+        send_mail(
+            'Event Position Assigned!',
+            render_to_string('emails/position_assigned.html', {'position': position_request.position}),
+            os.getenv('NO_REPLY'),
+            [position_request.user.email],
+        )
+
+        return HttpResponse(status=200)
 
 
 @require_staff
 @require_POST
 def unassign_position(request, position_id):
     position = EventPosition.objects.get(id=position_id)
+
+    send_mail(
+        'Event Position Unassigned',
+        render_to_string('emails/position_unassigned.html', {'position': position}),
+        os.getenv('NO_REPLY'),
+        [position.user.email],
+    )
+
     position.user = None
     position.save()
 

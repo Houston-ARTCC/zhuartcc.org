@@ -177,13 +177,13 @@ def remove_users(request):
             user.save()
             send_mail(
                 'Roster Removal Notification',
-                render_to_string('emails/roster_removal.txt', {'user': user}),
+                render_to_string('emails/roster_removal.html', {'user': user}),
                 os.getenv('NO_REPLY'),
                 [user.email],
-                html_message=render_to_string('emails/roster_removal.html', {'user': user}),
+                fail_silently=True,
             )
 
-            ActionLog(action=f'User {user.full_name} set to inactive by {request.user_obj}.').save()
+            ActionLog(action=f'User {user.full_name} removed from the ARTCC {request.user_obj}.').save()
 
     return HttpResponse(status=200)
 

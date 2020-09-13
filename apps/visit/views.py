@@ -2,12 +2,12 @@ import os
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+from zhuartcc.overrides import send_mail
 from .models import Visit
 from ..administration.models import ActionLog
 from ..user.models import User
@@ -34,15 +34,11 @@ def submit_visiting_request(request):
             )
             visiting_request.save()
 
-            context = {
-                'name': visiting_request.first_name,
-            }
             send_mail(
-                '[vZHU] We have received your visiting request!',
-                render_to_string('emails/visiting_request_received.txt', context),
+                'We have received your visiting request!',
+                render_to_string('emails/visiting_request_received.html', {'name': visiting_request.first_name}),
                 os.getenv('NO_REPLY'),
                 [visiting_request.email],
-                html_message=render_to_string('emails/visiting_request_received.html', context),
             )
 
             return redirect(reverse('home'))
@@ -84,15 +80,11 @@ def accept_visiting_request(request, visit_id):
 
     ActionLog(action=f'{visiting_request}\'s visiting request was accepted by {request.user_obj}.').save()
 
-    context = {
-        'name': visiting_request.first_name,
-    }
     send_mail(
-        '[vZHU] Welcome to the Houston ARTCC!',
-        render_to_string('emails/visiting_request_accepted.txt', context),
+        'Welcome to the Houston ARTCC!',
+        render_to_string('emails/visiting_request_accepted.html', {'name': visiting_request.first_name}),
         os.getenv('NO_REPLY'),
         [visiting_request.email],
-        html_message=render_to_string('emails/visiting_request_accepted.html', context),
     )
 
     visiting_request.delete()
@@ -112,11 +104,10 @@ def reject_visiting_request(request, visit_id):
         'reason': request.POST.get('reason')
     }
     send_mail(
-        '[vZHU] Your Houston ARTCC Visiting Request...',
-        render_to_string('emails/visiting_request_rejected.txt', context),
+        'Your Houston ARTCC Visiting Request...',
+        render_to_string('emails/visiting_request_rejected.html', context),
         os.getenv('NO_REPLY'),
         [visiting_request.email],
-        html_message=render_to_string('emails/visiting_request_rejected.html', context),
     )
 
     visiting_request.delete()

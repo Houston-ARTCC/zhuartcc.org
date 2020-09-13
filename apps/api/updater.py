@@ -1,12 +1,11 @@
 import os
 import ast
-import calendar
 import pytz
 import requests
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
-
 from django.core.mail import send_mail
+
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -60,13 +59,12 @@ def warn_inactive_users():
     for aggregate in return_inactive_users():
         context = {
             'user': aggregate['user_obj'],
-            'hours': round(aggregate['current'].total_seconds() / 3600, 1),
-            'deadline': f'{calendar.month_name[timezone.now().month + 1]} 5'
+            'hours': round(aggregate['hours']['current'].total_seconds() / 3600, 1),
         }
         send_mail(
             'Controller Activity Warning',
-            render_to_string('emails/activity_warning.txt', context),
+            render_to_string('emails/activity_warning.html', context),
             os.getenv('NO_REPLY'),
             [aggregate['user_obj'].email],
-            html_message=render_to_string('emails/activity_warning.html', context),
+            fail_silently=True,
         )

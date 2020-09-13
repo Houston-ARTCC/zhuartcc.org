@@ -1,0 +1,14 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    <p>Hello {{ request.student.first_name }},</p>
+    <p>We have received your training request! You will receive an email once a training staff member reviews your request.</p>
+    <p>Request Details:</p>
+    <ul>
+        <li><b>Availability:</b> {{ request.start|date:'M j, Y @ Hi\z' }} - {{ request.end|date:'M j, Y @ Hi\z' }}</li>
+        <li><b>Level:</b> {{ request.get_level_display }}</li>
+        <li><b>Type:</b> {{ request.get_type_display }}</li>
+        <li><b>Remarks:</b> {{ request.remarks }}</li>
+    </ul>
+    <p>If you believe there has been an error, please contact <a href="mailto:ta@zhuartcc.org">ta@zhuartcc.org</a> immediately!</p>
+{% endblock %}

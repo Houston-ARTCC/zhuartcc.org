@@ -1,0 +1,8 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    <p>Hello {{ position.user.first_name }},</p>
+    <p>You have been assigned a position for the <b>{{ position.event.name }}</b> event!</p>
+    <p>You will be controlling <b>{{ position.name }}</b>. The event starts on {{ position.event.start|date:'M d, Y \a\t Hi\z' }}, but please be in Teamspeak 30 minutes early for the briefing.</p>
+    <p>If you believe there has been an error or to withdraw from the event, please contact <a href="mailto:ec@zhuartcc.org">ec@zhuartcc.org</a> or <a href="mailto:aec@zhuartcc.org">aec@zhuartcc.org</a> immediately!</p>
+{% endblock %}

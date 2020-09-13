@@ -1,13 +1,7 @@
-{% extends 'emailTemplate.html' %}
+{% extends 'email_template.html' %}
 
-
-{% block message %}
-    <p><b>Hello {{ user.first_name }},</b></p>
-    <p>We regret to inform you that because you did not fulfill activity requirements for <b>{% now 'F Y' %}</b>, you have been removed from the Houston ARTCC active controller roster. If you are a home controller, you will be automatically transferred to VATUSA academy. If you are a visiting controller, reapply if you wish to visit again.</p>
+{% block content %}
+    <p>Hello {{ user.first_name }},</p>
+    <p>We regret to inform you that because you did not fulfill activity requirements for <b>{% now 'F Y' %}</b>, you have been removed from the Houston ARTCC active controller roster. If you are a home controller, you will be automatically transferred to VATUSA academy. If you are a visiting controller, re-apply if you wish to visit again.</p>
     <p>If you believe there has been an error, please contact <a href="mailto:atm@zhuartcc.org">atm@zhuartcc.org</a> or <a href="mailto:datm@zhuartcc.org">datm@zhuartcc.org</a> immediately!</p>
-{% endblock %}
-
-
-{% block footer %}
-    This message was sent automatically from <a href="https://zhuartcc.org" target="_blank">zhuartcc.org</a> on {% now 'M d, Y \a\t H:i\z' %}.
 {% endblock %}

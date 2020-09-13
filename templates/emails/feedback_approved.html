@@ -1,0 +1,6 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    <p>Hello {{ feedback.pilot_name }},</p>
+    <p>We thank you for your submitting feedback for {{ feedback.controller.full_name }}! It has been approved by staff and is now visible on the Houston ARTCC website.</p>
+{% endblock %}

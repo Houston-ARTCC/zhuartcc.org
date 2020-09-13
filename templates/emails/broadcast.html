@@ -1,13 +1,9 @@
-{% extends 'emailTemplate.html' %}
+{% extends 'email_template.html' %}
 
-
-{% block message %}
-    <p><b>Hello {{ user.first_name }},</b></p>
-
+{% block content %}
     {{ message|safe }}
 {% endblock %}
 
-
 {% block footer %}
-    This message was sent by {{ sender }} from <a href="https://zhuartcc.org" target="_blank">zhuartcc.org</a> on {% now 'M d, Y \a\t H:i\z' %}.
+    This message was sent by {{ sender.full_name }} on {% now 'M d, Y \a\t Hi\z' %}.
 {% endblock %}

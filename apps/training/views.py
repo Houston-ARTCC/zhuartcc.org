@@ -1,13 +1,16 @@
+import os
 from datetime import datetime, timedelta
 
 import pytz
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from zhuartcc.decorators import require_member, require_mentor, require_staff_or_mentor
+from zhuartcc.overrides import send_mail
 from .models import TrainingSession, TrainingRequest
 from ..administration.models import ActionLog
 from ..event.models import Event
@@ -70,14 +73,22 @@ def request_training(request):
         start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
         end = pytz.utc.localize(datetime.fromisoformat(request.POST.get('end')))
         if start < end:
-            TrainingRequest(
+            training_request = TrainingRequest(
                 student=request.user_obj,
                 start=pytz.utc.localize(datetime.fromisoformat(request.POST.get('start'))),
                 end=pytz.utc.localize(datetime.fromisoformat(request.POST.get('end'))),
                 type=request.POST.get('type'),
                 level=request.POST.get('level'),
                 remarks=request.POST.get('remarks', None)
-            ).save()
+            )
+            training_request.save()
+
+            send_mail(
+                'Training Request Received',
+                render_to_string('emails/request_received.html', {'request': training_request}),
+                os.getenv('NO_REPLY'),
+                [training_request.student.email],
+            )
         else:
             return HttpResponse('The start time must be before the end time.', status=400)
 
@@ -138,14 +149,22 @@ def view_training_requests(request):
 @require_mentor
 def accept_training_request(request, request_id):
     training_request = TrainingRequest.objects.get(id=request_id)
-    TrainingSession(
+    training_session = TrainingSession(
         student=training_request.student,
         instructor=request.user_obj,
         start=pytz.utc.localize(datetime.strptime(request.POST.get('start'), '%Y-%m-%dT%H:%M:%S.%f')),
         end=pytz.utc.localize(datetime.strptime(request.POST.get('end'), '%Y-%m-%dT%H:%M:%S.%f')),
         type=training_request.type,
         level=training_request.level,
-    ).save()
+    )
+    training_session.save()
+
+    send_mail(
+        'Training Scheduled!',
+        render_to_string('emails/request_accepted.html', {'session': training_session}),
+        os.getenv('NO_REPLY'),
+        [training_session.student.email, training_session.instructor.email],
+    )
 
     ActionLog(action=f'{request.user_obj} accepted {training_request.student.full_name}\'s training request.').save()
     training_request.delete()
@@ -158,7 +177,14 @@ def accept_training_request(request, request_id):
 def reject_training_request(request, request_id):
     training_request = TrainingRequest.objects.get(id=request_id)
 
+    send_mail(
+        'Training Request Rejected',
+        render_to_string('emails/request_rejected.html', {'request': training_request}),
+        os.getenv('NO_REPLY'),
+        [training_request.student.email],
+    )
     ActionLog(action=f'{request.user_obj} rejected {training_request.student.full_name}\'s training request.').save()
+
     training_request.delete()
 
     return redirect(reverse('training_requests'))

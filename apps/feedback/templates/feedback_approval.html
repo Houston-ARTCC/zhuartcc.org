@@ -56,15 +56,18 @@
                 launchCustomModal(
                     'info',
                     `Reject Feedback?`,
-                    `<p>Are you sure you would like to reject this feedback? This action cannot be undone!</p>
-                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+                    `<form action="${'{% url 'reject_feedback' feedback_id=0 %}'.replace(/0/, $this.data('id'))}" method="POST">
+                        {% csrf_token %}
+                        <div class="label-group">
+                            <textarea name="reason" rows="2" required></textarea>
+                            <label>Reason for Rejection</label>
+                            <span class="focus-border"></span>
+                        </div>
+                        <p>Are you sure you would like to reject this feedback? This action cannot be undone!</p>
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary">Confirm</button>
+                    </form>`
                 )
-                $('#customModal [data-action="confirm"]').click(function() {
-                    $.post('{% url 'reject_feedback' feedback_id=0 %}'.replace(/0/, $this.data('id')))
-                    .done(function() { launchSuccessModal() })
-                    .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
-                })
             }
         })
     </script>

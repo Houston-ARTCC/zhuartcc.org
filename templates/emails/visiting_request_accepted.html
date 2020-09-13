@@ -1,8 +1,7 @@
-{% extends 'emailTemplate.html' %}
+{% extends 'email_template.html' %}
 
-
-{% block message %}
-    <p><b>Hello {{ name }},</b></p>
+{% block content %}
+    <p>Hello {{ name }},</p>
     <p>Congratulations! Your visiting request to visit the virtual Houston ARTCC was approved by a senior staff member! We are happy to welcome you to our family and hope you enjoy your time here.</p>
     <br>
     <h3>Connecting to the vZHU Teamspeak</h3>
@@ -32,12 +31,7 @@
     <br>
     <h3>Training</h3>
     <p>To schedule a training session, log in to the main website and go to the Training Center, which can be found by clicking on your name in the top right. Here you will see all training sessions, previous and scheduled, and will also be able to manage training requests. Once you submit a training request, a member of the training team will accept your request and a session will be automatically scheduled.</p>
-    <p>If you have any questions regarding the training process or if you have any trouble scheduling training, please email the Training Administrator at <a href="mailto:ta@zhuartcc.org">ta@zhuartcc.org</a>.</p>
+    <p>If you have any questions regarding the training process or if you have any trouble scheduling training, please contact the Training Administrator at <a href="mailto:ta@zhuartcc.org">ta@zhuartcc.org</a>.</p>
     <br>
     <p>Again, on behalf of the entire staff team at Houston, welcome to the vZHU family!</p>
-{% endblock %}
-
-
-{% block footer %}
-    This message was sent automatically from <a href="https://zhuartcc.org" target="_blank">zhuartcc.org</a> on {% now 'M d, Y \a\t H:i\z' %}.
 {% endblock %}

@@ -1,3 +1,4 @@
+import threading
 from functools import wraps
 
 from django.core.exceptions import PermissionDenied
@@ -63,3 +64,10 @@ def require_role(role_list):
                 raise PermissionDenied('You lack the necessary role to access this endpoint!')
         return inner
     return decorator
+
+
+def run_async(func):
+    @wraps(func)
+    def inner(*args, **kwargs):
+        threading.Thread(target=func, args=args).start()
+    return inner

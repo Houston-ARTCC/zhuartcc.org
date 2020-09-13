@@ -40,7 +40,7 @@
                         <a href="{% url 'broadcast' %}"><button class="btn btn-secondary">Broadcast Email</button></a>
                         <a href="{% url 'log' %}"><button class="btn btn-secondary">Action Log</button></a>
                         <a href="{% url 'announcement' %}"><button class="btn btn-secondary">Create Announcement</button></a>
-                        <a href="{% url 'feedback_approval' %}"><button class="btn btn-secondary">Feedback Approval</button></a>
+                        <a href="{% url 'feedback_approval' %}"><button class="btn btn-secondary">Feedback Approval</button> {% if notifications.feedback %}<div class="notification">{{ notifications.feedback }}</div>{% endif %}</a>
                     </div>
                 </div>
             </div>

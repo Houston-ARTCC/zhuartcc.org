@@ -7,10 +7,11 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from zhuartcc.overrides import send_mass_html_mail
+from zhuartcc.decorators import require_staff, require_staff_or_mentor
 from .models import ActionLog, Announcement
+from ..feedback.models import Feedback
 from ..training.models import TrainingRequest
 from ..user.models import User
-from zhuartcc.decorators import require_staff, require_staff_or_mentor
 from ..visit.models import Visit
 
 
@@ -21,6 +22,7 @@ def view_admin_panel(request):
         'notifications': {
             'visit': Visit.objects.count(),
             'training': TrainingRequest.objects.count(),
+            'feedback': Feedback.objects.filter(approved=False).count(),
         }
     })
 

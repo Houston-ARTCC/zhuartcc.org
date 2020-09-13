@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -57,9 +58,13 @@ def approve_feedback(request, feedback_id):
     feedback.approved = True
     feedback.save()
 
+    return HttpResponse(status=200)
+
 
 @require_staff
 @require_POST
 def reject_feedback(request, feedback_id):
     feedback = Feedback.objects.get(id=feedback_id)
     feedback.delete()
+
+    return HttpResponse(status=200)

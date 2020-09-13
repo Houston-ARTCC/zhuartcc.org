@@ -50,18 +50,16 @@
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <input name="pilot_name" type="text">
+                                    <input name="pilot_name" type="text" value="{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}" readonly>
                                     <label>Your Name</label>
                                     <span class="focus-border"></span>
-                                    <div class="input-hint">Leave blank to remain anonymous</div>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <input name="pilot_email" type="text">
+                                    <input name="pilot_email" value="{{ request.session.vatsim_data.email }}" type="text" readonly>
                                     <label>Your Email</label>
                                     <span class="focus-border"></span>
-                                    <div class="input-hint">Leave blank to remain anonymous</div>
                                 </div>
                             </div>
                         </div>

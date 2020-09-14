@@ -101,41 +101,29 @@ WSGI_APPLICATION = 'zhuartcc.wsgi.application'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
     'formatters': {
         'verbose': {
             'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s'
         },
-        'simple': {
-            'format': '[%(levelname)s] %(message)s'
-        },
     },
     'handlers': {
-        'file_django': {
-            'class': 'logging.FileHandler',
-            'filename': 'logs/' + date.today().strftime('%Y-%m-%d') + '.log',
+        'logfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'maxBytes': 50000,
+            'backupCount': 2,
             'formatter': 'verbose',
-            'level': 'ERROR'
-        },
-        'file_modules': {
-            'class': 'logging.FileHandler',
-            'filename': 'logs/' + date.today().strftime('%Y-%m-%d') + '.log',
-            'formatter': 'verbose',
-            'level': 'ERROR'
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file_django'],
+            'handlers': ['logfile'],
             'propagate': True,
             'level': 'ERROR'
         },
         '': {
-            'handlers': ['file_modules'],
+            'handlers': ['logfile'],
             'propagate': True,
             'level': 'ERROR'
         },

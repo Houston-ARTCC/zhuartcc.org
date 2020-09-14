@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from datetime import datetime
+from datetime import datetime, date
 
 from django.utils import timezone
 from dotenv import load_dotenv
@@ -29,7 +29,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('SECRET_KEY', '*(8x#v^ooemwe2y02xx3e^80@^ou24hqs@u$46t6s-wmzvnmz#')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEV_ENV', '') == 'True'
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', os.getenv('WEBSITE_DOMAIN'), 'www.' + os.getenv('WEBSITE_DOMAIN')]
 
@@ -100,34 +100,46 @@ WSGI_APPLICATION = 'zhuartcc.wsgi.application'
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'formatters': {
         'verbose': {
-            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt': "%d/%b/%Y %H:%M:%S"
+            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s'
+        },
+        'simple': {
+            'format': '[%(levelname)s] %(message)s'
         },
     },
     'handlers': {
-        'file': {
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'when': 'midnight',
-            'interval': 1,
+        'file_django': {
+            'class': 'logging.FileHandler',
+            'filename': 'logs/' + date.today().strftime('%Y-%m-%d') + '.log',
             'formatter': 'verbose',
+            'level': 'ERROR'
+        },
+        'file_modules': {
+            'class': 'logging.FileHandler',
+            'filename': 'logs/' + date.today().strftime('%Y-%m-%d') + '.log',
+            'formatter': 'verbose',
+            'level': 'ERROR'
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': False,
+            'handlers': ['file_django'],
+            'propagate': True,
+            'level': 'ERROR'
         },
         '': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': False
+            'handlers': ['file_modules'],
+            'propagate': True,
+            'level': 'ERROR'
         },
-    }
+    },
 }
 
 
@@ -200,5 +212,3 @@ EMAIL_HOST_USER = os.getenv('EMAIL_USERNAME')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-
-ADMINS = [('Webmaster', 'wm@' + os.getenv('WEBSITE_DOMAIN'))]

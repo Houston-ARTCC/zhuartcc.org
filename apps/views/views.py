@@ -7,6 +7,7 @@ from ..api.models import Controller
 from ..api.views import return_sorted_hours
 from ..event.models import Event
 from ..training.models import TrainingSession
+from ..user.models import User
 
 
 def view_homepage(request):
@@ -33,12 +34,12 @@ def view_calendar(request):
 
 def error_404(request, exception):
     if request.method == 'POST':
-        return HttpResponse(exception, status=404)
+        return HttpResponse('The requested resource or endpoint was not found!', status=404)
 
     response = render(request, 'errorTemplate.html', {
         'error': 404,
         'title': 'We searched everything!',
-        'exception': exception
+        'exception': 'The requested resource or endpoint was not found!'
     })
     response.status_code = 404
     return response

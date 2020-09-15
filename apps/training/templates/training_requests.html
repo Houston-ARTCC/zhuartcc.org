@@ -40,6 +40,7 @@
 
 {% block scripts %}
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
     <script>
         $('[data-action="accept"]').click(function() {
             let $this = $(this)
@@ -51,10 +52,14 @@
                     <p>Drag the slider to set the start and end times for the training session. The limits are automatically set to what the student indicated as their availability.</p>
                     <input name="start" id="start" type="datetime-local" hidden>
                     <input name="end" id="end" type="datetime-local" hidden>
-                    <div class="mb-4 text-left d-flex justify-content-between">
+                    <div class="text-left d-flex justify-content-between">
                         <span class="badge badge-primary" id="start"></span>
                         <span class="position-absolute text-center text-primary" style="left: 0; right: 0; margin-left: auto; margin-right: auto; width: 100%;"><i class="far fa-2x fa-long-arrow-right"></i></span>
                         <span class="badge badge-primary" id="end"></span>
+                    </div>
+                    <div class="mb-4 text-left d-flex justify-content-between">
+                        <span class="badge badge-light" id="start-zulu"></span>
+                        <span class="badge badge-light" id="end-zulu"></span>
                     </div>
                     <div class="slider-range mb-3"></div>
                     <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -64,6 +69,7 @@
             let $slider = $('.slider-range')
             let start = $this.data('start')
             let duration = $this.data('duration')
+            let tz = moment.tz.guess()
             $slider.slider({
                 range: true,
                 min: 0,
@@ -72,18 +78,22 @@
                 slide: function(event, ui) {
                     let slide_min = moment.utc(start, 'YYYY-MM-DDTHH:mm:ss').add(ui.values[0], 'minutes')
                     let slide_max = moment.utc(start, 'YYYY-MM-DDTHH:mm:ss').add(ui.values[1], 'minutes')
-                    $('span#start').text(slide_min.format('MMM D, YYYY @ HHmm[z]'))
                     $('input#start').val(slide_min.format('YYYY-MM-DD[T]HH:mm:ss.SS'))
-                    $('span#end').text(slide_max.format('MMM D, YYYY @ HHmm[z]'))
+                    $('span#start').text(slide_min.clone().tz(tz).format('MMM D, YYYY @ HHmm z'))
+                    $('span#start-zulu').text(slide_min.format('MMM D, YYYY @ HHmm[z]'))
                     $('input#end').val(slide_max.format('YYYY-MM-DD[T]HH:mm:ss.SS'))
+                    $('span#end').text(slide_max.clone().tz(tz).format('MMM D, YYYY @ HHmm z'))
+                    $('span#end-zulu').text(slide_max.format('MMM D, YYYY @ HHmm[z]'))
                 }
             })
             let static_min = moment.utc(start, 'YYYY-MM-DDTHH:mm:ss').add($slider.slider('values', 0), 'minutes')
             let static_max = moment.utc(start, 'YYYY-MM-DDTHH:mm:ss').add($slider.slider('values', 1), 'minutes')
-            $('span#start').text(static_min.format('MMM D, YYYY @ HHmm[z]'))
             $('input#start').val(static_min.format('YYYY-MM-DD[T]HH:mm:ss.SS'))
-            $('span#end').text(static_max.format('MMM D, YYYY @ HHmm[z]'))
+            $('span#start').text(static_min.clone().tz(tz).format('MMM D, YYYY @ HHmm z'))
+            $('span#start-zulu').text(static_min.format('MMM D, YYYY @ HHmm[z]'))
             $('input#end').val(static_max.format('YYYY-MM-DD[T]HH:mm:ss.SS'))
+            $('span#end').text(static_max.clone().tz(tz).format('MMM D, YYYY @ HHmm z'))
+            $('span#end-zulu').text(static_max.format('MMM D, YYYY @ HHmm[z]'))
         })
         $('[data-action="reject"]').click(function() {
             launchCustomModal(

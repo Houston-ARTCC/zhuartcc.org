@@ -159,7 +159,7 @@
                         <tbody>
                             {% for connection in connections %}
                                 <tr>
-                                    <td style="width: 33.3%"><span class="d-none">{{ feedback.submitted|date:'m/d/Y Hi' }}</span>{{ connection.start|date:'M j, Y @ Hi\z' }}</td>
+                                    <td style="width: 33.3%"><span class="d-none">{{ connection.start|date:'m/d/Y Hi' }}</span>{{ connection.start|date:'M j, Y @ Hi\z' }}</td>
                                     <td style="width: 33.3%">{{ connection.callsign }}</td>
                                     <td style="width: 33.3%">{{ connection.duration|duration }}</td>
                                 </tr>

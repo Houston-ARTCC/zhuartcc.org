@@ -33,22 +33,22 @@ def login(request):
 
             request.session['vatsim_data'] = data
             request.session['cid'] = data['cid']
+            if not User.objects.filter(cid=data['cid']).exists():
+                if data['facility']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
+                    new_user = User(
+                        first_name=data['fname'].capitalize(),
+                        last_name=data['lname'].capitalize(),
+                        cid=int(data['cid']),
+                        email=data['email'],
+                        oper_init=assign_oper_init(data['fname'][0], data['lname'][0]),
+                        rating=data['rating_short'],
+                        main_role='MC',
+                        home_facility=data['facility']['id'],
+                    )
+                    new_user.save()
+                    new_user.assign_initial_cert()
 
-            if data['facility']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
-                new_user = User(
-                    first_name=data['fname'].capitalize(),
-                    last_name=data['lname'].capitalize(),
-                    cid=int(data['cid']),
-                    email=data['email'],
-                    oper_init=assign_oper_init(data['fname'][0], data['lname'][0]),
-                    rating=data['rating_short'],
-                    main_role='MC',
-                    home_facility=data['facility']['id'],
-                )
-                new_user.save()
-                new_user.assign_initial_cert()
-
-                ActionLog(action=f'User {new_user.full_name} was created by system.').save()
+                    ActionLog(action=f'User {new_user.full_name} was created by system.').save()
         else:
             return HttpResponse('Something was wrong with the token we got from VATUSA!', status=500)
 

@@ -36,12 +36,12 @@ def login(request):
             if not User.objects.filter(cid=data['cid']).exists():
                 if data['facility']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
                     new_user = User(
-                        first_name=data['fname'].capitalize(),
-                        last_name=data['lname'].capitalize(),
+                        first_name=data['firstname'].capitalize(),
+                        last_name=data['lastname'].capitalize(),
                         cid=int(data['cid']),
                         email=data['email'],
-                        oper_init=assign_oper_init(data['fname'][0], data['lname'][0]),
-                        rating=data['rating_short'],
+                        oper_init=assign_oper_init(data['firstname'][0], data['lastname'][0]),
+                        rating=data['rating'],
                         main_role='MC',
                         home_facility=data['facility']['id'],
                     )

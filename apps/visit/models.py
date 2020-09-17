@@ -27,8 +27,8 @@ class Visit(models.Model):
             rating=self.rating,
             main_role='VC',
         )
-        new_user.assign_initial_cert()
         new_user.save()
+        new_user.assign_initial_cert()
 
     @property
     def full_name(self):

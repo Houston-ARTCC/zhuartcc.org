@@ -17,7 +17,7 @@ def require_member(func):
 def require_session(func):
     @wraps(func)
     def inner(request, *args, **kwargs):
-        if request.user_obj and request.session.get('vatsim_data'):
+        if request.session.get('vatsim_data'):
             return func(request, *args, **kwargs)
         else:
             raise PermissionDenied('You must be logged in to access this endpoint!')

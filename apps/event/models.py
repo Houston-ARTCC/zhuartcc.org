@@ -28,7 +28,7 @@ class Event(models.Model):
 
                 sessions = ControllerSession.objects.filter(user=position.user)
                 for session in sessions:
-                    if session.callsign == position.name and session.start < self.end and session.end > self.start:
+                    if session.start < self.end and session.end > self.start:
                         duration += min([session.end, self.end]) - max([session.start, self.start])
 
                 session_seconds, event_seconds = duration.total_seconds(), self.duration.total_seconds()

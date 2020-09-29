@@ -1,8 +1,6 @@
 import ast
 import os
 import hmac
-import urllib.parse
-
 import requests
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 
@@ -55,24 +53,6 @@ def login(request):
             return HttpResponse('Something was wrong with the token we got from VATUSA!', status=500)
 
     return redirect(reverse('home'))
-
-
-def dev_login(request):
-    if not request.GET:
-        return redirect(f'https://auth.vatsim.net/oauth/authorize?client_id={os.getenv("VATSIM_CLIENT")}'
-                        f'&redirect_uri={urllib.parse.quote(request.build_absolute_uri(reverse("dev_login")), safe="")}'
-                        f'&response_type=code&scope=full_name+vatsim_details+email')
-    req = requests.post('https://auth.vatsim.net/oauth/token', data={
-        'grant_type': 'authorization_code',
-        'client_id': os.getenv('VATSIM_CLIENT'),
-        'client_secret': os.getenv('VATSIM_SECRET'),
-        'redirect_uri': 'http://localhost/devlogin/',
-        'code': request.GET.get('code'),
-    })
-    data = requests.get('https://auth.vatsim.net/api/user', headers={
-        'Authorization': 'Bearer ' + req.json()['access_token']
-    })
-    return HttpResponse(data.json(), status=400)
 
 
 def logout(request):

@@ -83,6 +83,7 @@ urlpatterns = [
 
     # ULS (Auth)
     path('login/', uls.login, name='login'),
+    path('devlogin/', uls.dev_login, name='dev_login'),
     path('logout/', uls.logout, name='logout'),
 
     # User

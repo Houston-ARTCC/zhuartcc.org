@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 
 import pytz
+from discord_webhook import DiscordEmbed, DiscordWebhook
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -77,8 +78,8 @@ def request_training(request):
                 student=request.user_obj,
                 start=pytz.utc.localize(datetime.fromisoformat(request.POST.get('start'))),
                 end=pytz.utc.localize(datetime.fromisoformat(request.POST.get('end'))),
-                type=request.POST.get('type'),
-                level=request.POST.get('level'),
+                type=int(request.POST.get('type')),
+                level=int(request.POST.get('level')),
                 remarks=request.POST.get('remarks', None)
             )
             training_request.save()
@@ -89,6 +90,33 @@ def request_training(request):
                 os.getenv('NO_REPLY'),
                 [training_request.student.email],
             )
+
+            format = '%b %d, %Y @ %H%Mz'
+            webhook = DiscordWebhook(url=os.getenv('TRAINING_WEBHOOK_URL'))
+            embed = DiscordEmbed(
+                title=':pencil:  New Training Request!',
+                description='See all requests at https://www.zhuartcc.org/training/requests.',
+                color=2966946
+            )
+            embed.add_embed_field(
+                name='User',
+                value=f'[{request.user_obj.cid}] {request.user_obj.full_name}',
+                inline=False,
+            )
+            embed.add_embed_field(
+                name='Availability',
+                value=f'{training_request.start.strftime(format)} - {training_request.end.strftime(format)}',
+                inline=False,
+            )
+            embed.add_embed_field(name='Level', value=training_request.get_level_display())
+            embed.add_embed_field(name='Type', value=training_request.get_type_display())
+            embed.add_embed_field(
+                name='Remarks',
+                value=training_request.remarks if training_request.remarks is not '' else 'No Remarks Provided',
+                inline=False,
+            )
+            webhook.add_embed(embed)
+            webhook.execute()
         else:
             return HttpResponse('The start time must be before the end time.', status=400)
 

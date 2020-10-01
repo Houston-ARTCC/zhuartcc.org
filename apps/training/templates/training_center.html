@@ -186,7 +186,7 @@
                 <button class="btn btn-primary" data-action="confirm">Confirm</button>`
             )
             $('#customModal button[data-action="confirm"]').click(function() {
-                $.post('{% url 'cancel_training' request_id=0 %}'.replace(/0/, $(this).data('id')))
+                $.post('{% url 'cancel_training' request_id=0 %}'.replace(/0/, $this.data('id')))
                 .done(function() { launchSuccessModal() })
                 .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })

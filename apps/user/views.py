@@ -6,7 +6,6 @@ import requests
 import pytz
 from datetime import datetime
 
-from django.core.mail import send_mail
 from django.db.models import Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -15,11 +14,12 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+from zhuartcc.overrides import send_mail
+from zhuartcc.decorators import require_staff
 from .models import User
 from ..administration.models import ActionLog
 from ..api.models import ControllerSession
 from ..api.views import return_inactive_users
-from zhuartcc.decorators import require_staff
 
 
 # Gets all staff members from local database and serves 'staff.html' file

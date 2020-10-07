@@ -4,11 +4,11 @@ import pytz
 import requests
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
-from django.core.mail import send_mail
 
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from zhuartcc.overrides import send_mail
 from .views import return_inactive_users
 from .models import Controller, ControllerSession
 from ..user.models import User

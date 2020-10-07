@@ -67,9 +67,9 @@ def accept_visiting_request(request, visit_id):
         edit_user = User.objects.get(cid=visiting_request.cid)
         if edit_user.status == 2:
             edit_user.status = 0
-            edit_user.email = visiting_request.email,
-            edit_user.oper_init = assign_oper_init(visiting_request.first_name[0], visiting_request.first_name[0]),
-            edit_user.rating = visiting_request.rating,
+            edit_user.email = visiting_request.email
+            edit_user.oper_init = assign_oper_init(visiting_request.first_name[0], visiting_request.first_name[0])
+            edit_user.rating = visiting_request.rating
             edit_user.main_role = 'VC'
             edit_user.assign_initial_cert()
             edit_user.save()

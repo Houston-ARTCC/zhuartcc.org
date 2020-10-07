@@ -1,5 +1,3 @@
-import threading
-
 from django.core.mail import get_connection, EmailMultiAlternatives
 from django.utils.html import strip_tags
 

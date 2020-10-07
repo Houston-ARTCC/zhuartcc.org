@@ -69,5 +69,5 @@ def require_role(role_list):
 def run_async(func):
     @wraps(func)
     def inner(*args, **kwargs):
-        threading.Thread(target=func, args=args).start()
+        threading.Thread(target=func, args=args, kwargs=kwargs).start()
     return inner

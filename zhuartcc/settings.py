@@ -97,38 +97,46 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'zhuartcc.wsgi.application'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
-        'verbose': {
+        'standard': {
             'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s'
+        },
+        'simple': {
+            'format': '%(message)s'
         },
     },
     'handlers': {
         'logfile': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
-            'maxBytes': 50000,
+            'maxBytes': 1024 * 1024 * 1,
             'backupCount': 2,
-            'formatter': 'verbose',
+            'formatter': 'standard',
+        },
+        'discord': {
+            'level': 'DEBUG',
+            'class': 'zhuartcc.logging.DiscordWebhookHandler',
+            'formatter': 'simple',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['logfile'],
+            'handlers': ['logfile', 'discord'],
             'propagate': True,
             'level': 'ERROR'
         },
         '': {
-            'handlers': ['logfile'],
+            'handlers': ['logfile', 'discord'],
             'propagate': True,
             'level': 'ERROR'
         },
     },
 }
+
 
 
 # Database

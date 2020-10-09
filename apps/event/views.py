@@ -204,6 +204,7 @@ def assign_position(request, request_id):
         )
 
         return HttpResponse(status=200)
+    return HttpResponse('Position is already assigned to selected user.', status=403)
 
 
 @require_staff

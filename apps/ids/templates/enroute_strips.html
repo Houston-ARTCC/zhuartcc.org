@@ -1,0 +1,274 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Information Display System :: Houston ARTCC</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap">
+    </head>
+    <body>
+        <div class="text-center">
+            <form id="add">
+                {% csrf_token %}
+                <label>
+                    Callsign
+                    <input name="add-callsign" class="form-control" required>
+                </label>
+                <label>
+                    Crossing
+                    <input name="add-crossing" class="form-control" required>
+                </label>
+                <button class="btn btn-outline-primary btn-sm" type="submit">Add Flight Strip</button>
+            </form>
+        </div>
+
+        <style type="text/css">
+            * {
+                font: 13px 'Roboto Mono', monospace;
+            }
+            .section {
+                font: 20px 'Roboto Mono', monospace;
+                color: white;
+                padding: 10px;
+                background-color: #5a5a5a;
+                text-align: center;
+            }
+            td{
+                border: 1px solid gray;
+                padding: 0 5px;
+            }
+            .form-control {
+                height: auto;
+                padding: 2px;
+                margin: 2px 0;
+            }
+            .bg-coast {
+                background-color: rgba(209, 237, 255, 0.67);
+            }
+        </style>
+        <form class="d-none flight" id="template">
+            <table>
+                <colgroup>
+                    <col style="width: 150px">
+                    <col style="width: 85px">
+                    <col style="width: 85px">
+                    <col style="width: 85px">
+                    <col style="width: 100px">
+                    <col style="width: 85px">
+                        <col style="width: 500px">
+                    <col style="width: 85px">
+                </colgroup>
+                <tr style="height: 100px">
+                    <td rowspan="3">
+                        <div class="mb-2" id="callsign"></div>
+                        <div id="aircraft"></div>
+                        <div id="tas_filed">T</div>
+                        <div class="mb-2" id="tas_actual"></div>
+                        <div><button type="button" class="btn btn-outline-danger btn-sm" data-class="delete" data-id="{{ flight.id }}"><i class="far fa-trash-alt"></i></button></div>
+                    </td>
+                    <td rowspan="3">
+                        <div class="mb-2"><input class="form-control" name="prev_fix" ></div>
+                        <div><input class="form-control" type="number" name="prev_fix_time"></div>
+                        <div><input class="form-control" type="number" name="prev_fix_time_rev"></div>
+                        <div class="mb-2"><input class="form-control" type="number" name="prev_fix_time_actual"></div>
+                        <div><input class="form-control" type="number" name="post_fix_plus"></div>
+                    </td>
+                    <td colspan="2"><input class="form-control" type="number" name="post_fix_time"></td>
+                    <td rowspan="3">
+                        <div class="mb-2" id="altitude"></div>
+                        <div id="arrival"></div>
+                    </td>
+                    <td rowspan="3">
+                        <div class="mb-2"><input class="form-control" name="next_fix"></div>
+                        <div class="mb-2"><input class="form-control" type="number" name="next_fix_time"></div>
+                        <div><input class="form-control" type="number" name="requested_altitude"></div>
+                    </td>
+                    <td rowspan="3">
+                        <div id="route" class="mb-2"></div>
+                    </td>
+                    <td rowspan="3">
+                        <div id="transponder"></div>
+                    </td>
+                </tr>
+                <tr style="height: 35px">
+                    <td></td>
+                    <td><input class="form-control" type="number" name="post_fix_time_actual"></td>
+                </tr>
+                <tr style="height: 35px">
+                    <td colspan="2"><input class="form-control" name="post_fix"></td>
+                </tr>
+            </table>
+        </form>
+        {% for waypoint, flights in all_flights.items %}
+            <div id="{{ waypoint }}" style="width: 1176px">
+                <div class="section">{{ waypoint }}</div>
+                {% for flight in flights %}
+                    <form class="flight" id="{{ flight.id }}">
+                        <table {% if flight.coast %}class="bg-coast"{% endif %}>
+                            <colgroup>
+                                <col style="width: 150px">
+                                <col style="width: 85px">
+                                <col style="width: 85px">
+                                <col style="width: 85px">
+                                <col style="width: 100px">
+                                <col style="width: 85px">
+                                <col style="width: 500px">
+                                <col style="width: 85px">
+                            </colgroup>
+                            <tr style="height: 100px">
+                                <td rowspan="3">
+                                    <div class="mb-2" id="callsign">{{ flight.callsign|default:'' }}</div>
+                                    <div id="aircraft">{{ flight.aircraft|default:'' }}</div>
+                                    <div id="tas_filed">T{{ flight.tas_filed|default:'' }}</div>
+                                    <div class="mb-2" id="tas_actual">{{ flight.tas_actual|default:'' }}</div>
+                                    <div><button type="button" class="btn btn-outline-danger btn-sm" data-class="delete" data-id="{{ flight.id }}"><i class="far fa-trash-alt"></i></button></div>
+                                </td>
+                                <td rowspan="3">
+                                    <div class="mb-2"><input class="form-control" data-toggle="tooltip" title="Previous fix" name="prev_fix" value="{{ flight.prev_fix|default:'' }}"></div>
+                                    <div><input class="form-control" data-toggle="tooltip" title="Estimated time over previous fix" type="number" name="prev_fix_time" value="{{ flight.prev_fix_time|default:'' }}"></div>
+                                    <div><input class="form-control" data-toggle="tooltip" title="Revised estimated time over previous fix" type="number" name="prev_fix_time_rev" value="{{ flight.prev_fix_time_rev|default:'' }}"></div>
+                                    <div class="mb-2"><input class="form-control" data-toggle="tooltip" title="Actual time over previous fix" type="number" name="prev_fix_time_actual" value="{{ flight.prev_fix_time_actual|default:'' }}"></div>
+                                    <div><input class="form-control" data-toggle="tooltip" title="Plus time expressed in minutes from the previous fix to the posted fix" type="number" name="post_fix_plus" value="{{ flight.post_fix_plus|default:'' }}"></div>
+                                </td>
+                                <td colspan="2"><input class="form-control" data-toggle="tooltip" title="Center−estimated time over posted fix" type="number" name="post_fix_time" value="{{ flight.post_fix_time|default:'' }}"></td>
+                                <td rowspan="3">
+                                    <div class="mb-2" id="altitude">{{ flight.altitude|default:'' }}</div>
+                                    <div id="arrival">{% if flight.arrival %}<i class="far fa-lg fa-long-arrow-alt-up"></i>{% else %}<i class="far fa-lg fa-long-arrow-alt-down"></i>{% endif %}</div>
+                                </td>
+                                <td rowspan="3">
+                                    <div class="mb-2"><input class="form-control" data-toggle="tooltip" title="Next posted fix or coordination fix" name="next_fix" value="{{ flight.next_fix|default:'' }}"></div>
+                                    <div class="mb-2"><input class="form-control" data-toggle="tooltip" title="Pilot’s estimated time over next fix" type="number" name="next_fix_time" value="{{ flight.next_fix_time|default:'' }}"></div>
+                                    <div><input class="form-control" data-toggle="tooltip" title="Requested altitude" type="number" name="requested_altitude" value="{{ flight.requested_altitude|default:'' }}"></div>
+                                </td>
+                                <td rowspan="3">
+                                    <div id="route" class="mb-2">{{ flight.route|default:'' }}</div>
+                                </td>
+                                <td rowspan="3">
+                                    <div id="transponder">{{ flight.transponder|default:'' }}</div>
+                                </td>
+                            </tr>
+                            <tr style="height: 35px">
+                                <td></td>
+                                <td><input class="form-control" data-toggle="tooltip" title="Actual time over posted fix" type="number" name="post_fix_time_actual" value="{{ flight.post_fix_time_actual|default:'' }}"></td>
+                            </tr>
+                            <tr style="height: 35px">
+                                <td colspan="2"><input class="form-control" data-toggle="tooltip" title="Posted fix" name="post_fix" value="{{ flight.post_fix|default:'' }}"></td>
+                            </tr>
+                        </table>
+                    </form>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+        <script>
+            let socket = null
+            function populateStrip(form, data) {
+                for (const [key, value] of Object.entries(data)) {
+                    form.find('[name="' + key + '"]').val(value)
+                }
+                form.find('#callsign').text(data.callsign)
+                form.find('#aircraft').text(data.aircraft)
+                form.find('#tas_filed').text('T' + data.tas_filed)
+                form.find('#tas_actual').text(data.tas_actual)
+                form.find('#altitude').text(data.altitude)
+                form.find('#arrival').html(data.arrival ? '<i class="far fa-lg fa-long-arrow-alt-up"></i>': '<i class="far fa-lg fa-long-arrow-alt-down"></i>')
+                form.find('#route').text(data.route)
+                form.find('#transponder').text(data.transponder)
+                if (data.coast) { form.find('table').addClass('bg-coast') } else { form.find('table').removeClass('bg-coast') }
+            }
+            function openChatSocket() {
+                socket = new WebSocket('ws://' + window.location.host + '/ws/ids/')
+
+                // When a message is received via the socket
+                socket.onmessage = function(e) {
+                    let data = JSON.parse(e.data)
+                    console.log(data)
+                    if (data.action === 'update' || data.action === 'new') {
+                        if (!$('form#' + data.flight_id).length) {
+                            $('#template').clone().removeClass('d-none').attr('id', data.flight_id).appendTo('#' + data.flight_data.post_fix)
+                        }
+                        let form = $('form#' + data.flight_id)
+                        form.appendTo('#' + data.flight_data.post_fix)
+                        populateStrip(form, data.flight_data)
+                    } else if (data.action === 'delete') {
+                        $('form#' + data.flight_id).remove()
+                    }
+                }
+                // Reopen socket if it unexpectedly closes
+                socket.onclose = function() {
+                    socket = null
+                    openChatSocket()
+                }
+            }
+            openChatSocket()
+            $(function() {
+                $('[data-toggle="tooltip"]').tooltip({
+                    placement: 'right',
+                    trigger: 'focus'
+                })
+                // Submit form if the input tag is unfocused or the enter key is pressed
+                $('input').not('#add input').blur(function() {
+                    $(this).closest('form').submit()
+                })
+                .keyup(function(event) {
+                    if (event.key === 'Enter' || event.keyCode === 13) {
+                        $(this).closest('form').submit()
+                    }
+                })
+                // Send form data to socket when form is submitted
+                $('form').submit(function(event) {
+                    event.preventDefault()
+                    socket.send(JSON.stringify({
+                        'action': 'update',
+                        'flight_id': $(this).attr('id'),
+                        'flight_data': $(this).serializeArray(),
+                    }))
+                })
+                // Delete flight strip
+                $('button[data-class="delete"]').click(function() {
+                    Swal.fire({
+                        title: 'Do you want to continue?',
+                        icon: 'info',
+                    }).then((result) => {
+                        if (result.value) {
+                            console.log('Deleting flight with ID ' + $(this).data('id'))
+                            socket.send(JSON.stringify({
+                                'action': 'delete',
+                                'flight_id': $(this).data('id'),
+                            }))
+                            $(this).closest('form').remove()
+                        }
+                    })
+                })
+                // Create flight strip from callsign
+                $('#add').submit(function(event) {
+                    event.preventDefault()
+                    $.post('/ids/add/', $(this).serialize())
+                    .done(function() {
+                        document.getElementById('add').reset()
+                        Swal.fire({
+                            title: 'Success!',
+                            icon: 'success',
+                        })
+                        location.reload()
+                    })
+                    .fail(function(event) {
+                        Swal.fire({
+                            title: 'Oops!',
+                            text: event.responseText,
+                            icon: 'error',
+                        })
+                    })
+                })
+            })
+        </script>
+    </body>
+</html>

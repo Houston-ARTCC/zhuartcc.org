@@ -185,7 +185,7 @@
                 if (data.coast) { form.find('table').addClass('bg-coast') } else { form.find('table').removeClass('bg-coast') }
             }
             function openChatSocket() {
-                socket = new WebSocket('ws://' + window.location.host + '/ws/ids/')
+                socket = new WebSocket('wss://zhuartcc.org/ws/ids/')
 
                 // When a message is received via the socket
                 socket.onmessage = function(e) {

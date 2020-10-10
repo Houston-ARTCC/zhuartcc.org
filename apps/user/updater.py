@@ -71,7 +71,7 @@ def update_roster():
             params={'apikey': os.getenv('API_KEY')},
         ).json()
         
-        if user_details['status'] == 'error':
+        if user_details.get('status') == 'error':
             continue
         
         edit_user.rating = user_details['rating_short']

@@ -1,3 +1,4 @@
+import json
 import os
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -73,7 +74,7 @@ def update_roster():
             edit_user.rating = user_details['rating_short']
         except KeyError:
             log = open('api_log.txt', 'w+')
-            log.write(user_details + '\n')
+            log.write(json.dumps(user_details) + '\n')
             log.close()
         edit_user.save()
 

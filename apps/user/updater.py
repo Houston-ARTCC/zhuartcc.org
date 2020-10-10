@@ -70,12 +70,16 @@ def update_roster():
             f'https://api.vatusa.net/v2/user/{edit_user.cid}',
             params={'apikey': os.getenv('API_KEY')},
         ).json()
+<<<<<<< HEAD
         try:
             edit_user.rating = user_details['rating_short']
         except KeyError:
             log = open('api_log.txt', 'w+')
             log.write(json.dumps(user_details) + '\n')
             log.close()
+=======
+        edit_user.rating = user_details['rating_short']
+>>>>>>> parent of 6fbffc4... Added partial IDS support.
         edit_user.save()
 
 

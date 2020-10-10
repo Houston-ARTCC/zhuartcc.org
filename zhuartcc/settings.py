@@ -54,12 +54,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
     'apps.administration',
     'apps.api.apps.ApiConfig',
     'apps.event.apps.EventConfig',
     'apps.feedback',
-    'apps.ids.apps.IdsConfig',
     'apps.pilots',
     'apps.resource',
     'apps.training.apps.TrainingConfig',
@@ -210,17 +208,3 @@ EMAIL_HOST_USER = os.getenv('EMAIL_USERNAME')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-
-
-# Channels
-
-ASGI_APPLICATION = 'apps.ids.routing.application'
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
-        },
-    },
-}

@@ -9,7 +9,6 @@ from apps.administration import views as administration
 from apps.api import views as api
 from apps.event import views as event
 from apps.feedback import views as feedback
-from apps.ids import views as ids
 from apps.pilots import views as pilots
 from apps.resource import views as resource
 from apps.training import views as training
@@ -55,10 +54,6 @@ urlpatterns = [
     path('feedback/approval/', feedback.view_feedback_approval, name='feedback_approval'),
     path('feedback/<int:feedback_id>/approve/', feedback.approve_feedback, name='accept_feedback'),
     path('feedback/<int:feedback_id>/reject/', feedback.reject_feedback, name='reject_feedback'),
-
-    # Information Display System
-    path('ids/', ids.view_enroute_strips),
-    path('ids/add/', ids.add_flight),
 
     # Pilots
     path('map/', pilots.view_artcc_map, name='map'),

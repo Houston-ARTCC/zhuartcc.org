@@ -7,13 +7,12 @@ from ..api.models import Controller
 from ..api.views import return_sorted_hours
 from ..event.models import Event
 from ..training.models import TrainingSession
-from ..user.models import User
 
 
 def view_homepage(request):
     return render(request, 'homepage.html', {
         'online': Controller.objects.all(),
-        'events': Event.objects.filter(hidden=False).filter(end__gte=timezone.now()).order_by('start')[:3],
+        'events': Event.objects.filter(hidden=False).filter(end__gte=timezone.now()).order_by('start')[:5],
         'announcements': Announcement.objects.all().order_by('-created')[:5],
         'top_controllers': return_sorted_hours()
     })

@@ -1,7 +1,7 @@
 {% load static %}
 
 <nav class="navbar navbar-expand-md navbar-shrink fixed-top">
-    <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-logo-gray" src=" {% if dark %}{% static 'img/zhulogo-dark.png' %}{% else %}{% static 'img/zhulogo-light.png' %}{% endif %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}"></a>
+    <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-logo-gray" src=" {% if dark %}{% static 'img/zhulogo-dark-october.png' %}{% else %}{% static 'img/zhulogo-light-october.png' %}{% endif %}"><img class="navbar-logo-color d-none" src="{% static 'img/zhulogo-october.png' %}"></a>
     <ul class="navbar-nav ml-auto {% if dark %}navbar-dark{% endif %} d-none d-lg-flex">
         <li class="nav-item ml-5">
             <a class="nav-link" href="{% url 'calendar' %}">Calendar</a>

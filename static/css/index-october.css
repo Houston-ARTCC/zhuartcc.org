@@ -267,8 +267,18 @@ a:hover {
 #calendar-menu .btn, #calendar-range,
 .tui-full-calendar-dayname-date-area span,
 .tui-full-calendar-timegrid-timezone-label,
+.tui-full-calendar-weekday-schedule-title,
 .tui-full-calendar-left-content {
-    color: white;
+    color: white!important;
+}
+.tui-full-calendar-popup-container {
+    color: #0f0f0f!important;
+}
+#bats {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 275px;
 }
 
 

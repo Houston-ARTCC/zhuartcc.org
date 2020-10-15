@@ -280,6 +280,9 @@ a:hover {
     bottom: 0;
     width: 275px;
 }
+.text-black-50 {
+    color: rgba(255,255,255,.5)!important;
+}
 
 
 /*

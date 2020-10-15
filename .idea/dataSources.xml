@@ -5,7 +5,7 @@
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\miker\Documents\Projects\Houston ARTCC\beta.zhuartcc.org\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\miker\Documents\Projects\Houston ARTCC\zhuartcc.org\db.sqlite3</jdbc-url>
       <driver-properties>
         <property name="date_string_format" value="yyyy-MM-dd HH:mm:ss.SSS" />
       </driver-properties>

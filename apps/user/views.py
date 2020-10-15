@@ -88,7 +88,7 @@ def view_profile(request, cid):
     connections = ControllerSession.objects.filter(user=user).order_by('-start')
     now = timezone.now()
     stats = connections.aggregate(
-        month=Sum('duration', filter=Q(start__month=now.month)),
+        month=Sum('duration', filter=Q(start__month=now.month) & Q(start__year=now.year)),
         year=Sum('duration', filter=Q(start__year=now.year)),
         total=Sum('duration'),
     )

@@ -29,7 +29,7 @@
                         <tbody>
                             {% for feedback in all_feedback %}
                                 <tr>
-                                    <td class="text-center"><span class="d-none">{{ feedback.submitted|date:'m/d/Y Hi' }}</span>{{ feedback.submitted|date:'M j, Y @ Hi\z' }}</td>
+                                    <td class="text-center"><span class="d-none">{{ feedback.submitted|date:'Ymd Hi' }}</span>{{ feedback.submitted|date:'M j, Y @ Hi\z' }}</td>
                                     <td class="text-center">{{ feedback.controller.full_name }}</td>
                                     <td class="text-center">{{ feedback.controller_callsign }}</td>
                                     <td class="text-center text-warning">{% for i in feedback.rating|as_range %}<i class="fas fa-star mr-1"></i>{% endfor %}</td>

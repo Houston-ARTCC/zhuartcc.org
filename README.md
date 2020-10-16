@@ -7,6 +7,8 @@ Written in Python 3.8 using the Django web framework.
 
 **By Michael Romashov, Houston ARTCC Webmaster**
 
+![Deploy](https://github.com/MikeRomaa/zhuartcc.org/workflows/Deploy/badge.svg)
+
 ## Prerequisites
 
 - Python 3.8 (with pip)

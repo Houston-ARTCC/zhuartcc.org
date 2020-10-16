@@ -33,14 +33,10 @@ Written in Python 3.8 using the Django web framework.
 6. Create `logs` directory for log file storage.
 	-	`mkdir logs`
 
-7. Perform Django migration, which creates the database and its tables.
-	-	`python manage.py makemigrations administration api event feedback pilots resource training user visit`
-	-	`python manage.py migrate`
-
-8. Make a copy of `.env.example` and name it `.env`.
+7. Make a copy of `.env.example` and name it `.env`.
 	-	`cp .env.example .env`
 
-9. Edit `.env` to fill in environment variables.
+8. Edit `.env` to fill in environment variables.
 	- **DEV_ENV** = `True` if used in development, `False` if used in production.
 	- **SECRET_KEY** = Django secret key used to provide cryptographic signing. Can be generated at  https://djecrety.ir/. (Not required in development)
 	- **WEBSITE_DOMAIN** = Domain of your website (eg. `zhuartcc.org`). Used to generate hostnames.
@@ -50,6 +46,10 @@ Written in Python 3.8 using the Django web framework.
 	- **AIRPORT_IATA** = JSON encoded list of IATA codes of controlled airfields within your ARTCC. Used to detect online controllers. (eg. `"['IAH', 'MSY', 'HOU']"`)
 	- **MAVP_ARTCCS** = JSON encoded list of ICAO codes of ARTCCS with whom you have Mutual Automatic Visiting Privileges. Used to allow MAVP controllers to log in. (eg. `"['ZJX', 'PCF', 'ZFW']"`)
 		- Use `"[]"` if your facility does not utilize MAVPs.
+
+9. Perform Django migration, which creates the database and its tables.
+	-	`python manage.py makemigrations administration api event feedback pilots resource training user visit`
+	-	`python manage.py migrate`
 
 10. Pull your facility's home roster from VATUSA's API.
 	-	`python manage.py pull_roster`

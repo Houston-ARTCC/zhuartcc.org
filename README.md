@@ -22,7 +22,8 @@ Written in Python 3.8 using the Django web framework.
 
 3. Inside the directory, create a virtual environment (venv) and activate it.
 	-	`python -m venv venv`
-	-	`source venv/bin/activate`
+	-	`source venv/bin/activate` (Linux)
+	-	`venv\Scripts\activate` (Windows)
 
 4. You should now see `(venv)` next to your cursor, indicating that you are now running python from the venv.
 	-	`(venv) user@host:~/zhuartcc.org$`

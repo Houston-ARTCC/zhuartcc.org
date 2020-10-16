@@ -83,6 +83,7 @@ def modify_session(session, request):
 
             if post_ctrs.json()['status'] == 'OK':
                 session.ctrs_id = post_ctrs.json()['id']
+                session.save()
 
 
 @require_staff_or_mentor

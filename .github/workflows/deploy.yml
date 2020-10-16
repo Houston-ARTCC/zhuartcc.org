@@ -1,4 +1,4 @@
-name: Deploy Production From Master
+name: Deploy
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: SSH, Git Pull, and Restart Webserver
+      - name: SSH, Git Pull, Migrate, and Restart
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}

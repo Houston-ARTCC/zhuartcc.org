@@ -41,6 +41,7 @@ urlpatterns = [
     path('events/position/<int:position_id>/request/', event.request_position, name='request_position'),
     path('events/position/<int:request_id>/unrequest/', event.unrequest_position, name='unrequest_position'),
     path('events/position/<int:request_id>/assign/', event.assign_position, name='assign_position'),
+    path('events/position/<int:position_id>/assign/<int:cid>/', event.manual_assign, name='manual_assign_position'),
     path('events/position/<int:position_id>/unassign/', event.unassign_position, name='unassign_position'),
     path('events/position/<int:position_id>/delete/', event.delete_position, name='delete_position'),
     path('events/presets/', event.view_presets, name='presets'),

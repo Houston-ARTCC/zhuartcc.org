@@ -116,6 +116,7 @@ def edit_event(request, event_id):
             return render(request, 'edit_event.html', {
                 'page_title': f'Editing {event.name}',
                 'positions': positions,
+                'controllers': User.objects.exclude(status=2),
                 'event': event
             })
     else:
@@ -223,6 +224,35 @@ def unassign_position(request, position_id):
     position.save()
 
     return HttpResponse(status=200)
+
+
+@require_staff
+@require_POST
+def manual_assign(request, position_id, cid):
+    position = EventPosition.objects.get(id=position_id)
+    controller = User.objects.get(cid=cid)
+
+    if position.user != controller:
+        if position.user is not None:
+            send_mail(
+                'Event Position Unassigned',
+                render_to_string('emails/position_unassigned.html', {'position': position}),
+                os.getenv('NO_REPLY'),
+                [position.user.email],
+            )
+
+        position.user = controller
+        position.save()
+
+        send_mail(
+            'Event Position Assigned!',
+            render_to_string('emails/position_assigned.html', {'position': position}),
+            os.getenv('NO_REPLY'),
+            [controller.email],
+        )
+
+        return HttpResponse(status=200)
+    return HttpResponse('Position is already assigned to selected user.', status=403)
 
 
 @require_staff

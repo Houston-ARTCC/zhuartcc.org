@@ -1,0 +1,28 @@
+name: Deploy Production From Master
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: SSH, Git Pull, and Restart Webserver
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SSH_HOST }}
+          username: ${{ secrets.PRODUCTION_SSH_USERNAME }}
+          password: ${{ secrets.PRODUCTION_SSH_PASSWORD }}
+          port: 22
+          use_insecure_cipher: true
+          script: |
+            cd zhuartcc.org/zhuartcc.org
+            source ../venv/bin/activate
+            git pull
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            python manage.py makemigrations
+            python manage.py migrate
+            touch ../tmp/restart.txt

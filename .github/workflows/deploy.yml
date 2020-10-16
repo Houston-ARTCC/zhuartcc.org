@@ -25,6 +25,5 @@ jobs:
             pip install -r requirements.txt
             python manage.py makemigrations
             python manage.py migrate
-            touch ../tmp/restart.txt
             python manage.py collectstatic --noinput
             touch ../tmp/restart.txt

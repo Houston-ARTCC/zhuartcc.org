@@ -27,16 +27,25 @@ class TrainingSession(models.Model):
         (2, 'Cancelled'),
         (3, 'No-Show'),
     )
+    OTS_STATUSES = (
+        (0, 'Non-OTS'),
+        (1, 'Passed'),
+        (2, 'Failed'),
+        (3, 'Recommended'),
+    )
     student = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='student_sessions')
     instructor = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='instructor_sessions')
     start = models.DateTimeField()
     end = models.DateTimeField()
-    position = models.CharField(max_length=16, null=True, blank=True)
+    movements = models.IntegerField(default=0)
+    progress = models.IntegerField(default=3)
+    position = models.CharField(max_length=16)
     type = models.IntegerField(choices=TYPES)
     level = models.IntegerField(choices=LEVELS)
     status = models.IntegerField(default=0, choices=STATUSES)
-    session_notes = models.TextField(null=True, blank=True)
-    session_file = models.FileField(upload_to='training/', null=True, blank=True)
+    ots_status = models.IntegerField(default=0, choices=OTS_STATUSES)
+    ctrs_id = models.IntegerField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
 
     @property
     def duration(self):

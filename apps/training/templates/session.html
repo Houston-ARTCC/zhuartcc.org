@@ -16,6 +16,9 @@
 {% block body %}
     {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
         <div class="text-center text-lg-left mb-4">
+        {% if session.status == 0 %}
+            <a href="{% url 'file_session' session_id=session.id %}"><button class="btn btn-success"><i class="far fa-file-alt"></i> File Session</button></a>
+        {% endif %}
             <a href="{% url 'edit_session' session_id=session.id %}"><button class="btn btn-secondary"><i class="far fa-pencil-ruler"></i> Edit Session</button></a>
         </div>
     {% endif %}
@@ -38,7 +41,7 @@
         </div>
         <div class="col-12 col-lg">
             <h3>Session Notes</h3>
-            <p>{{ session.session_notes|safe|default:'No notes provided.' }}</p>
+            <p>{{ session.notes|safe|default:'No notes provided.' }}</p>
         </div>
     </div>
     {% if session.session_file %}

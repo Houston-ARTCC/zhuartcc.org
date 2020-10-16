@@ -77,6 +77,7 @@ urlpatterns = [
     path('training/requests/<int:request_id>/cancel/', training.cancel_training_request, name='cancel_training'),
     path('training/session/<int:session_id>/', training.view_session, name='view_session'),
     path('training/session/<int:session_id>/edit/', training.edit_session, name='edit_session'),
+    path('training/session/<int:session_id>/file/', training.file_session, name='file_session'),
     path('training/mentors/', training.view_mentor_history, name='mentor_history'),
     path('training/scheduled/', training.view_scheduled_sessions, name='scheduled_sessions'),
     path('training/student/<int:cid>/', training.view_student_profile, name='student_profile'),

@@ -619,12 +619,20 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
 .btn-outline-primary:focus {
     box-shadow: 0 0 0 0.2rem rgba(45, 69, 162, 0.5)!important;
 }
+.btn-outline-secondary {
+    border: 2px #5f5f5f solid;
+    transition: 400ms;
+}
 .btn-outline-danger {
     border: 2px #dc3545 solid;
     transition: 400ms;
 }
 .btn-outline-success {
     border: 2px #57db51 solid;
+    transition: 400ms;
+}
+.btn-outline-info {
+    border: 2px #56c8ef solid;
     transition: 400ms;
 }
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
@@ -662,67 +670,9 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
     color: inherit;
     text-decoration: inherit;
 }
-.exam-answer {
-    font: 14px Gilroy-Bold, Helvetica, sans-serif;
-    background-color: #f3f3f3;
-    width: 100%;
-    display: block;
-    text-align: left;
-    padding: 20px;
-    margin: 10px 0;
-    border-radius: 5px;
-    transition: 300ms;
-    cursor: pointer;
-}
-.exam-correct {
-    background-color: #c0ffb1;
-}
-.exam-correct:hover {
-    background-color: #c0ffb1!important;
-    transition: 300ms;
-}
-.exam-correct .exam-letter {
-    background-color: white;
-    color: #c0ffb1;
-    transition: 300ms;
-}
-.exam-incorrect {
-    background-color: #ffd1d1;
-}
-.exam-incorrect:hover {
-    background-color: #ffd1d1!important;
-    transition: 300ms;
-}
-.exam-incorrect .exam-letter {
-    background-color: white;
-    color: #ffd1d1;
-    transition: 300ms;
-}
-.exam-answer:hover {
-    background-color: #eaeaea;
-    transition: 300ms;
-}
-.exam-answer.selected {
-    background: #2d45a2;
-    color: white;
-    box-shadow: 0 0 0 0.2rem rgba(45, 69, 162, 0.5)!important;
-    transition: 300ms;
-}
-.exam-answer.selected:hover {
-    color: white;
-    transition: 300ms;
-}
-.exam-letter {
-    padding: 5px 9px;
-    background-color: #2d45a2;
-    color: white;
-    border-radius: 20px;
-    transition: 300ms;
-}
-.exam-answer.selected .exam-letter {
-    background-color: white;
-    color: #2d45a2;
-    transition: 300ms;
+.btn-group .btn {
+    margin: 1px;
+    box-shadow: none!important;
 }
 
 

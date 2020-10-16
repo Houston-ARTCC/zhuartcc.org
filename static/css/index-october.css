@@ -625,6 +625,9 @@ input.form-control {
     background-color: #303030!important;
     color: white!important;
 }
+select {
+    background-color: #303030;
+}
 
 
 /*
@@ -671,12 +674,20 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
 .btn-outline-primary:focus {
     box-shadow: 0 0 0 0.2rem rgba(239, 137, 69, 0.5)!important;
 }
+.btn-outline-secondary {
+    border: 2px #5f5f5f solid;
+    transition: 400ms;
+}
 .btn-outline-danger {
     border: 2px #dc3545 solid;
     transition: 400ms;
 }
 .btn-outline-success {
     border: 2px #57db51 solid;
+    transition: 400ms;
+}
+.btn-outline-info {
+    border: 2px #56c8ef solid;
     transition: 400ms;
 }
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
@@ -717,7 +728,7 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
     text-decoration: inherit;
 }
 .btn-group .btn {
-    margin: unset;
+    margin: 1px;
     box-shadow: none!important;
 }
 

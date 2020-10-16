@@ -1,8 +1,9 @@
 import os
-from datetime import datetime, timedelta
-
 import pytz
+import requests
+from datetime import datetime, timedelta
 from discord_webhook import DiscordEmbed, DiscordWebhook
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -43,28 +44,81 @@ def view_session(request, session_id):
         return HttpResponse('You are unauthorized to view somebody else\'s training session!', status=401)
 
 
+def modify_session(session, request):
+    session.instructor = User.objects.get(id=request.POST.get('instructor'))
+    session.start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
+    session.end = pytz.utc.localize(datetime.fromisoformat(request.POST.get('end')))
+    session.movements = request.POST.get('movements')
+    session.progress = request.POST.get('progress')
+    session.position = request.POST.get('position')
+    session.type = request.POST.get('type')
+    session.level = request.POST.get('level')
+    session.status = 1
+    session.ots_status = request.POST.get('ots_status')
+    session.notes = request.POST.get('notes')
+    session.save()
+
+    # Visitors don't get training records posted to VATUSA CTRS
+    if session.student.main_role == 'HC':
+        hours, remainder = divmod(session.duration.total_seconds(), 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        data = {
+            'apikey': os.getenv('API_KEY'),
+            'instructor_id': session.instructor.cid,
+            'session_date': session.start.strftime('%Y-%m-%d %H:%M'),
+            'position': session.position,
+            'duration': f'{int(hours):02}:{int(minutes):02}',
+            'movements': session.movements,
+            'score': session.progress,
+            'notes': 'No notes provided.' if session.notes == '' else session.notes,
+            'location': 1 if session.type == 2 else 2 if session.type == 1 else 0,
+            'ots_status': session.ots_status,
+        }
+
+        if session.ctrs_id is not None:
+            requests.put(f'https://api.vatusa.net/v2/training/record/{session.ctrs_id}', data=data)
+        else:
+            post_ctrs = requests.post(f'https://api.vatusa.net/v2/user/{session.student.cid}/training/record', data=data)
+
+            if post_ctrs.json()['status'] == 'OK':
+                session.ctrs_id = post_ctrs.json()['id']
+
+
+@require_staff_or_mentor
+def file_session(request, session_id):
+    session = TrainingSession.objects.get(id=session_id)
+
+    if session.status == 0:
+        if request.method == 'POST':
+            modify_session(session, request)
+
+            return redirect(reverse('view_session', args=[session.id]))
+
+        return render(request, 'file_session.html', {
+            'page_title': 'File Session',
+            'session': session,
+            'instructors': User.objects.filter(training_role='INS'),
+            'mentors': User.objects.filter(training_role='MTR'),
+        })
+    else:
+        return HttpResponse('You cannot file a completed, cancelled, or no-show session!', status=401)
+
+
 @require_staff_or_mentor
 def edit_session(request, session_id):
     session = TrainingSession.objects.get(id=session_id)
 
     if request.method == 'POST':
-        session.instructor = User.objects.get(id=request.POST.get('instructor'))
-        session.start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
-        session.end = pytz.utc.localize(datetime.fromisoformat(request.POST.get('end')))
-        session.position = request.POST.get('position')
-        session.type = request.POST.get('type')
-        session.level = request.POST.get('level')
-        session.status = request.POST.get('status')
-        session.session_notes = request.POST.get('notes')
-        session.session_file = request.FILES.get('ots', session.session_file)
-        session.save()
+        modify_session(session, request)
 
         return redirect(reverse('view_session', args=[session.id]))
 
     return render(request, 'edit_session.html', {
         'page_title': 'Edit Session',
         'session': session,
-        'instructors': User.objects.filter(training_role__in=['MTR', 'INS'])
+        'instructors': User.objects.filter(training_role='INS'),
+        'mentors': User.objects.filter(training_role='MTR'),
     })
 
 
@@ -112,7 +166,7 @@ def request_training(request):
             embed.add_embed_field(name='Type', value=training_request.get_type_display())
             embed.add_embed_field(
                 name='Remarks',
-                value=training_request.remarks if training_request.remarks is not '' else 'No Remarks Provided',
+                value=training_request.remarks if training_request.remarks != '' else 'No Remarks Provided',
                 inline=False,
             )
             webhook.add_embed(embed)

@@ -6,17 +6,17 @@
 {% endblock %}
 
 {% block header %}
-    <h2 style="font-size: 40px">You are now editing</h2>
+    <h2 style="font-size: 40px">You are now filing</h2>
     <h1 style="font-size: 65px">{{ session.student.first_name }}'s {{ session.get_level_display }} Session</h1>
 {% endblock %}
 
 {% block body %}
     <div class="alert alert-info mb-4">
         <h4 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Important!</h4>
-        <p>If you would like to mark this session as complete and submit this session to the VATUSA Centralized Training Record System, <a class="alert-link" href="{% url 'file_session' session_id=session.id %}">file this session</a> instead! Only utilize this to make changes to previously filed sessions or mark session as cancelled or no-show.</p>
-        <p class="mb-0">Submitting this form will automatically submit the changes made to this training session to the CTRS, given that the session has been filed.</p>
+        <p>Submitting this form will automatically submit this training session to the VATUSA Centralized Training Record System, thus there is no need to create this session on the VATUSA website! That being said, do not submit this form if the student failed to appear for the session or if the session was cancelled.</p>
+        <p class="mb-0">If this session is an OTS, submit the OTS form separately as a supplement to this note at <a class="alert-link" href="https://www.vatusa.net/mgt/controller/{{ session.student.cid }}/promote/">https://www.vatusa.net/mgt/controller/{{ session.student.cid }}/promote</a>.</p>
     </div>
-    <form id="sessionForm" action="{% url 'edit_session' session_id=session.id %}" method="POST">
+    <form id="sessionForm" action="{% url 'file_session' session_id=session.id %}" method="POST">
         {% csrf_token %}
         <div class="row">
             <div class="col-6">
@@ -88,7 +88,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="label-group">
-                                    <input name="movements" type="number" value="{{ session.movements }}" required>
+                                    <input name="movements" type="number" required>
                                     <label>Aircraft Moved</label>
                                     <span class="focus-border"></span>
                                 </div>
@@ -109,12 +109,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <select name="status" required>
-                                        <option value="0" {% if session.status == 0 %}selected{% endif %}>Scheduled</option>
-                                        <option value="1" {% if session.status == 1 %}selected{% endif %} disabled>Completed</option>
-                                        <option value="2" {% if session.status == 2 %}selected{% endif %}>Cancelled</option>
-                                        <option value="3" {% if session.status == 3 %}selected{% endif %}>No-Show</option>
-                                    </select>
+                                    <input type="text" value="Completed" readonly>
                                     <label>Status</label>
                                     <span class="focus-border"></span>
                                 </div>
@@ -122,24 +117,25 @@
                             <div class="col-6">
                                 <div class="label-group">
                                     <select name="progress" required>
-                                        <option value="1" {% if session.progress == 1 %}selected{% endif %}>1 - No Progress</option>
-                                        <option value="2" {% if session.progress == 2 %}selected{% endif %}>2 - Little Progress</option>
-                                        <option value="3" {% if session.progress == 3 %}selected{% endif %}>3 - Average Progress</option>
-                                        <option value="4" {% if session.progress == 4 %}selected{% endif %}>4 - Great Progress</option>
-                                        <option value="5" {% if session.progress == 5 %}selected{% endif %}>5 - Exceptional Progress</option>
+                                        <option selected></option>
+                                        <option value="1">1 - No Progress</option>
+                                        <option value="2">2 - Little Progress</option>
+                                        <option value="3">3 - Average Progress</option>
+                                        <option value="4">4 - Great Progress</option>
+                                        <option value="5">5 - Exceptional Progress</option>
                                     </select>
                                     <label>Progress</label>
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
                             <div class="col-12 text-center" id="ots_status">
-                                <input name="ots_status" type="text" value="{{ session.ots_status }}" hidden required>
+                                <input name="ots_status" type="text" value="0" hidden required>
                                 <label class="standalone text-center">OTS Status</label>
                                 <div class="btn-group">
-                                    <button class="btn btn-outline-secondary {% if session.ots_status == 0 %}active{% endif %}" type="button" value="0">Non-OTS</button>
-                                    <button class="btn btn-outline-success {% if session.ots_status == 1 %}active{% endif %}" type="button" value="1"><i class="far fa-check"></i> Passed</button>
-                                    <button class="btn btn-outline-danger {% if session.ots_status == 2 %}active{% endif %}" type="button" value="2"><i class="far fa-times"></i> Failed</button>
-                                    <button class="btn btn-outline-info {% if session.ots_status == 3 %}active{% endif %}" type="button" value="3"><i class="far fa-thumbs-up"></i> Recommended</button>
+                                    <button class="btn btn-outline-secondary active" type="button" value="0">Non-OTS</button>
+                                    <button class="btn btn-outline-success" type="button" value="1"><i class="far fa-check"></i> Passed</button>
+                                    <button class="btn btn-outline-danger" type="button" value="2"><i class="far fa-times"></i> Failed</button>
+                                    <button class="btn btn-outline-info" type="button" value="3"><i class="far fa-thumbs-up"></i> Recommended</button>
                                 </div>
                             </div>
                         </div>
@@ -163,7 +159,7 @@
             </div>
         </div>
         <a href="{% url 'view_session' session_id=session.id %}"><button class="btn btn-secondary" type="button">Return to Session</button></a>
-        <button class="btn btn-primary">Save Changes</button>
+        <button class="btn btn-primary"><i class="far fa-file-alt"></i> File Session</button>
     </form>
 {% endblock %}
 
@@ -172,6 +168,8 @@
     <script>
         var quill = null
         $(function() {
+            $('.collapse').collapse()
+            $('#ots').collapse('hide')
             quill = new Quill('#editor', {
                 theme: 'snow',
                 modules: {

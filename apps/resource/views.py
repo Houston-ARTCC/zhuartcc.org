@@ -9,15 +9,14 @@ from ..administration.models import ActionLog
 
 
 def view_resources(request):
-    # resources = Resource.objects.all().order_by('category')
-    # resources_sorted = {k: list(g) for k, g in groupby(resources, key=lambda resource: resource.category)}
-    # categories = Resource._meta.get_field('category').choices
-    # return render(request, 'resources.html', {
-    #     'page_title': 'Resources',
-    #     'resources': resources_sorted,
-    #     'categories': categories
-    # })
-    return redirect('https://sites.google.com/view/vzhuids/documents-controlling-files')
+    resources = Resource.objects.all().order_by('category')
+    resources_sorted = {k: list(g) for k, g in groupby(resources, key=lambda resource: resource.category)}
+    categories = Resource._meta.get_field('category').choices
+    return render(request, 'resources.html', {
+        'page_title': 'Resources',
+        'resources': resources_sorted,
+        'categories': categories
+    })
 
 
 # Accepts form data and adds database entry

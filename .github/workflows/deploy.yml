@@ -12,9 +12,9 @@ jobs:
       - name: SSH, Git Pull, and Restart Webserver
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.PRODUCTION_SSH_HOST }}
-          username: ${{ secrets.PRODUCTION_SSH_USERNAME }}
-          password: ${{ secrets.PRODUCTION_SSH_PASSWORD }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           use_insecure_cipher: true
           script: |

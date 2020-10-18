@@ -204,6 +204,8 @@ def assign_position(request, request_id):
             [position_request.user.email],
         )
 
+        position_request.user.event_requests.filter(position__event=position_request.position.event).delete()
+
         return HttpResponse(status=200)
     return HttpResponse('Position is already assigned to selected user.', status=403)
 

@@ -134,6 +134,7 @@
                                 <div class="label-group">
                                     <select name="mentor_level">
                                         <option {% if user.mentor_level == '' %}selected{% endif %}></option>
+                                        <option {% if user.mentor_level == 'Ground' %}selected{% endif %}>Ground</option>
                                         <option {% if user.mentor_level == 'Tower' %}selected{% endif %}>Tower</option>
                                         <option {% if user.mentor_level == 'Approach' %}selected{% endif %}>Approach</option>
                                         <option {% if user.mentor_level == 'Center' %}selected{% endif %}>Center</option>

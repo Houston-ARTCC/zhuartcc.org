@@ -30,3 +30,12 @@ class ControllerSession(models.Model):
 
     def __str__(self):
         return f'{self.start} | {self.user.full_name} on {self.callsign}'
+
+
+class CurrentAtis(models.Model):
+    facility = models.CharField(max_length=4)
+    config_profile = models.CharField(max_length=16)
+    atis_letter = models.CharField(max_length=1)
+    airport_conditions = models.TextField()
+    notams = models.TextField()
+    updated = models.DateTimeField(auto_now=True)

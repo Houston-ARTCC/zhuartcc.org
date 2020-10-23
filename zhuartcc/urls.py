@@ -27,6 +27,8 @@ urlpatterns = [
 
     # API
     path('statistics/', api.view_statistics, name='statistics'),
+    path('api/vatis/', api.update_atis, name='update_atis'),
+    path('api/vatis/<str:icao>/', api.get_atis, name='get_atis'),
 
     # Event
     path('events/', event.view_all_events, name='events'),

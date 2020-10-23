@@ -2,10 +2,13 @@ import calendar
 from datetime import timedelta
 
 from django.db.models import Sum, Q
+from django.forms import model_to_dict
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
-from .models import ControllerSession
+from .models import ControllerSession, CurrentAtis
 from ..user.models import User
 
 
@@ -81,3 +84,26 @@ def return_sorted_hours():
         aggregates += [aggregate]
 
     return sorted(aggregates, key=lambda i: i['hours'], reverse=True)
+
+
+@require_POST
+def update_atis(request):
+    try:
+        CurrentAtis(
+            facility=request.POST.get('facility'),
+            config_profile=request.POST.get('config_profile'),
+            atis_letter=request.POST.get('atis_letter'),
+            airport_conditions=request.POST.get('airport_conditions'),
+            notams=request.POST.get('notams'),
+        ).save()
+    except:
+        return HttpResponse(status=400)
+    return HttpResponse(status=200)
+
+
+def get_atis(request, icao):
+    atis = CurrentAtis.objects.filter(facility=icao.upper()).first()
+    if atis:
+        return JsonResponse(model_to_dict(atis))
+    else:
+        return HttpResponse(f'ATIS for facility {icao.upper()} was not found.', status=404)

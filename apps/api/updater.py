@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from zhuartcc.overrides import send_mail
 from .views import return_inactive_users
-from .models import Controller, ControllerSession
+from .models import Controller, ControllerSession, CurrentAtis
 from ..user.models import User
 
 
@@ -39,6 +39,10 @@ def pull_controllers():
                 duration=controller.last_update - controller.online_since,
             ).save()
             controller.delete()
+
+    for atis in CurrentAtis.objects.all():
+        if atis.facility + '_ATIS' not in atc_clients:
+            atis.delete()
 
     for callsign, controller in atc_clients.items():
         if controller[1] and User.objects.filter(cid=controller[1]).exists():

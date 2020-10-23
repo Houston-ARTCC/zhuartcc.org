@@ -56,6 +56,7 @@ def modify_session(session, request):
     session.status = 1
     session.ots_status = request.POST.get('ots_status')
     session.notes = request.POST.get('notes')
+    session.solo_granted = request.POST.get('solo_grated')
     session.save()
 
     # Visitors don't get training records posted to VATUSA CTRS

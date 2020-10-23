@@ -46,6 +46,7 @@ class TrainingSession(models.Model):
     ots_status = models.IntegerField(default=0, choices=OTS_STATUSES)
     ctrs_id = models.IntegerField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
+    solo_granted = models.BooleanField(default=False)
 
     @property
     def duration(self):

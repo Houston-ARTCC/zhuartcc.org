@@ -1,4 +1,5 @@
 import calendar
+import json
 import os
 from datetime import timedelta
 
@@ -92,21 +93,22 @@ def return_sorted_hours():
 @csrf_exempt
 @require_POST
 def update_atis(request):
+    data = json.loads(request.body)
     webhook = DiscordWebhook(url=os.getenv('LOGGING_WEBHOOK_URL'))
     embed = DiscordEmbed(
         title='POST - vATIS',
-        description=f'```{request.POST} :: {request.POST.get("facility")}```',
+        description=f'```{data} :: {data.get("facility")}```',
         color=2966946
     )
     webhook.add_embed(embed)
     webhook.execute()
     try:
         CurrentAtis(
-            facility=request.POST.get('facility'),
-            config_profile=request.POST.get('config_profile'),
-            atis_letter=request.POST.get('atis_letter'),
-            airport_conditions=request.POST.get('airport_conditions'),
-            notams=request.POST.get('notams'),
+            facility=data.get('facility'),
+            config_profile=data.get('config_profile'),
+            atis_letter=data.get('atis_letter'),
+            airport_conditions=data.get('airport_conditions'),
+            notams=data.get('notams'),
         ).save()
     except:
         return HttpResponse(status=400)

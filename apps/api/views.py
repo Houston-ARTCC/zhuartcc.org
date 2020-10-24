@@ -8,6 +8,7 @@ from django.forms import model_to_dict
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from .models import ControllerSession, CurrentAtis
@@ -88,6 +89,7 @@ def return_sorted_hours():
     return sorted(aggregates, key=lambda i: i['hours'], reverse=True)
 
 
+@csrf_exempt
 @require_POST
 def update_atis(request):
     webhook = DiscordWebhook(url=os.getenv('LOGGING_WEBHOOK_URL'))

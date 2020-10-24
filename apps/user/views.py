@@ -134,6 +134,18 @@ def edit_user(request, cid):
     return render(request, 'editUser.html', {'page_title': f'Editing {user.full_name}', 'user': user})
 
 
+@require_POST
+def edit_bio(request, cid):
+    user = User.objects.get(cid=cid)
+    if user == request.user_obj:
+        user.biography = request.POST.get('biography')
+        user.save()
+
+        return redirect(reverse('view_user', args=[user.cid]))
+    else:
+        return HttpResponse(status=403)
+
+
 @require_staff
 @require_POST
 def update_status(request, cid):

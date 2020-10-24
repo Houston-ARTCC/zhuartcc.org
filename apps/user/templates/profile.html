@@ -56,7 +56,14 @@
         </div>
         <div class="col-12 col-lg-6 col-xl-4">
             <div class="card">
-                <div class="card-header">Biography</div>
+                <div class="card-header">
+                    Biography
+                    {% if user == request.user_obj %}
+                        <a class="float-right" onclick="editBio()">
+                            <i class="fas fa-pencil-ruler"></i>
+                        </a>
+                    {% endif %}
+                </div>
                 <div class="card-body">
                     {{ user.biography|default:'No biography set' }}
                 </div>
@@ -205,6 +212,22 @@
                 .done(function() { launchSuccessModal() })
                 .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             })
+        {% endif %}
+        {% if user == request.user_obj %}
+            function editBio() {
+                launchCustomModal(
+                    'info',
+                    'Editing Biography',
+                    `<form action="{% url 'edit_bio' cid=user.cid %}" method="POST">
+                        {% csrf_token %}
+                        <div class="label-group">
+                            <textarea name="biography" rows="2">{{ user.biography }}</textarea>
+                            <span class="focus-border"></span>
+                        </div>
+                        <button class="btn btn-primary">Submit</button>
+                    </form>`
+                )
+            }
         {% endif %}
     </script>
 {% endblock %}

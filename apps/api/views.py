@@ -1,6 +1,8 @@
 import calendar
+import os
 from datetime import timedelta
 
+from discord_webhook import DiscordEmbed, DiscordWebhook
 from django.db.models import Sum, Q
 from django.forms import model_to_dict
 from django.http import HttpResponse, JsonResponse
@@ -88,6 +90,14 @@ def return_sorted_hours():
 
 @require_POST
 def update_atis(request):
+    webhook = DiscordWebhook(url=os.getenv('LOGGING_WEBHOOK_URL'))
+    embed = DiscordEmbed(
+        title='POST - vATIS',
+        description=f'```{request.POST} :: {request.POST.get("facility")}```',
+        color=2966946
+    )
+    webhook.add_embed(embed)
+    webhook.execute()
     try:
         CurrentAtis(
             facility=request.POST.get('facility'),

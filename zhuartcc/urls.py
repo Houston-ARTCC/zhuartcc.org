@@ -95,6 +95,7 @@ urlpatterns = [
     path('roster/<int:cid>/', user.view_profile, name='view_user'),
     path('roster/<int:cid>/edit/', user.edit_user, name='edit_user'),
     path('roster/<int:cid>/editbio/', user.edit_bio, name='edit_bio'),
+    path('roster/<int:cid>/editavatar/', user.edit_avatar, name='edit_avatar'),
     path('roster/<int:cid>/status/', user.update_status, name='edit_status'),
     path('roster/<int:cid>/addcomment/', user.add_comment, name='add_comment'),
     path('roster/<int:cid>/removecomment/', user.remove_comment, name='remove_comment'),

@@ -2,148 +2,148 @@
 {% load static %}
 
 {% block body %}
-<div class="row">
-    <div class="col-md-0 col-xl-3"></div>
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-header bg-secondary">Air Traffic Manager <a class="float-right" href="mailto:atm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for ATM in staff.ATM %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ ATM.full_name }}</h4>
-                {% empty %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
-                {% endfor %}
-                <p>The ATM is responsible for the macro-management of the ARTCC. They oversee day-to-day operations and ensure the ARTCC runs smoothly.</p>
+    <div class="row">
+        <div class="col-md-0 col-xl-3"></div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-header bg-secondary">Air Traffic Manager <a class="float-right" href="mailto:atm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for ATM in staff.ATM %}
+                        <h4><img class="rounded-circle" src="{% if ATM.profile_picture %}{{ ATM.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ ATM.full_name }}</h4>
+                    {% empty %}
+                        <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
+                    {% endfor %}
+                    <p>The ATM is responsible for the macro-management of the ARTCC. They oversee day-to-day operations and ensure the ARTCC runs smoothly.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-header bg-secondary">Deputy Air Traffic Manager <a class="float-right" href="mailto:datm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for DATM in staff.DATM %}
+                        <h4><img class="rounded-circle" src="{% if DATM.profile_picture %}{{ DATM.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ DATM.full_name }}</h4>
+                    {% empty %}
+                        <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
+                    {% endfor %}
+                    <p>The DATM assists the ATM with the management of the ARTCC. The DATM acts as the ATM when necessary.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-0 col-xl-3"></div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-header bg-secondary">Training Administrator <a class="float-right" href="mailto:ta@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for TA in staff.TA %}
+                        <h4><img class="rounded-circle" src="{% if TA.profile_picture %}{{ TA.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ TA.full_name }}</h4>
+                    {% empty %}
+                        <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
+                    {% endfor %}
+                    <p>The TA works with the ATM and DATM to build training programs, establish training procedures, and recommend instructors and mentors.</p>
+                </div>
+                {% if staff.ATA %}
+                    <div class="card-header bg-secondary">Assistant Training Administrator <a class="float-right" href="mailto:ata@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                    <div class="card-body">
+                        {% for ATA in staff.ATA %}
+                            <h4><img class="rounded-circle" src="{% if ATA.profile_picture %}{{ ATA.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ ATA.full_name }}</h4>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-header bg-secondary">Events Coordinator <a class="float-right" href="mailto:ec@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for EC in staff.EC %}
+                        <h4><img class="rounded-circle" src="{% if EC.profile_picture %}{{ EC.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ EC.full_name }}</h4>
+                    {% empty %}
+                        <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
+                    {% endfor %}
+                    <p>The EC is responsible for the creation, planning, advertising, and coordination of events with neighboring facilities, virtual airlines, VATUSA, and VATSIM.</p>
+                </div>
+                {% if staff.AEC %}
+                    <div class="card-header bg-secondary">Assistant Events Coordinator <a class="float-right" href="mailto:aec@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                    <div class="card-body">
+                        {% for AEC in staff.AEC %}
+                            <h4><img class="rounded-circle" src="{% if AEC.profile_picture %}{{ AEC.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ AEC.full_name }}</h4>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-header bg-secondary">Facility Engineer <a class="float-right" href="mailto:fe@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for FE in staff.FE %}
+                        <h4><img class="rounded-circle" src="{% if FE.profile_picture %}{{ FE.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ FE.full_name }}</h4>
+                    {% empty %}
+                        <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
+                    {% endfor %}
+                    <p>The FE is responsible for the creation of sector files, radar client files, training scenarios, written documents, and other ARTCC resources as directed by the ATM.</p>
+                </div>
+                {% if staff.AFE %}
+                    <div class="card-header bg-secondary">Assistant Facility Engineer <a class="float-right" href="mailto:afe@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                    <div class="card-body">
+                        {% for AFE in staff.AFE %}
+                            <h4><img class="rounded-circle" src="{% if AFE.profile_picture %}{{ AFE.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ AFE.full_name }}</h4>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-header bg-secondary">Webmaster <a class="float-right" href="mailto:wm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for WM in staff.WM %}
+                        <h4><img class="rounded-circle" src="{% if WM.profile_picture %}{{ WM.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ WM.full_name }}</h4>
+                    {% empty %}
+                        <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
+                    {% endfor %}
+                    <p>The WM is responsible for the operation and maintenance of ARTCC IT services such as the website, Teamspeak server, and other tasks as required.</p>
+                </div>
+                {% if staff.AWM %}
+                    <div class="card-header bg-secondary">Assistant Webmaster <a class="float-right" href="mailto:awm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                    <div class="card-body">
+                        {% for AWM in staff.AWM %}
+                            <h4><img class="rounded-circle" src="{% if AWM.profile_picture %}{{ AWM.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ AWM.full_name }}</h4>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-header bg-secondary">Deputy Air Traffic Manager <a class="float-right" href="mailto:datm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for DATM in staff.DATM %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ DATM.full_name }}</h4>
-                {% empty %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
-                {% endfor %}
-                <p>The DATM assists the ATM with the management of the ARTCC. The DATM acts as the ATM when necessary.</p>
+    <hr>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header bg-secondary">Instructors <a class="float-right" href="mailto:instructor@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for instructor in staff.INS %}
+                        <h4><img class="rounded-circle" src="{% if instructor.profile_picture %}{{ instructor.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ instructor.full_name }}</h4>
+                    {% empty %}
+                        <h4>No Instructors</h4>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header bg-secondary">Mentors <a class="float-right" href="mailto:mentor@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
+                <div class="card-body">
+                    {% for mentor in staff.MTR %}
+                        <h4><img class="rounded-circle" src="{% if mentor.profile_picture %}{{ mentor.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="40px">&nbsp; {{ mentor.full_name }} <span class="badge badge-info">{{ mentor.mentor_level }}</span></h4>
+                    {% empty %}
+                        <h4>No Mentors</h4>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-0 col-xl-3"></div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-header bg-secondary">Training Administrator <a class="float-right" href="mailto:ta@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for TA in staff.TA %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ TA.full_name }}</h4>
-                {% empty %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
-                {% endfor %}
-                <p>The TA works with the ATM and DATM to build training programs, establish training procedures, and recommend instructors and mentors.</p>
-            </div>
-            {% if staff.ATA %}
-            <div class="card-header bg-secondary">Assistant Training Administrator <a class="float-right" href="mailto:ata@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for ATA in staff.ATA %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ ATA.full_name }}</h4>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-header bg-secondary">Events Coordinator <a class="float-right" href="mailto:ec@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for EC in staff.EC %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ EC.full_name }}</h4>
-                {% empty %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
-                {% endfor %}
-                <p>The EC is responsible for the creation, planning, advertising, and coordination of events with neighboring facilities, virtual airlines, VATUSA, and VATSIM.</p>
-            </div>
-            {% if staff.AEC %}
-            <div class="card-header bg-secondary">Assistant Events Coordinator <a class="float-right" href="mailto:aec@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for AEC in staff.AEC %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ AEC.full_name }}</h4>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-header bg-secondary">Facility Engineer <a class="float-right" href="mailto:fe@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for FE in staff.FE %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ FE.full_name }}</h4>
-                {% empty %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
-                {% endfor %}
-                <p>The FE is responsible for the creation of sector files, radar client files, training scenarios, written documents, and other ARTCC resources as directed by the ATM.</p>
-            </div>
-            {% if staff.AFE %}
-            <div class="card-header bg-secondary">Assistant Facility Engineer <a class="float-right" href="mailto:afe@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for AFE in staff.AFE %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ AFE.full_name }}</h4>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-header bg-secondary">Webmaster <a class="float-right" href="mailto:wm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for WM in staff.WM %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ WM.full_name }}</h4>
-                {% empty %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; Vacant</h4>
-                {% endfor %}
-                <p>The WM is responsible for the operation and maintenance of ARTCC IT services such as the website, Teamspeak server, and other tasks as required.</p>
-            </div>
-            {% if staff.AWM %}
-            <div class="card-header bg-secondary">Assistant Webmaster <a class="float-right" href="mailto:awm@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for AWM in staff.AWM %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ AWM.full_name }}</h4>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-xl-6">
-        <div class="card">
-            <div class="card-header bg-secondary">Instructors <a class="float-right" href="mailto:instructor@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for instructor in staff.INS %}
-                <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ instructor.full_name }}</h4>
-                {% empty %}
-                <h4>No Instructors</h4>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-6">
-        <div class="card">
-            <div class="card-header bg-secondary">Mentors <a class="float-right" href="mailto:mentor@zhuartcc.org"><i class="far fa-envelope"></i></a></div>
-            <div class="card-body">
-                {% for mentor in staff.MTR %}
-                    <h4><img class="rounded-circle" src="{% static 'img/placeholder-profile.png' %}" height="40px">&nbsp; {{ mentor.full_name }} <span class="badge badge-info">{{ mentor.mentor_level }}</span></h4>
-                {% empty %}
-                <h4>No Mentors</h4>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
+    {% endblock %}

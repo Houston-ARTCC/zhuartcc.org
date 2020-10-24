@@ -44,8 +44,4 @@
             <p>{{ session.notes|safe|default:'No notes provided.' }}</p>
         </div>
     </div>
-    {% if session.session_file %}
-        <hr>
-        <embed src="{{ session.session_file.url }}" width="100%" height="1000px" type="application/pdf">
-    {% endif %}
 {% endblock %}

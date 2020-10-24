@@ -1,11 +1,15 @@
-import calendar
 import os
+import pytz
+import base64
+import calendar
+import requests
+from PIL import Image
+from io import BytesIO
+from datetime import datetime
 from itertools import groupby
 
-import requests
-import pytz
-from datetime import datetime
-
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -126,6 +130,12 @@ def edit_user(request, cid):
         user.app_cert = int(post['app_cert'])
         user.ctr_cert = int(post['ctr_cert'])
         user.ocn_cert = int(post['ocn_cert'])
+
+        image_b64 = request.POST.get('profile_picture')
+        if image_b64:
+            image_data = base64.b64decode(image_b64.split(',')[1])
+            user.profile_picture = ContentFile(image_data, str(user.cid) + '.png')
+
         user.save()
 
         ActionLog(action=f'User {user.full_name} modified by {request.user_obj}.').save()
@@ -139,6 +149,21 @@ def edit_bio(request, cid):
     user = User.objects.get(cid=cid)
     if user == request.user_obj:
         user.biography = request.POST.get('biography')
+        user.save()
+
+        return redirect(reverse('view_user', args=[user.cid]))
+    else:
+        return HttpResponse(status=403)
+
+
+@require_POST
+def edit_avatar(request, cid):
+    user = User.objects.get(cid=cid)
+    if user == request.user_obj:
+        image_b64 = request.POST.get('profile_picture')
+        if image_b64:
+            image_data = base64.b64decode(image_b64.split(',')[1])
+            user.profile_picture = ContentFile(image_data, str(user.cid) + '.png')
         user.save()
 
         return redirect(reverse('view_user', args=[user.cid]))

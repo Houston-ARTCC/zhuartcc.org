@@ -2,329 +2,329 @@
 {% load static %}
 
 {% block tabs %}
-<a class="tab active" data-target="#home">Home</a>
-<a class="tab" data-target="#visiting">Visiting</a>
-<a class="tab" data-target="#mavp">MAVP</a>
+    <a class="tab active" data-target="#home">Home</a>
+    <a class="tab" data-target="#visiting">Visiting</a>
+    <a class="tab" data-target="#mavp">MAVP</a>
 {% endblock %}
 
 {% block body %}
-<div id="home">
-    {% for level, users in home.items %}
-    {% if users %}
-    <div class="text-center">
-        <h3 class="heading-row text-primary my-4">{{ level }}</h3>
-    </div>
-    <div class="row">
-        {% for user in users %}
-        <div class="col-12 col-lg-6 col-xl-3 mx-auto">
-            <div class="card">
-                <div class="card-header bg-secondary text-center">
-                    <img class="rounded-circle mb-2" src="{% static 'img/placeholder-profile.png' %}" height="60px">
-                    <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
-                    {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
-                    <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
-                    {% endif %}
+    <div id="home">
+        {% for level, users in home.items %}
+            {% if users %}
+                <div class="text-center">
+                    <h3 class="heading-row text-primary my-4">{{ level }}</h3>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md text-center">
-                            <h2 class="stat">{{ user.cid }}</h2>
-                            <p>CID</p>
+                <div class="row">
+                    {% for user in users %}
+                        <div class="col-12 col-lg-6 col-xl-3 mx-auto">
+                            <div class="card">
+                                <div class="card-header bg-secondary text-center">
+                                    <img class="rounded-circle mb-2" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="60px">
+                                    <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
+                                    {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
+                                        <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md text-center">
+                                            <h2 class="stat">{{ user.cid }}</h2>
+                                            <p>CID</p>
+                                        </div>
+                                        <div class="col-md text-center">
+                                            <h2 class="stat">{{ user.rating }}</h2>
+                                            <p>Rating</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md text-center">
-                            <h2 class="stat">{{ user.rating }}</h2>
-                            <p>Rating</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
-                            </tr>
-                            <tr>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
+            {% endif %}
         {% endfor %}
     </div>
-    {% endif %}
-    {% endfor %}
-</div>
-<div id="visiting" style="display: none">
-    {% for level, users in visiting.items %}
-    {% if users %}
-    <div class="text-center">
-        <h3 class="heading-row text-primary my-3">{{ level }}</h3>
-    </div>
-    <div class="row">
-        {% for user in users %}
-        <div class="col-lg-6 col-xl-3 mx-auto">
-            <div class="card">
-                <div class="card-header bg-secondary text-center">
-                    <img class="rounded-circle mb-2" src="{% static 'img/placeholder-profile.png' %}" height="60px">
-                    <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
-                    <p>from {{ user.home_facility }}</p>
-                    {% if request.user_obj.is_staff %}
-                        <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
-                    {% endif %}
+    <div id="visiting" style="display: none">
+        {% for level, users in visiting.items %}
+            {% if users %}
+                <div class="text-center">
+                    <h3 class="heading-row text-primary my-3">{{ level }}</h3>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md text-center">
-                            <h2 class="stat">{{ user.cid }}</h2>
-                            <p>CID</p>
+                <div class="row">
+                    {% for user in users %}
+                        <div class="col-lg-6 col-xl-3 mx-auto">
+                            <div class="card">
+                                <div class="card-header bg-secondary text-center">
+                                    <img class="rounded-circle mb-2" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="60px">
+                                    <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
+                                    <p>from {{ user.home_facility }}</p>
+                                    {% if request.user_obj.is_staff %}
+                                        <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md text-center">
+                                            <h2 class="stat">{{ user.cid }}</h2>
+                                            <p>CID</p>
+                                        </div>
+                                        <div class="col-md text-center">
+                                            <h2 class="stat">{{ user.rating }}</h2>
+                                            <p>Rating</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md text-center">
-                            <h2 class="stat">{{ user.rating }}</h2>
-                            <p>Rating</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
-                            </tr>
-                            <tr>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
+            {% endif %}
         {% endfor %}
     </div>
-    {% endif %}
-    {% endfor %}
-</div>
-<div id="mavp" style="display: none">
-    {% for level, users in mavp.items %}
-    {% if users %}
-    <div class="text-center">
-        <h3 class="heading-row text-primary my-3">{{ level }}</h3>
-    </div>
-    <div class="row">
-        {% for user in users %}
-        <div class="col-lg-6 col-xl-3 mx-auto">
-            <div class="card">
-                <div class="card-header bg-secondary text-center">
-                    <img class="rounded-circle mb-2" src="{% static 'img/placeholder-profile.png' %}" height="60px">
-                    <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
-                    <p>from {{ user.home_facility }}</p>
-                    {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
-                    <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
-                    {% endif %}
+    <div id="mavp" style="display: none">
+        {% for level, users in mavp.items %}
+            {% if users %}
+                <div class="text-center">
+                    <h3 class="heading-row text-primary my-3">{{ level }}</h3>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md text-center">
-                            <h2 class="stat">{{ user.cid }}</h2>
-                            <p>CID</p>
+                <div class="row">
+                    {% for user in users %}
+                        <div class="col-lg-6 col-xl-3 mx-auto">
+                            <div class="card">
+                                <div class="card-header bg-secondary text-center">
+                                    <img class="rounded-circle mb-2" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="60px">
+                                    <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
+                                    <p>from {{ user.home_facility }}</p>
+                                    {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
+                                        <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md text-center">
+                                            <h2 class="stat">{{ user.cid }}</h2>
+                                            <p>CID</p>
+                                        </div>
+                                        <div class="col-md text-center">
+                                            <h2 class="stat">{{ user.rating }}</h2>
+                                            <p>Rating</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
+                                                <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="width: 16.7%" class="text-center">
+                                                    {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                                    {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                                    {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                                    {% else %}<i class="fas fa-circle text-secondary"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md text-center">
-                            <h2 class="stat">{{ user.rating }}</h2>
-                            <p>Rating</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
-                                <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
-                            </tr>
-                            <tr>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
-                                    {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
-                                    {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
-                                    {% else %}<i class="fas fa-circle text-secondary"></i>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
+            {% endif %}
         {% endfor %}
     </div>
-    {% endif %}
-    {% endfor %}
-</div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    function showHide(showEl, hideEl) {
-        hideEl.fadeOut(200, function() {
-            showEl.fadeIn(200, function() {
+    <script>
+        function showHide(showEl, hideEl) {
+            hideEl.fadeOut(200, function() {
+                showEl.fadeIn(200, function() {
+                })
             })
-        })
-    }
-
-    $('.tab').click(function() {
-        $('.tab').removeClass('active')
-        let home = $('#home')
-        let visiting = $('#visiting')
-        let mavp = $('#mavp')
-        if ($(this).data('target') === '#home') {
-            if (visiting.is(':visible')) {
-                showHide(home, visiting)
-            } else {
-                showHide(home, mavp)
-            }
-        } else if ($(this).data('target') === '#visiting') {
-            if (home.is(':visible')) {
-                showHide(visiting, home)
-            } else {
-                showHide(visiting, mavp)
-            }
-        } else {
-            if (home.is(':visible')) {
-                showHide(mavp, home)
-            } else {
-                showHide(mavp, visiting)
-            }
         }
-        $(this).addClass('active')
-    })
-</script>
+
+        $('.tab').click(function() {
+            $('.tab').removeClass('active')
+            let home = $('#home')
+            let visiting = $('#visiting')
+            let mavp = $('#mavp')
+            if ($(this).data('target') === '#home') {
+                if (visiting.is(':visible')) {
+                    showHide(home, visiting)
+                } else {
+                    showHide(home, mavp)
+                }
+            } else if ($(this).data('target') === '#visiting') {
+                if (home.is(':visible')) {
+                    showHide(visiting, home)
+                } else {
+                    showHide(visiting, mavp)
+                }
+            } else {
+                if (home.is(':visible')) {
+                    showHide(mavp, home)
+                } else {
+                    showHide(mavp, visiting)
+                }
+            }
+            $(this).addClass('active')
+        })
+    </script>
 {% endblock %}

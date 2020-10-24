@@ -4,7 +4,14 @@
 
 {% block header %}
     <div class="d-lg-flex text-center text-lg-left align-items-center">
-        <img class="rounded-circle mb-2" src="{% static 'img/placeholder-profile.png' %}" height="130px">
+        <div class="col-3 text-center my-auto">
+            <img class="avatar" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}">
+            {% if user == request.user_obj %}
+                <input type="file" class="upload-avatar">
+                <input type="hidden" name="profile_picture">
+                <div class="change-avatar">Change Avatar</div>
+            {% endif %}
+        </div>
         <div class="ml-lg-4">
             <h1 style="font-size: 65px">{{ user.full_name }}</h1>
             <h2 style="font-size: 40px">
@@ -184,6 +191,8 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js" integrity="sha512-N4T9zTrqZUWCEhVU2uD0m47ADCWYRfEGNQ+dx/lYdQvOn+5FJZxcyHOY68QKsjTEC7Oa234qhXFhjPGQu6vhqg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.min.js" integrity="sha512-V8cSoC5qfk40d43a+VhrTEPf8G9dfWlEJgvLSiq2T2BmgGRmZzB8dGe7XAABQrWj3sEfrR5xjYICTY4eJr76QQ==" crossorigin="anonymous"></script>
     <script>
         $(function() {
             $('#connections').DataTable({
@@ -227,6 +236,40 @@
                         <button class="btn btn-primary">Submit</button>
                     </form>`
                 )
+            }
+            var cropper = null
+            $('.upload-avatar').change(function(e) {
+                $('.change-avatar').text('Change Avatar')
+                let files = e.target.files
+                if (FileReader && files && files.length) {
+                    let reader = new FileReader()
+                    reader.onload = function () {
+                        launchCustomModal(
+                            'info',
+                            'Crop your avatar!',
+                            `<div class="col-sm-12 my-4"><img class="image-crop" src=""></div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary" onclick="cropImage()">Submit</button>`
+                        )
+                        $('.image-crop').attr('src', reader.result)
+                        cropper = $('.image-crop').cropper({
+                            aspectRatio: 1,
+                            viewMode: 2,
+                            zoomable: false,
+                            movable: false,
+                            autoCropArea: 1,
+                        })
+                    }
+                    reader.readAsDataURL(files[0])
+                }
+            })
+            function cropImage() {
+                let imageData = cropper.data('cropper').getCroppedCanvas().toDataURL()
+                $('.avatar').attr('src', imageData)
+                $.post('{% url 'edit_avatar' cid=user.cid %}', {profile_picture: imageData})
+                .always(function() { $('#customModal').modal('hide') })
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
             }
         {% endif %}
     </script>

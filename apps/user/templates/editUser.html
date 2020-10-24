@@ -7,432 +7,439 @@
 {% endblock %}
 
 {% block body %}
-<form action="{% url 'edit_user' cid=user.cid %}" method="POST">
-    {% csrf_token %}
-    <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-            <div class="card card-nav-tabs">
-                <div class="card-header">User Details</div>
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="label-group">
-                                    <input name="cid" type="text" value="{{ user.cid }}" readonly>
-                                    <label>CID</label>
-                                    <span class="focus-border"></span>
+    <form action="{% url 'edit_user' cid=user.cid %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-xl-4">
+                <div class="card card-nav-tabs">
+                    <div class="card-header">User Details</div>
+                    <div class="card-body">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="label-group">
+                                        <input name="cid" type="text" value="{{ user.cid }}" readonly>
+                                        <label>CID</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="label-group">
+                                        <input name="rating" type="text" value="{{ user.rating }}" readonly>
+                                        <label>Rating</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="label-group">
+                                        <input name="oper_init" type="text" value="{{ user.oper_init }}" required>
+                                        <label>OI</label>
+                                        <span class="focus-border"></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="label-group">
-                                    <input name="rating" type="text" value="{{ user.rating }}" readonly>
-                                    <label>Rating</label>
-                                    <span class="focus-border"></span>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="first_name" type="text" value="{{ user.first_name }}" required>
+                                        <label>First</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="last_name" type="text" value="{{ user.last_name }}" required>
+                                        <label>Last Name</label>
+                                        <span class="focus-border"></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="label-group">
-                                    <input name="oper_init" type="text" value="{{ user.oper_init }}" required>
-                                    <label>OI</label>
-                                    <span class="focus-border"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="label-group">
-                                    <input name="first_name" type="text" value="{{ user.first_name }}" required>
-                                    <label>First</label>
-                                    <span class="focus-border"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="label-group">
-                                    <input name="last_name" type="text" value="{{ user.last_name }}" required>
-                                    <label>Last Name</label>
-                                    <span class="focus-border"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="label-group">
-                                    <input name="email" type="text" value="{{ user.email }}" required>
-                                    <label>Email</label>
-                                    <span class="focus-border"></span>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <input name="email" type="text" value="{{ user.email }}" required>
+                                        <label>Email</label>
+                                        <span class="focus-border"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-xl-4">
-            <div class="card card-nav-tabs">
-                <div class="card-header card-header-warning">ARTCC Roles</div>
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row mb-1">
-                            <div class="col-12 mb-2" id="role-radio">
-                                <label class="radio-group-label">Main Role</label>
-                                <div class="radio-group">
-                                    <input type="radio" name="main_role" value="HC" {% if user.main_role == 'HC' %}checked{% endif %}>
-                                    <label class="radio-label">Home Controller</label>
+            <div class="col-sm-12 col-md-6 col-xl-4">
+                <div class="card card-nav-tabs">
+                    <div class="card-header card-header-warning">ARTCC Roles</div>
+                    <div class="card-body">
+                        <div class="col">
+                            <div class="row mb-1">
+                                <div class="col-12 mb-2" id="role-radio">
+                                    <label class="radio-group-label">Main Role</label>
+                                    <div class="radio-group">
+                                        <input type="radio" name="main_role" value="HC" {% if user.main_role == 'HC' %}checked{% endif %}>
+                                        <label class="radio-label">Home Controller</label>
+                                    </div>
+                                    <div class="radio-group">
+                                        <input type="radio" name="main_role" value="VC" {% if user.main_role == 'VC' %}checked{% endif %}>
+                                        <label class="radio-label">Visting Controller from</label>
+                                        <div class="label-group">
+                                            <input id="VC" name="home_facility" type="text" {% if user.main_role == 'VC' %}value="{{ user.home_facility }}" required{% else %}disabled{% endif %}>
+                                            <label>Fac.</label>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                    <div class="radio-group">
+                                        <input type="radio" name="main_role" value="MC" {% if user.main_role == 'MC' %}checked{% endif %}>
+                                        <label class="radio-label">MAVP Controller from</label>
+                                        <div class="label-group">
+                                            <input id="MC" name="home_facility" type="text" {% if user.main_role == 'MC' %}value="{{ user.home_facility }}" required{% else %}disabled{% endif %}>
+                                            <label>Fac.</label>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="radio-group">
-                                    <input type="radio" name="main_role" value="VC" {% if user.main_role == 'VC' %}checked{% endif %}>
-                                    <label class="radio-label">Visting Controller from</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
                                     <div class="label-group">
-                                        <input id="VC" name="home_facility" type="text" {% if user.main_role == 'VC' %}value="{{ user.home_facility }}" required{% else %}disabled{% endif %}>
-                                        <label>Fac.</label>
+                                        <select name="staff_role">
+                                            <option {% if user.staff_role == '' %}selected{% endif %}></option>
+                                            <option {% if user.staff_role == 'AWM' %}selected{% endif %}>AWM</option>
+                                            <option {% if user.staff_role == 'WM' %}selected{% endif %}>WM</option>
+                                            <option {% if user.staff_role == 'AEC' %}selected{% endif %}>AEC</option>
+                                            <option {% if user.staff_role == 'EC' %}selected{% endif %}>EC</option>
+                                            <option {% if user.staff_role == 'AFE' %}selected{% endif %}>AFE</option>
+                                            <option {% if user.staff_role == 'FE' %}selected{% endif %}>FE</option>
+                                            <option {% if user.staff_role == 'ATA' %}selected{% endif %}>ATA</option>
+                                            <option {% if user.staff_role == 'TA' %}selected{% endif %}>TA</option>
+                                            <option {% if user.staff_role == 'DATM' %}selected{% endif %}>DATM</option>
+                                            <option {% if user.staff_role == 'ATM' %}selected{% endif %}>ATM</option>
+                                        </select>
+                                        <label>Staff Role</label>
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
-                                <div class="radio-group">
-                                    <input type="radio" name="main_role" value="MC" {% if user.main_role == 'MC' %}checked{% endif %}>
-                                    <label class="radio-label">MAVP Controller from</label>
+                                <div class="col-4">
                                     <div class="label-group">
-                                        <input id="MC" name="home_facility" type="text" {% if user.main_role == 'MC' %}value="{{ user.home_facility }}" required{% else %}disabled{% endif %}>
-                                        <label>Fac.</label>
+                                        <select name="training_role">
+                                            <option {% if user.training_role == '' %}selected{% endif %}></option>
+                                            <option {% if user.training_role == 'MTR' %}selected{% endif %}>MTR</option>
+                                            <option {% if user.training_role == 'INS' %}selected{% endif %}>INS</option>
+                                        </select>
+                                        <label>Training Role</label>
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="label-group">
-                                    <select name="staff_role">
-                                        <option {% if user.staff_role == '' %}selected{% endif %}></option>
-                                        <option {% if user.staff_role == 'AWM' %}selected{% endif %}>AWM</option>
-                                        <option {% if user.staff_role == 'WM' %}selected{% endif %}>WM</option>
-                                        <option {% if user.staff_role == 'AEC' %}selected{% endif %}>AEC</option>
-                                        <option {% if user.staff_role == 'EC' %}selected{% endif %}>EC</option>
-                                        <option {% if user.staff_role == 'AFE' %}selected{% endif %}>AFE</option>
-                                        <option {% if user.staff_role == 'FE' %}selected{% endif %}>FE</option>
-                                        <option {% if user.staff_role == 'ATA' %}selected{% endif %}>ATA</option>
-                                        <option {% if user.staff_role == 'TA' %}selected{% endif %}>TA</option>
-                                        <option {% if user.staff_role == 'DATM' %}selected{% endif %}>DATM</option>
-                                        <option {% if user.staff_role == 'ATM' %}selected{% endif %}>ATM</option>
-                                    </select>
-                                    <label>Staff Role</label>
-                                    <span class="focus-border"></span>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="label-group">
-                                    <select name="training_role">
-                                        <option {% if user.training_role == '' %}selected{% endif %}></option>
-                                        <option {% if user.training_role == 'MTR' %}selected{% endif %}>MTR</option>
-                                        <option {% if user.training_role == 'INS' %}selected{% endif %}>INS</option>
-                                    </select>
-                                    <label>Training Role</label>
-                                    <span class="focus-border"></span>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="label-group">
-                                    <select name="mentor_level">
-                                        <option {% if user.mentor_level == '' %}selected{% endif %}></option>
-                                        <option {% if user.mentor_level == 'Ground' %}selected{% endif %}>Ground</option>
-                                        <option {% if user.mentor_level == 'Tower' %}selected{% endif %}>Tower</option>
-                                        <option {% if user.mentor_level == 'Approach' %}selected{% endif %}>Approach</option>
-                                        <option {% if user.mentor_level == 'Center' %}selected{% endif %}>Center</option>
-                                        <option {% if user.mentor_level == 'Oceanic' %}selected{% endif %}>Oceanic</option>
-                                    </select>
-                                    <label>Mentor Level</label>
-                                    <span class="focus-border"></span>
+                                <div class="col-4">
+                                    <div class="label-group">
+                                        <select name="mentor_level">
+                                            <option {% if user.mentor_level == '' %}selected{% endif %}></option>
+                                            <option {% if user.mentor_level == 'Ground' %}selected{% endif %}>Ground</option>
+                                            <option {% if user.mentor_level == 'Tower' %}selected{% endif %}>Tower</option>
+                                            <option {% if user.mentor_level == 'Approach' %}selected{% endif %}>Approach</option>
+                                            <option {% if user.mentor_level == 'Center' %}selected{% endif %}>Center</option>
+                                            <option {% if user.mentor_level == 'Oceanic' %}selected{% endif %}>Oceanic</option>
+                                        </select>
+                                        <label>Mentor Level</label>
+                                        <span class="focus-border"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-xl-4">
-            <div class="card card-nav-tabs">
-                <div class="card-header card-header-warning">Status</div>
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col-12 mb-1 toggle">
-                                <input name="activity_exempt" type="checkbox" {% if user.activity_exempt %}checked{% endif %}>
-                                <label>Exempt from monthly hour requirements.</label>
+            <div class="col-sm-12 col-md-6 col-xl-4">
+                <div class="card card-nav-tabs">
+                    <div class="card-header card-header-warning">Status</div>
+                    <div class="card-body">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-12 mb-1 toggle">
+                                    <input name="activity_exempt" type="checkbox" {% if user.activity_exempt %}checked{% endif %}>
+                                    <label>Exempt from monthly hour requirements.</label>
+                                </div>
+                                <div class="col-12 mb-0 toggle">
+                                    <input name="prevent_event_signup" type="checkbox" {% if user.prevent_event_signup %}checked{% endif %}>
+                                    <label>Blocked from signing up for events.</label>
+                                </div>
                             </div>
-                            <div class="col-12 mb-0 toggle">
-                                <input name="prevent_event_signup" type="checkbox" {% if user.prevent_event_signup %}checked{% endif %}>
-                                <label>Blocked from signing up for events.</label>
+                            <div class="row">
+                                <div class="col-12 mb-3 text-center">
+                                    <hr>
+                                    <h5>Current Status:</h5>
+                                    {% if user.status == 0 %}
+                                        <div class="badge text-success"><i class="far fa-check"></i> Active Controller</div>
+                                    {% elif user.status == 1 %}
+                                        <div class="badge text-primary"><i class="far fa-clock"></i> LOA Until {{ user.loa_until }}</div>
+                                    {% elif user.status == 2 %}
+                                        <div class="badge text-danger"><i class="far fa-times"></i> Inactive Controller</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 mb-3 text-center">
-                                <hr>
-                                <h5>Current Status:</h5>
+                            <div class="col-12 text-center">
                                 {% if user.status == 0 %}
-                                    <div class="badge text-success"><i class="far fa-check"></i> Active Controller</div>
+                                    <button id="inactive" class="btn btn-outline-danger" type="button"><i class="far fa-times"></i> Mark Inactive</button>
+                                    <button id="loa" class="btn btn-outline-primary" type="button"><i class="far fa-clock"></i> Mark LOA</button>
                                 {% elif user.status == 1 %}
-                                    <div class="badge text-primary"><i class="far fa-clock"></i> LOA Until {{ user.loa_until }}</div>
+                                    <button id="active" class="btn btn-outline-success" type="button"><i class="far fa-check"></i> Mark Active</button>
+                                    <button id="inactive" class="btn btn-outline-danger" type="button"><i class="far fa-times"></i> Mark Inactive</button>
                                 {% elif user.status == 2 %}
-                                    <div class="badge text-danger"><i class="far fa-times"></i> Inactive Controller</div>
+                                    <button id="active" class="btn btn-outline-success" type="button"><i class="far fa-check"></i> Mark Active</button>
+                                    <button id="loa" class="btn btn-outline-primary" type="button"><i class="far fa-clock"></i> Mark LOA</button>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            {% if user.status == 0 %}
-                                <button id="inactive" class="btn btn-outline-danger" type="button"><i class="far fa-times"></i> Mark Inactive</button>
-                                <button id="loa" class="btn btn-outline-primary" type="button"><i class="far fa-clock"></i> Mark LOA</button>
-                            {% elif user.status == 1 %}
-                                <button id="active" class="btn btn-outline-success" type="button"><i class="far fa-check"></i> Mark Active</button>
-                                <button id="inactive" class="btn btn-outline-danger" type="button"><i class="far fa-times"></i> Mark Inactive</button>
-                            {% elif user.status == 2 %}
-                                <button id="active" class="btn btn-outline-success" type="button"><i class="far fa-check"></i> Mark Active</button>
-                                <button id="loa" class="btn btn-outline-primary" type="button"><i class="far fa-clock"></i> Mark LOA</button>
-                            {% endif %}
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-            <div class="card card-nav-tabs">
-                <div class="card-header card-header-warning">User Profile</div>
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col-3 text-center my-auto">
-                                <img class="avatar" src="{% static 'img/placeholder-profile.png' %}">
-                                <input type="file" class="upload-avatar">
-                                <div class="change-avatar">Change Avatar</div>
-                            </div>
-                            <div class="col-9">
-                                <div class="label-group">
-                                    <textarea name="biography" rows="3">{{ user.biography|default:'' }}</textarea>
-                                    <label>Biography</label>
-                                    <span class="focus-border"></span>
+            <div class="col-sm-12 col-md-6">
+                <div class="card card-nav-tabs">
+                    <div class="card-header card-header-warning">User Profile</div>
+                    <div class="card-body">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-3 text-center my-auto">
+                                    <img class="avatar" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}">
+                                    <input type="file" class="upload-avatar">
+                                    <input type="hidden" name="profile_picture">
+                                    <div class="change-avatar">Change Avatar</div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="label-group">
+                                        <textarea name="biography" rows="3">{{ user.biography|default:'' }}</textarea>
+                                        <label>Biography</label>
+                                        <span class="focus-border"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12 col-xl-6">
-            <div class="card card-nav-tabs">
-                <div class="card-header card-header-warning">Endorsements</div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <td style="width: 16.7%" class="text-center border-0"><b>Delivery</b></td>
-                                <td style="width: 16.7%" class="text-center border-0"><b>Ground</b></td>
-                                <td style="width: 16.7%" class="text-center border-0"><b>Tower</b></td>
-                                <td style="width: 16.7%" class="text-center border-0"><b>Approach</b></td>
-                                <td style="width: 16.7%" class="text-center border-0"><b>Center</b></td>
-                                <td style="width: 16.7%" class="text-center border-0"><b>Oceanic</b></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 16.7%" class="text-center">
-                                    <input type="text" name="del_cert" id="del-input" value="{{ user.del_cert }}" hidden>
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                            <span id="del-circle" class="text-{% if user.del_cert == 3 %}danger{% elif user.del_cert == 2 %}success{% elif user.del_cert == 1 %}warning{% else %}secondary{% endif %}">
-                                                <i class="fas fa-circle"></i>
-                                            </span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item endorsement" data-endorsement="del" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="del" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="del" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="del" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+            <div class="col-md-12 col-xl-6">
+                <div class="card card-nav-tabs">
+                    <div class="card-header card-header-warning">Endorsements</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <td style="width: 16.7%" class="text-center border-0"><b>Delivery</b></td>
+                                    <td style="width: 16.7%" class="text-center border-0"><b>Ground</b></td>
+                                    <td style="width: 16.7%" class="text-center border-0"><b>Tower</b></td>
+                                    <td style="width: 16.7%" class="text-center border-0"><b>Approach</b></td>
+                                    <td style="width: 16.7%" class="text-center border-0"><b>Center</b></td>
+                                    <td style="width: 16.7%" class="text-center border-0"><b>Oceanic</b></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 16.7%" class="text-center">
+                                        <input type="text" name="del_cert" id="del-input" value="{{ user.del_cert }}" hidden>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <span id="del-circle" class="text-{% if user.del_cert == 3 %}danger{% elif user.del_cert == 2 %}success{% elif user.del_cert == 1 %}warning{% else %}secondary{% endif %}">
+                                                    <i class="fas fa-circle"></i>
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item endorsement" data-endorsement="del" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="del" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="del" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="del" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    <input type="text" name="gnd_cert" id="gnd-input" value="{{ user.gnd_cert }}" hidden>
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                            <span id="gnd-circle" class="text-{% if user.gnd_cert == 3 %}danger{% elif user.gnd_cert == 2 %}success{% elif user.gnd_cert == 1 %}warning{% else %}secondary{% endif %}">
-                                                <i class="fas fa-circle"></i>
-                                            </span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                    </td>
+                                    <td style="width: 16.7%" class="text-center">
+                                        <input type="text" name="gnd_cert" id="gnd-input" value="{{ user.gnd_cert }}" hidden>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <span id="gnd-circle" class="text-{% if user.gnd_cert == 3 %}danger{% elif user.gnd_cert == 2 %}success{% elif user.gnd_cert == 1 %}warning{% else %}secondary{% endif %}">
+                                                    <i class="fas fa-circle"></i>
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="gnd" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    <input type="text" name="twr_cert" id="twr-input" value="{{ user.twr_cert }}" hidden>
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                            <span id="twr-circle" class="text-{% if user.twr_cert == 3 %}danger{% elif user.twr_cert == 2 %}success{% elif user.twr_cert == 1 %}warning{% else %}secondary{% endif %}">
-                                                <i class="fas fa-circle"></i>
-                                            </span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item endorsement" data-endorsement="twr" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="twr" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="twr" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="twr" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                    </td>
+                                    <td style="width: 16.7%" class="text-center">
+                                        <input type="text" name="twr_cert" id="twr-input" value="{{ user.twr_cert }}" hidden>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <span id="twr-circle" class="text-{% if user.twr_cert == 3 %}danger{% elif user.twr_cert == 2 %}success{% elif user.twr_cert == 1 %}warning{% else %}secondary{% endif %}">
+                                                    <i class="fas fa-circle"></i>
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item endorsement" data-endorsement="twr" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="twr" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="twr" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="twr" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    <input type="text" name="app_cert" id="app-input" value="{{ user.app_cert }}" hidden>
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                            <span id="app-circle" class="text-{% if user.app_cert == 3 %}danger{% elif user.app_cert == 2 %}success{% elif user.app_cert == 1 %}warning{% else %}secondary{% endif %}">
-                                                <i class="fas fa-circle"></i>
-                                            </span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item endorsement" data-endorsement="app" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="app" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="app" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="app" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                    </td>
+                                    <td style="width: 16.7%" class="text-center">
+                                        <input type="text" name="app_cert" id="app-input" value="{{ user.app_cert }}" hidden>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <span id="app-circle" class="text-{% if user.app_cert == 3 %}danger{% elif user.app_cert == 2 %}success{% elif user.app_cert == 1 %}warning{% else %}secondary{% endif %}">
+                                                    <i class="fas fa-circle"></i>
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item endorsement" data-endorsement="app" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="app" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="app" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="app" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    <input type="text" name="ctr_cert" id="ctr-input" value="{{ user.ctr_cert }}" hidden>
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                            <span id="ctr-circle" class="text-{% if user.ctr_cert == 3 %}danger{% elif user.ctr_cert == 2 %}success{% elif user.ctr_cert == 1 %}warning{% else %}secondary{% endif %}">
-                                                <i class="fas fa-circle"></i>
-                                            </span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                    </td>
+                                    <td style="width: 16.7%" class="text-center">
+                                        <input type="text" name="ctr_cert" id="ctr-input" value="{{ user.ctr_cert }}" hidden>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <span id="ctr-circle" class="text-{% if user.ctr_cert == 3 %}danger{% elif user.ctr_cert == 2 %}success{% elif user.ctr_cert == 1 %}warning{% else %}secondary{% endif %}">
+                                                    <i class="fas fa-circle"></i>
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="ctr" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td style="width: 16.7%" class="text-center">
-                                    <input type="text" name="ocn_cert" id="ocn-input" value="{{ user.ocn_cert }}" hidden>
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                            <span id="ocn-circle" class="text-{% if user.ocn_cert == 3 %}danger{% elif user.ocn_cert == 2 %}success{% elif user.ocn_cert == 1 %}warning{% else %}secondary{% endif %}">
-                                                <i class="fas fa-circle"></i>
-                                            </span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
-                                            <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                    </td>
+                                    <td style="width: 16.7%" class="text-center">
+                                        <input type="text" name="ocn_cert" id="ocn-input" value="{{ user.ocn_cert }}" hidden>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <span id="ocn-circle" class="text-{% if user.ocn_cert == 3 %}danger{% elif user.ocn_cert == 2 %}success{% elif user.ocn_cert == 1 %}warning{% else %}secondary{% endif %}">
+                                                    <i class="fas fa-circle"></i>
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="0"><i class="fas fa-circle text-secondary"></i> <b>No Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="1"><i class="fas fa-circle text-warning"></i> <b>Minor Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="2"><i class="fas fa-circle text-success"></i> <b>Major Endorsement</b></a>
+                                                <a class="dropdown-item endorsement" data-endorsement="ocn" data-type="3"><i class="fas fa-circle text-danger"></i> <b>Solo Endorsement</b></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <a href="{% url 'roster' %}"><button class="btn btn-secondary" type="button">Cancel</button></a>
-    <button class="btn btn-primary" type="submit">Save Changes</button>
-</form>
+        <a href="{% url 'roster' %}"><button class="btn btn-secondary" type="button">Cancel</button></a>
+        <button class="btn btn-primary" type="submit">Save Changes</button>
+    </form>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    $(function() {
-        $('#role-radio input[type="radio"]').change(function() {
-            if ($(this).val() === 'HC') {
-                deselect($('#VC'))
-                deselect($('#MC'))
-            } else if ($(this).val() === 'VC') {
-                select($('#VC'))
-                deselect($('#MC'))
-            } else {
-                select($('#MC'))
-                deselect($('#VC'))
-            }
-        })
-        $('#active').click(function() { postStatusUpdate({status: 0}) })
-        $('#inactive').click(function() { postStatusUpdate({status: 2}) })
-        $('#loa').click(function() {
-            launchCustomModal(
-                'info',
-                'When will the LOA expire?',
-                `<div class="col-sm-12"><div class="datepicker"></div></div>
-                <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-primary" onclick="submitLOA()">Submit</button>`
-            )
-        })
-        $('.upload-avatar').change(function(e) {
-            let files = e.target.files
-            if (FileReader && files && files.length) {
-                let reader = new FileReader()
-                reader.onload = function () {
-                    launchCustomModal(
-                        'info',
-                        'Crop your avatar!',
-                        `<div class="col-sm-12 my-4"><img class="image-crop" src=""></div>
-                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" onclick="cropImage()">Submit</button>`
-                    )
-                    $('.image-crop').attr('src', reader.result)
-                    .cropper({
-                        aspectRatio: 1,
-                        viewMode: 2,
-                        zoomable: false,
-                        movable: false,
-                        autoCropArea: 1,
-                    })
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js" integrity="sha512-N4T9zTrqZUWCEhVU2uD0m47ADCWYRfEGNQ+dx/lYdQvOn+5FJZxcyHOY68QKsjTEC7Oa234qhXFhjPGQu6vhqg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.min.js" integrity="sha512-V8cSoC5qfk40d43a+VhrTEPf8G9dfWlEJgvLSiq2T2BmgGRmZzB8dGe7XAABQrWj3sEfrR5xjYICTY4eJr76QQ==" crossorigin="anonymous"></script>
+    <script>
+    var cropper = null
+        $(function() {
+            $('#role-radio input[type="radio"]').change(function() {
+                if ($(this).val() === 'HC') {
+                    deselect($('#VC'))
+                    deselect($('#MC'))
+                } else if ($(this).val() === 'VC') {
+                    select($('#VC'))
+                    deselect($('#MC'))
+                } else {
+                    select($('#MC'))
+                    deselect($('#VC'))
                 }
-                reader.readAsDataURL(files[0])
-            }
+            })
+            $('#active').click(function() { postStatusUpdate({status: 0}) })
+            $('#inactive').click(function() { postStatusUpdate({status: 2}) })
+            $('#loa').click(function() {
+                launchCustomModal(
+                    'info',
+                    'When will the LOA expire?',
+                    `<div class="col-sm-12"><div class="datepicker"></div></div>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" onclick="submitLOA()">Submit</button>`
+                )
+            })
+            $('.upload-avatar').change(function(e) {
+                $('.change-avatar').text('Change Avatar')
+                let files = e.target.files
+                if (FileReader && files && files.length) {
+                    let reader = new FileReader()
+                    reader.onload = function () {
+                        launchCustomModal(
+                            'info',
+                            'Crop your avatar!',
+                            `<div class="col-sm-12 my-4"><img class="image-crop" src=""></div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary" onclick="cropImage()">Submit</button>`
+                        )
+                        $('.image-crop').attr('src', reader.result)
+                        cropper = $('.image-crop').cropper({
+                            aspectRatio: 1,
+                            viewMode: 2,
+                            zoomable: false,
+                            movable: false,
+                            autoCropArea: 1,
+                        })
+                    }
+                    reader.readAsDataURL(files[0])
+                }
+            })
+            $('.endorsement').click(function(e) {
+                let color = ''
+                $(`#${$(this).data('endorsement')}-input`).val($(this).data('type'))
+                switch ($(this).data('type')) {
+                    case 0:
+                        color = 'text-secondary'
+                        break
+                    case 1:
+                        color = 'text-warning'
+                        break
+                    case 2:
+                        color = 'text-success'
+                        break
+                    case 3:
+                        color = 'text-danger'
+                        break
+                }
+                $(`#${$(this).data('endorsement')}-circle`).attr('class', color)
+            })
         })
-        $('.endorsement').click(function(e) {
-            let color = ''
-            $(`#${$(this).data('endorsement')}-input`).val($(this).data('type'))
-            switch ($(this).data('type')) {
-                case 0:
-                    color = 'text-secondary'
-                    break
-                case 1:
-                    color = 'text-warning'
-                    break
-                case 2:
-                    color = 'text-success'
-                    break
-                case 3:
-                    color = 'text-danger'
-                    break
-            }
-            $(`#${$(this).data('endorsement')}-circle`).attr('class', color)
-        })
-    })
 
-    function cropImage() {
-        $('#customModal').modal('hide')
-    }
-    function submitLOA() {
-        let loa_until = $('.datepicker').data('datepicker').getFormattedDate('yyyy-mm-dd')
-        if (loa_until) {
-            postStatusUpdate({status: 1, loa_until: loa_until})
+        function cropImage() {
+            let imageData = cropper.data('cropper').getCroppedCanvas().toDataURL()
+            $('.avatar').attr('src', imageData)
+            $('[name="profile_picture"]').val(imageData)
             $('#customModal').modal('hide')
         }
-    }
-    function postStatusUpdate(data) {
-        $.post('{% url 'edit_status' cid=user.cid %}', data)
-        .done(function() { launchSuccessModal() })
-        .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
-    }
-    function select(el) {
-        el.attr('required', 'required').removeAttr('disabled')
-    }
-    function deselect(el) {
-        el.val('').removeClass('has-content').removeAttr('required').attr('disabled', 'disabled')
-    }
-</script>
+        function submitLOA() {
+            let loa_until = $('.datepicker').data('datepicker').getFormattedDate('yyyy-mm-dd')
+            if (loa_until) {
+                postStatusUpdate({status: 1, loa_until: loa_until})
+                $('#customModal').modal('hide')
+            }
+        }
+        function postStatusUpdate(data) {
+            $.post('{% url 'edit_status' cid=user.cid %}', data)
+            .done(function() { launchSuccessModal() })
+            .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+        }
+        function select(el) {
+            el.attr('required', 'required').removeAttr('disabled')
+        }
+        function deselect(el) {
+            el.val('').removeClass('has-content').removeAttr('required').attr('disabled', 'disabled')
+        }
+    </script>
 {% endblock %}

@@ -204,7 +204,7 @@
                                 <div class="col-3 text-center my-auto">
                                     <img class="avatar" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}">
                                     <input type="file" class="upload-avatar">
-                                    <input type="hidden" name="profile_picture">
+                                    <input type="hidden">
                                     <div class="change-avatar">Change Avatar</div>
                                 </div>
                                 <div class="col-9">
@@ -371,31 +371,6 @@
                     <button class="btn btn-primary" onclick="submitLOA()">Submit</button>`
                 )
             })
-            $('.upload-avatar').change(function(e) {
-                $('.change-avatar').text('Change Avatar')
-                let files = e.target.files
-                if (FileReader && files && files.length) {
-                    let reader = new FileReader()
-                    reader.onload = function () {
-                        launchCustomModal(
-                            'info',
-                            'Crop your avatar!',
-                            `<div class="col-sm-12 my-4"><img class="image-crop" src=""></div>
-                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button class="btn btn-primary" onclick="cropImage()">Submit</button>`
-                        )
-                        $('.image-crop').attr('src', reader.result)
-                        cropper = $('.image-crop').cropper({
-                            aspectRatio: 1,
-                            viewMode: 2,
-                            zoomable: false,
-                            movable: false,
-                            autoCropArea: 1,
-                        })
-                    }
-                    reader.readAsDataURL(files[0])
-                }
-            })
             $('.endorsement').click(function(e) {
                 let color = ''
                 $(`#${$(this).data('endorsement')}-input`).val($(this).data('type'))
@@ -416,12 +391,46 @@
                 $(`#${$(this).data('endorsement')}-circle`).attr('class', color)
             })
         })
-
+        var cropper = null
+        $('.upload-avatar').change(function(e) {
+            $('.change-avatar').text('Change Avatar')
+            let files = e.target.files
+            if (FileReader && files && files.length) {
+                let reader = new FileReader()
+                reader.onload = function () {
+                    launchCustomModal(
+                        'info',
+                        'Crop your avatar!',
+                        `<div class="col-sm-12 my-4"><img class="image-crop" src=""></div>
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" onclick="cropImage()">Submit</button>`
+                    )
+                    $('.image-crop').attr('src', reader.result)
+                    cropper = $('.image-crop').cropper({
+                        aspectRatio: 1,
+                        viewMode: 2,
+                        zoomable: false,
+                        movable: false,
+                        autoCropArea: 1,
+                    })
+                }
+                reader.readAsDataURL(files[0])
+            }
+        })
         function cropImage() {
-            let imageData = cropper.data('cropper').getCroppedCanvas().toDataURL()
-            $('.avatar').attr('src', imageData)
-            $('[name="profile_picture"]').val(imageData)
-            $('#customModal').modal('hide')
+            let imageData = cropper.data('cropper').getCroppedCanvas().toBlob((blob) => {
+                const formData = new FormData();
+                formData.append('profile_picture', blob);
+                $.post({
+                    url: '{% url 'edit_avatar' cid=user.cid %}',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                })
+                .always(function() { $('#customModal').modal('hide') })
+                .done(function() { launchSuccessModal(); $('.avatar').attr('src', imageData) })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+            })
         }
         function submitLOA() {
             let loa_until = $('.datepicker').data('datepicker').getFormattedDate('yyyy-mm-dd')

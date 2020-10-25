@@ -39,7 +39,7 @@ class User(models.Model):
     solo_cert = models.CharField(max_length=32, null=True, blank=True)
 
     # Profile Details
-    profile_picture = models.ImageField(null=True, blank=True)
+    profile_picture = models.ImageField(null=True, blank=True, upload_to='profile/')
     biography = models.TextField(null=True, blank=True)
     staff_comment = models.TextField(null=True, blank=True)
     staff_comment_author = models.ForeignKey('self', models.SET_NULL, null=True, blank=True)

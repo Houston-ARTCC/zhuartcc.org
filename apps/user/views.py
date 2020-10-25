@@ -131,11 +131,6 @@ def edit_user(request, cid):
         user.ctr_cert = int(post['ctr_cert'])
         user.ocn_cert = int(post['ocn_cert'])
 
-        image_b64 = request.POST.get('profile_picture')
-        if image_b64:
-            image_data = base64.b64decode(image_b64.split(',')[1])
-            user.profile_picture = ContentFile(image_data, str(user.cid) + '.png')
-
         user.save()
 
         ActionLog(action=f'User {user.full_name} modified by {request.user_obj}.').save()
@@ -159,11 +154,10 @@ def edit_bio(request, cid):
 @require_POST
 def edit_avatar(request, cid):
     user = User.objects.get(cid=cid)
-    if user == request.user_obj:
-        image_b64 = request.POST.get('profile_picture')
-        if image_b64:
-            image_data = base64.b64decode(image_b64.split(',')[1])
-            user.profile_picture = ContentFile(image_data, str(user.cid) + '.png')
+    if user == request.user_obj or request.user_obj.is_staff:
+        profile = request.FILES.get('profile_picture')
+        if profile:
+            user.profile_picture = profile
         user.save()
 
         return redirect(reverse('view_user', args=[user.cid]))

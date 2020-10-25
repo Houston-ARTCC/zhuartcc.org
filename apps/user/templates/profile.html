@@ -4,12 +4,12 @@
 
 {% block header %}
     <div class="d-lg-flex text-center text-lg-left align-items-center">
-        <div class="col-3 text-center my-auto">
-            <img class="avatar" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}">
+        <div class="text-center my-auto position-relative">
+            <img class="avatar-lg" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}">
             {% if user == request.user_obj %}
                 <input type="file" class="upload-avatar">
-                <input type="hidden" name="profile_picture">
-                <div class="change-avatar">Change Avatar</div>
+                <input type="hidden">
+                <div class="change-avatar"><h5 class="pt-2">Change Avatar</h5></div>
             {% endif %}
         </div>
         <div class="ml-lg-4">
@@ -264,12 +264,19 @@
                 }
             })
             function cropImage() {
-                let imageData = cropper.data('cropper').getCroppedCanvas().toDataURL()
-                $('.avatar').attr('src', imageData)
-                $.post('{% url 'edit_avatar' cid=user.cid %}', {profile_picture: imageData})
-                .always(function() { $('#customModal').modal('hide') })
-                .done(function() { launchSuccessModal() })
-                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+                let imageData = cropper.data('cropper').getCroppedCanvas().toBlob((blob) => {
+                    const formData = new FormData();
+                    formData.append('profile_picture', blob);
+                    $.post({
+                        url: '{% url 'edit_avatar' cid=user.cid %}',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                    })
+                    .always(function() { $('#customModal').modal('hide') })
+                    .done(function() { launchSuccessModal(); $('.avatar').attr('src', imageData) })
+                    .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+                })
             }
         {% endif %}
     </script>

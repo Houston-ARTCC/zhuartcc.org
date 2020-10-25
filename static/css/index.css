@@ -175,11 +175,6 @@ a:hover {
 .stat {
     color: #2d45a2;
 }
-.avatar {
-    height: 100px;
-    width: 100px;
-    border-radius: 50px;
-}
 .badge {
     font: 17px Gilroy-Bold, Helvetica, sans-serif;
 }
@@ -519,15 +514,23 @@ input[type="checkbox"]:checked ~ label {
 .datepicker-days table {
     width: 100%;
 }
+.avatar, .avatar ~ .upload-avatar, .avatar ~ .change-avatar {
+    text-align: center;
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+}
+.avatar-lg, .avatar-lg ~ .upload-avatar, .avatar-lg ~ .change-avatar {
+    height: 130px;
+    width: 130px;
+    border-radius: 100px;
+}
 .upload-avatar, .change-avatar {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     margin: auto;
-    height: 100px;
-    width: 100px;
-    border-radius: 50px;
     opacity: 0;
 }
 .change-avatar {
@@ -540,6 +543,7 @@ input[type="checkbox"]:checked ~ label {
     pointer-events: none;
 }
 .upload-avatar:hover ~ .change-avatar {
+    text-align: center;
     opacity: 1;
     cursor: pointer;
     transition: 200ms;

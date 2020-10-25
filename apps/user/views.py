@@ -157,6 +157,7 @@ def edit_avatar(request, cid):
     if user == request.user_obj or request.user_obj.is_staff:
         profile = request.FILES.get('profile_picture')
         if profile:
+            profile.name = str(user.cid)
             user.profile_picture = profile
         user.save()
 

@@ -108,7 +108,7 @@ def base26encode(int_n):
 # Assigns operating initials to a user based on their initials. Cycles to the next letter if the initials are taken
 def assign_oper_init(f_init, l_init, user=None):
     oi = (f_init + l_init).upper()
-    while User.objects.filter(oper_init=oi).exclude(id=user.id if user else 0).exists():
+    while User.objects.exclude(status=2).filter(oper_init=oi).exclude(id=user.id if user else 0).exists():
         new_oi = base26decode(oi) + 1
         oi = base26encode(new_oi if new_oi <= 675 else 0)
     if len(oi) < 2:

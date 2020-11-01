@@ -93,6 +93,7 @@ def return_sorted_hours():
 def update_atis(request):
     try:
         data = json.loads(request.body)
+        CurrentAtis.objects.filter(facility=data.get('facility')).delete()
         CurrentAtis(
             facility=data.get('facility'),
             config_profile=data.get('config_profile'),

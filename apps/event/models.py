@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from django.db import models
 
-from ..api.models import ControllerSession
+from ..api.models import ControllerSession, Controller
 from ..user.models import User
 
 
@@ -31,8 +31,14 @@ class Event(models.Model):
                     if session.start < self.end and session.end > self.start:
                         duration += min([session.end, self.end]) - max([session.start, self.start])
 
+                active_sessions = Controller.objects.filter(user=position.user)
+                for session in active_sessions:
+                    cleanup = self.end + timedelta(hours=1)
+                    if session.online_since < cleanup and session.last_update > self.start:
+                        duration += min([session.last_update, cleanup]) - max([session.online_since, self.start])
+
                 session_seconds, event_seconds = duration.total_seconds(), self.duration.total_seconds()
-                if event_seconds - session_seconds <= 60:
+                if session_seconds < event_seconds and event_seconds - session_seconds <= 120:
                     session_seconds = event_seconds
 
                 score = [(session_seconds / event_seconds) * 100]

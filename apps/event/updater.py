@@ -1,4 +1,6 @@
+from datetime import timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
+
 from django.utils import timezone
 
 from .models import Event
@@ -12,7 +14,7 @@ def start():
 
 
 def update_event_scores():
-    past_events = Event.objects.filter(end__lte=timezone.now()).filter(scored=False)
+    past_events = Event.objects.filter(end__lte=timezone.now() - timedelta(hours=1)).filter(scored=False)
     for event in past_events:
         if not event.scored:
             event.calculate_scores()

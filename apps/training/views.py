@@ -59,32 +59,36 @@ def modify_session(session, request):
     session.solo_granted = request.POST.get('solo_grated', False)
     session.save()
 
-    # Visitors don't get training records posted to VATUSA CTRS
-    if session.student.main_role == 'HC':
-        hours, remainder = divmod(session.duration.total_seconds(), 3600)
-        minutes, seconds = divmod(remainder, 60)
+    # Visitors and oceanic sessions don't get training records posted to VATUSA CTRS
+    if session.student.main_role == 'HC' and session.level != 7:
+        post_ctrs(session)
 
-        data = {
-            'apikey': os.getenv('API_KEY'),
-            'instructor_id': session.instructor.cid,
-            'session_date': session.start.strftime('%Y-%m-%d %H:%M'),
-            'position': session.position,
-            'duration': f'{int(hours):02}:{int(minutes):02}',
-            'movements': session.movements,
-            'score': session.progress,
-            'notes': 'No notes provided.' if session.notes == '' else session.notes,
-            'location': 1 if session.type == 2 else 2 if session.type == 1 else 0,
-            'ots_status': session.ots_status,
-        }
 
-        if session.ctrs_id is not None:
-            requests.put(f'https://api.vatusa.net/v2/training/record/{session.ctrs_id}', data=data)
-        else:
-            post_ctrs = requests.post(f'https://api.vatusa.net/v2/user/{session.student.cid}/training/record', data=data)
+def post_ctrs(session):
+    hours, remainder = divmod(session.duration.total_seconds(), 3600)
+    minutes, seconds = divmod(remainder, 60)
 
-            if post_ctrs.json()['status'] == 'OK':
-                session.ctrs_id = post_ctrs.json()['id']
-                session.save()
+    data = {
+        'apikey': os.getenv('API_KEY'),
+        'instructor_id': session.instructor.cid,
+        'session_date': session.start.strftime('%Y-%m-%d %H:%M'),
+        'position': session.position,
+        'duration': f'{int(hours):02}:{int(minutes):02}',
+        'movements': session.movements,
+        'score': session.progress,
+        'notes': 'No notes provided.' if session.notes == '' else session.notes,
+        'location': 1 if session.type == 2 else 2 if session.type == 1 else 0,
+        'ots_status': session.ots_status,
+    }
+
+    if session.ctrs_id is not None:
+        requests.put(f'https://api.vatusa.net/v2/training/record/{session.ctrs_id}', data=data)
+    else:
+        response = requests.post(f'https://api.vatusa.net/v2/user/{session.student.cid}/training/record', data=data)
+
+        if response.json()['status'] == 'OK':
+            session.ctrs_id = response.json()['id']
+            session.save()
 
 
 @require_staff_or_mentor

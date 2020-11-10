@@ -28,6 +28,7 @@ class User(models.Model):
     staff_role = models.CharField(max_length=32, null=True, blank=True)
     training_role = models.CharField(max_length=32, null=True, blank=True)
     mentor_level = models.CharField(max_length=32, null=True, blank=True)
+    cic = models.BooleanField(default=False)
 
     # Endorsements
     del_cert = models.IntegerField(default=0, choices=ENDORSEMENTS)

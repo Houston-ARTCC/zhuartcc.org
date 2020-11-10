@@ -163,6 +163,10 @@
                                     <input name="prevent_event_signup" type="checkbox" {% if user.prevent_event_signup %}checked{% endif %}>
                                     <label>Blocked from signing up for events.</label>
                                 </div>
+                                <div class="col-12 mb-0 toggle">
+                                    <input name="cic" type="checkbox" {% if user.cic %}checked{% endif %}>
+                                    <label>CIC endorsed.</label>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-12 mb-3 text-center">

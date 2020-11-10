@@ -52,8 +52,10 @@
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
                                         <b><a class="text-success" data-action="unrequest" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="right" title="Click to remove request">Requested</a></b>
+                                    {% elif position.is_cic and not position|is_cic_eligible:request.user_obj %}
+                                        <b><a class="text-danger" data-toggle="tooltip" data-placement="right" title="You must be CIC endorsed!">CIC Position</a></b>
                                     {% else %}
-                                        <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="right" title="Click to request position">Request</a></b>
+                                        <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="right" title="Click to request position">Request{% if position.is_cic %} CIC{% endif %}</a></b>
                                     {% endif %}
                                 {% else %}
                                     {% if position.user %}
@@ -86,8 +88,10 @@
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
                                         <b><a class="text-success" data-action="unrequest" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="right" title="Click to remove request">Requested</a></b>
+                                    {% elif position.is_cic and not position|is_cic_eligible:request.user_obj %}
+                                        <b><a class="text-danger" data-toggle="tooltip" data-placement="right" title="You must be CIC endorsed!">CIC Position</a></b>
                                     {% else %}
-                                        <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="right" title="Click to request position">Request</a></b>
+                                        <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="right" title="Click to request position">Request{% if position.is_cic %} CIC{% endif %}</a></b>
                                     {% endif %}
                                 {% else %}
                                     {% if position.user %}
@@ -120,8 +124,10 @@
                                         {{ position.user.full_name }}
                                     {% elif position.requests.all|id_from_user:user.id %}
                                         <b><a class="text-success" data-action="unrequest" data-id="{{ position.requests.all|id_from_user:user.id }}" data-toggle="tooltip" data-placement="right" title="Click to remove request">Requested</a></b>
+                                    {% elif position.is_cic and not position|is_cic_eligible:request.user_obj %}
+                                        <b><a class="text-danger" data-toggle="tooltip" data-placement="right" title="You must be CIC endorsed!">CIC Position</a></b>
                                     {% else %}
-                                        <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="right" title="Click to request position">Request</a></b>
+                                        <b><a class="text-info" data-action="request" data-id="{{ position.id }}" data-toggle="tooltip" data-placement="right" title="Click to request position">Request{% if position.is_cic %} CIC{% endif %}</a></b>
                                     {% endif %}
                                 {% else %}
                                     {% if position.user %}

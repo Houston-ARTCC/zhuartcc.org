@@ -158,17 +158,23 @@ def delete_position(request, position_id):
 @require_POST
 @csrf_exempt
 def request_position(request, position_id):
+    position = EventPosition.objects.get(id=position_id)
+
     if request.user_obj.prevent_event_signup:
         return HttpResponse('You are not allowed to sign up for events!', status=403)
-    elif EventPositionRequest.objects.filter(user=request.user_obj).filter(position_id=position_id).exists():
-        return HttpResponse('You already requested this position!', status=403)
-    else:
-        EventPositionRequest(
-            position=EventPosition.objects.get(id=position_id),
-            user=request.user_obj,
-        ).save()
 
-        return HttpResponse(status=200)
+    if position.is_cic and not position.is_cic_eligible(request.user_obj):
+        return HttpResponse('You are not eligible for this CIC position!', status=403)
+
+    if EventPositionRequest.objects.filter(user=request.user_obj).filter(position_id=position_id).exists():
+        return HttpResponse('You already requested this position!', status=403)
+
+    EventPositionRequest(
+        position=position,
+        user=request.user_obj,
+    ).save()
+
+    return HttpResponse(status=200)
 
 
 @require_member

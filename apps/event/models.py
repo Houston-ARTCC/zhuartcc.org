@@ -73,6 +73,16 @@ class EventPosition(models.Model):
     user = models.ForeignKey(User, models.CASCADE, null=True, blank=True, related_name='event_positions')
     name = models.CharField(max_length=16)
 
+    def is_cic_eligible(self, user):
+        if not user.cic:
+            return False
+        if self.category == 'cab':
+            return user.twr_cert == 2 if self.is_major else user.twr_cert == 1
+        elif self.category == 'tracon':
+            return user.app_cert == 2 if self.is_major else user.app_cert == 1
+        else:
+            return user.ctr_cert == 2 if self.is_major else user.ctr_cert == 1
+
     @property
     def category(self):
         if '_DEL' in self.name or '_GND' in self.name or '_TWR' in self.name:
@@ -81,6 +91,14 @@ class EventPosition(models.Model):
             return 'tracon'
         else:
             return 'center'
+
+    @property
+    def is_major(self):
+        return self.name.split('_')[0] == 'IAH'
+
+    @property
+    def is_cic(self):
+        return self.name.split('_')[1] == 'T'
 
     def __str__(self):
         return f'{self.event.name} | {self.name}'

@@ -1,5 +1,7 @@
 from django import template
 
+from apps.event.models import EventPosition
+from apps.user.models import User
 
 register = template.Library()
 
@@ -41,3 +43,9 @@ def id_from_user(queryset, user_id):
 @register.filter
 def to_iso_format(dt):
     return dt.isoformat().replace('+00:00', '')
+
+
+@register.filter
+def is_cic_eligible(position, user):
+    if isinstance(position, EventPosition) and isinstance(user, User):
+        return position.is_cic_eligible(user)

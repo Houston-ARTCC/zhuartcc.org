@@ -123,6 +123,7 @@ def edit_user(request, cid):
         user.mentor_level = request.POST.get('mentor_level', None)
         user.activity_exempt = True if 'activity_exempt' in post else False
         user.prevent_event_signup = True if 'prevent_event_signup' in post else False
+        user.cic = True if 'cic' in post else False
         user.biography = request.POST.get('biography', None)
         user.del_cert = int(post['del_cert'])
         user.gnd_cert = int(post['gnd_cert'])

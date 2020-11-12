@@ -112,3 +112,6 @@ def get_atis(request, icao):
         return JsonResponse(model_to_dict(atis))
     else:
         return HttpResponse(f'ATIS for facility {icao.upper()} was not found.', status=404)
+
+
+

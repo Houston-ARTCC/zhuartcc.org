@@ -1,16 +1,16 @@
 {% extends 'secondaryTemplate.html' %}
 {% load filters %}
-
 {% block header %}
     <h1 style="font-size: 65px">{{ session.get_level_display }} Session</h1>
     <h2 style="font-size: 40px">{{ session.start|date:'M j, Y @ Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ session.end|date:'Hi\z' }}
+    <h3 style="font-size: 40px">{{ session.start|date:'M j, Y @ Hi' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ session.end|date:'Hi' }}
     <span class="badge badge-md
         {% if session.status == 0 %}badge-info
         {% elif session.status == 1 %}badge-success
         {% elif session.status == 2 %}badge-danger
         {% elif session.status == 3 %}badge-warning
         {% endif %}
-    ">{{ session.get_status_display }}</span></h2>
+    ">{{ session.get_status_display }}</span></h3>
 {% endblock %}
 
 {% block body %}

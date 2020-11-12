@@ -114,9 +114,6 @@ LOGGING = {
         'standard': {
             'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s'
         },
-        'simple': {
-            'format': '%(message)s'
-        },
     },
     'handlers': {
         'logfile': {
@@ -127,20 +124,15 @@ LOGGING = {
             'backupCount': 2,
             'formatter': 'standard',
         },
-        'discord': {
-            'level': 'DEBUG',
-            'class': 'zhuartcc.logging.DiscordWebhookHandler',
-            'formatter': 'simple',
-        },
     },
     'loggers': {
         'django': {
-            'handlers': ['logfile', 'discord'],
+            'handlers': ['logfile'],
             'propagate': True,
             'level': 'ERROR'
         },
         '': {
-            'handlers': ['logfile', 'discord'],
+            'handlers': ['logfile'],
             'propagate': True,
             'level': 'ERROR'
         },

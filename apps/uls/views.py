@@ -1,12 +1,13 @@
 import ast
 import os
-import hmac
+from datetime import timedelta
+
 import requests
-from base64 import urlsafe_b64encode, urlsafe_b64decode
 
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils import timezone
 
 from ..administration.models import ActionLog
 from ..user.models import User
@@ -14,43 +15,60 @@ from ..user.updater import assign_oper_init
 
 
 def login(request):
-    # Checks if user has a token from VATUSA
-    if request.GET.get('token'):
-        raw_token = request.GET.get('token')
-        token = raw_token.split('.')
+    # Checks if user has a authorization code from VATSIM
+    if request.GET.get('code'):
+        resp = requests.post('https://auth.vatsim.net/oauth/token/', data={
+            'grant_type': 'authorization_code',
+            'client_id': os.getenv('VATSIM_CONNECT_ID'),
+            'client_secret': os.getenv('VATSIM_CONNECT_SECRET'),
+            'redirect_uri': os.getenv('VATSIM_CONNECT_REDIRECT'),
+            'code': request.GET.get('code'),
+        })
 
-        token_sig = token[2]
-
-        jwk_sig = urlsafe_b64encode(
-            hmac.digest(
-                urlsafe_b64decode(os.getenv('ULS_K_VALUE') + '=='),
-                f'{token[0]}.{token[1]}'.encode(),
-                'sha256',
-            ))[:-1].decode()
-
-        if token_sig == jwk_sig:
-            data = requests.get(f'https://login.vatusa.net/uls/v2/info?token={token[1]}').json()
-
-            request.session['vatsim_data'] = data
-            request.session['cid'] = data['cid']
-            if not User.objects.filter(cid=data['cid']).exists():
-                if data['facility']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
-                    new_user = User(
-                        first_name=data['firstname'].capitalize(),
-                        last_name=data['lastname'].capitalize(),
-                        cid=int(data['cid']),
-                        email=data['email'],
-                        oper_init=assign_oper_init(data['firstname'][0], data['lastname'][0]),
-                        rating=data['rating'],
-                        main_role='MC',
-                        home_facility=data['facility']['id'],
-                    )
-                    new_user.save()
-                    new_user.assign_initial_cert()
-
-                    ActionLog(action=f'User {new_user.full_name} was created by system.').save()
+        if resp.status_code == 200:
+            auth = resp.json()
         else:
-            return HttpResponse('Something was wrong with the token we got from VATUSA!', status=500)
+            return
+
+        if 'full_name' not in auth.get('scopes') or 'email' not in auth.get('scopes'):
+            return
+
+        data = requests.get('https://auth.vatsim.net/api/user/', headers={
+            'Authorization': 'Bearer ' + auth.get('access_token'),
+            'Accept': 'application/json'
+        }).json().get('data')
+
+        if data['vatsim']['division']['id'] == 'USA':
+            resp = requests.get('https://api.vatusa.net/v2/user/' + data.get('cid'))
+
+            if resp.status_code == 200:
+                data['vatsim']['subdivision']['id'] = resp.json().get('facility')
+
+        request.session['vatsim_data'] = data
+        request.session['cid'] = data.get('cid')
+
+        user = User.objects.filter(cid=data.get('cid')).first()
+        if user:
+            user.access_token = auth.get('access_token')
+            user.refresh_token = auth.get('refresh_token')
+            user.token_expires = timezone.now() + timedelta(seconds=auth.get('expires_in'))
+            user.save()
+        else:
+            if data['vatsim']['subdivision']['id'] in ast.literal_eval(os.getenv('MAVP_ARTCCS')):
+                new_user = User(
+                    first_name=data['personal']['name_first'].capitalize(),
+                    last_name=data['personal']['name_last'].capitalize(),
+                    cid=int(data['cid']),
+                    email=data['personal']['email'],
+                    oper_init=assign_oper_init(data['personal']['name_first'][0], data['personal']['name_last'][0]),
+                    rating=data['vatsim']['rating']['short'],
+                    main_role='MC',
+                    home_facility=data['vatsim']['subdivision'].get('id', data['vatsim']['division']['id']),
+                )
+                new_user.save()
+                new_user.assign_initial_cert()
+
+                ActionLog(action=f'User {new_user.full_name} was created by system.').save()
 
     return redirect(reverse('home'))
 

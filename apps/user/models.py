@@ -52,6 +52,11 @@ class User(models.Model):
     activity_exempt = models.BooleanField(default=False)
     prevent_event_signup = models.BooleanField(default=False)
 
+    # Authentication
+    access_token = models.TextField(null=True, blank=True)
+    refresh_token = models.TextField(null=True, blank=True)
+    token_expires = models.DateTimeField(null=True, blank=True)
+
     @property
     def event_score(self):
         if self.main_role == 'HC':

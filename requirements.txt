@@ -13,4 +13,4 @@ sentry-sdk~=0.19.3
 six~=1.15.0
 sqlparse~=0.4.1
 tzlocal~=2.1
-urllib3~=1.26.1
+urllib3~=1.26.2

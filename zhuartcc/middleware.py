@@ -1,4 +1,6 @@
+import pytz
 from apps.user.models import User
+
 
 
 class UserMiddleware:
@@ -9,3 +11,6 @@ class UserMiddleware:
         request.user_obj = User.objects.filter(cid=request.session.get('cid')).first()
 
         return self.get_response(request)
+
+
+

@@ -112,3 +112,25 @@ def get_atis(request, icao):
         return JsonResponse(model_to_dict(atis))
     else:
         return HttpResponse(f'ATIS for facility {icao.upper()} was not found.', status=404)
+
+
+class TMUNotice(object):
+    pass
+
+
+@csrf_exempt
+@require_POST
+def tmu_notice(request):
+    try:
+        data = json.loads(request.body)
+        TMUNotice.objects.filter(notice=data.get('TMUNotice')).delete()
+        TMUNotice(
+            tmu_notice=data.get('tmu_notice')
+            time_issued=data.get('time_issued')
+            
+        )
+
+
+
+
+

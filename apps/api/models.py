@@ -40,6 +40,8 @@ class CurrentAtis(models.Model):
     notams = models.TextField()
     updated = models.DateTimeField(auto_now=True)
 
+
 class TMUNotice(models.Model):
-    info = models.CharField(max_length=300)
-    time_issued = models.CharField(max_length=5)
+    info = models.TextField()
+    time_issued = models.DateTimeField(auto_now_add=True)
+    time_expires = models.DateTimeField()

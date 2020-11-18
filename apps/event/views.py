@@ -138,7 +138,7 @@ def edit_event(request, event_id):
             return render(request, 'edit_event.html', {
                 'page_title': f'Editing {event.name}',
                 'positions': positions,
-                'controllers': User.objects.exclude(status=2),
+                'controllers': User.objects.exclude(status=2).order_by('first_name'),
                 'event': event
             })
     else:

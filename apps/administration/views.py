@@ -19,7 +19,7 @@ from ..visit.models import Visit
 def view_admin_panel(request):
     return render(request, 'admin_panel.html', {
         'page_title': 'Admin Panel',
-        'controllers': User.objects.all(),
+        'controllers': User.objects.all().order_by('first_name'),
         'notifications': {
             'visit': Visit.objects.count(),
             'training': TrainingRequest.objects.count(),

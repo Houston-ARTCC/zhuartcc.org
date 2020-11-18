@@ -19,18 +19,19 @@ from dotenv import load_dotenv
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
-if os.getenv('DEV_ENV', '') != 'True' and os.getenv('SENTRY_DSN'):
-    sentry_sdk.init(
-        dsn=os.getenv('SENTRY_DSN'),
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
-    )
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Loads environment variables from .env file
 load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Initialize Sentry.io SDK for error handling
+if os.getenv('DEV_ENV', '') == 'False' and os.getenv('SENTRY_DSN'):
+    sentry_sdk.init(
+        dsn=os.getenv('SENTRY_DSN'),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+    )
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -43,17 +44,17 @@ DEBUG = os.getenv('DEV_ENV', '') == 'True'
 
 ALLOWED_HOSTS = ['localhost', os.getenv('WEBSITE_DOMAIN'), 'www.' + os.getenv('WEBSITE_DOMAIN')]
 
-SECURE_HSTS_SECONDS = os.getenv('DEV_ENV', '') != 'True'
+SECURE_HSTS_SECONDS = os.getenv('DEV_ENV', '') == 'False'
 
-SECURE_SSL_REDIRECT = os.getenv('DEV_ENV', '') != 'True'
+SECURE_SSL_REDIRECT = os.getenv('DEV_ENV', '') == 'False'
 
-SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('DEV_ENV', '') != 'True'
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('DEV_ENV', '') == 'False'
 
-SECURE_HSTS_PRELOAD = os.getenv('DEV_ENV', '') != 'True'
+SECURE_HSTS_PRELOAD = os.getenv('DEV_ENV', '') == 'False'
 
-SESSION_COOKIE_SECURE = os.getenv('DEV_ENV', '') != 'True'
+SESSION_COOKIE_SECURE = os.getenv('DEV_ENV', '') == 'False'
 
-CSRF_COOKIE_SECURE = os.getenv('DEV_ENV', '') != 'True'
+CSRF_COOKIE_SECURE = os.getenv('DEV_ENV', '') == 'False'
 
 # Application definition
 

@@ -1,6 +1,7 @@
 import os
 import pytz
 from datetime import datetime
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -103,6 +104,27 @@ def edit_event(request, event_id):
             event.banner = request.POST.get('banner')
             event.host = request.POST.get('host')
             event.description = request.POST.get('description', None)
+            if event.hidden and 'hidden' not in request.POST:
+                format = '%b %d, %Y @ %H%Mz'
+                url = request.build_absolute_uri(reverse("event", args=[event.id]))
+                webhook = DiscordWebhook(url=os.getenv('EVENTS_WEBHOOK_URL'))
+                embed = DiscordEmbed(
+                    title=f':calendar: {event.name}',
+                    description=event.description + f'\n**[Sign up for the event here!]({url})**',
+                    color=2966946
+                )
+                embed.add_embed_field(
+                    name='Start & End',
+                    value=f'{event.start.strftime(format)} - {event.end.strftime(format)}',
+                    inline=False,
+                )
+                embed.add_embed_field(
+                    name='Presented by',
+                    value=event.host,
+                )
+                embed.set_image(url=request.build_absolute_uri(event.banner))
+                webhook.add_embed(embed)
+                webhook.execute()
             event.hidden = True if 'hidden' in request.POST else False
             event.save()
 
@@ -261,6 +283,31 @@ def manual_assign(request, position_id, cid):
 
         return HttpResponse(status=200)
     return HttpResponse('Position is already assigned to selected user.', status=403)
+
+
+@require_staff
+@require_POST
+def embed_positions(request, event_id):
+    event = Event.objects.get(id=event_id)
+    url = request.build_absolute_uri(reverse("event", args=[event.id]))
+    webhook = DiscordWebhook(url=os.getenv('EVENTS_WEBHOOK_URL'))
+    embed = DiscordEmbed(
+        title=f':calendar: "{event.name}"',
+        description=f'Below are the event position assignments as they currently stand. Assignments are subject to '
+                    f'change on the day of the event so you should always double check the event page before logging '
+                    f'on to control.\n**[View the event page here!]({url})**',
+        color=2966946
+    )
+    for position in event.positions.all():
+        embed.add_embed_field(
+            name=position.name,
+            value=position.user.full_name if position.user is not None else 'Unassigned',
+        )
+    embed.set_image(url=request.build_absolute_uri(event.banner))
+    webhook.add_embed(embed)
+    webhook.execute()
+
+    return HttpResponse(status=200)
 
 
 @require_staff

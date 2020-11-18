@@ -40,6 +40,7 @@ urlpatterns = [
     path('events/<int:event_id>/edit/', event.edit_event, name='edit_event'),
     path('events/<int:event_id>/delete/', event.delete_event, name='delete_event'),
     path('events/<int:event_id>/add/', event.add_position, name='add_position'),
+    path('events/<int:event_id>/embedpositions/', event.embed_positions, name='embed_positions'),
     path('events/position/<int:position_id>/request/', event.request_position, name='request_position'),
     path('events/position/<int:request_id>/unrequest/', event.unrequest_position, name='unrequest_position'),
     path('events/position/<int:request_id>/assign/', event.assign_position, name='assign_position'),

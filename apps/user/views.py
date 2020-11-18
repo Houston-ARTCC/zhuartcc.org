@@ -1,15 +1,10 @@
 import os
 import pytz
-import base64
 import calendar
 import requests
-from PIL import Image
-from io import BytesIO
 from datetime import datetime
 from itertools import groupby
 
-from django.core.files.base import ContentFile
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect

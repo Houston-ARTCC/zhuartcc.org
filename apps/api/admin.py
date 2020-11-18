@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Controller, ControllerSession, CurrentAtis
+from .models import Controller, ControllerSession, CurrentAtis, TMUNotice
 
 
 @admin.register(Controller)
@@ -15,3 +15,8 @@ class ControllerSessionAdmin(admin.ModelAdmin):
 @admin.register(CurrentAtis)
 class CurrentAtisAdmin(admin.ModelAdmin):
     list_display = ('facility', 'atis_letter', 'config_profile', 'updated')
+
+
+@admin.register(TMUNotice)
+class TMUNoticeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'time_issued', 'time_expires')

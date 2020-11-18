@@ -1,5 +1,6 @@
 import calendar
 import json
+import os
 from datetime import timedelta
 
 from django.db.models import Sum, Q
@@ -8,9 +9,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 
-from .models import ControllerSession, CurrentAtis
+from .models import ControllerSession, CurrentAtis, TMUNotice
 from ..user.models import User
 
 
@@ -106,9 +107,36 @@ def update_atis(request):
     return HttpResponse(status=200)
 
 
+@require_GET
 def get_atis(request, icao):
     atis = CurrentAtis.objects.filter(facility=icao.upper()).first()
     if atis:
         return JsonResponse(model_to_dict(atis))
     else:
         return HttpResponse(f'ATIS for facility {icao.upper()} was not found.', status=404)
+
+
+@require_POST
+def post_tmu(request):
+    if request.POST.get('api_key') == os.getenv('IDS_API_KEY'):
+        notice = TMUNotice(
+            info=request.POST.get('info'),
+            time_issued=request.POST.get('time_issued'),
+        )
+        notice.save()
+        return HttpResponse(JsonResponse(model_to_dict(notice)))
+    else:
+        return HttpResponse('Invalid API key.', status=401)
+
+
+@require_POST
+def delete_tmu(request, notice_id):
+    if request.POST.get('api_key') == os.getenv('IDS_API_KEY'):
+        notice = TMUNotice.objects.filter(id=notice_id).first()
+        if notice:
+            notice.delete()
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(f'TMU notice with id {notice_id} was not found.', status=404)
+    else:
+        return HttpResponse('Invalid API key.', status=401)

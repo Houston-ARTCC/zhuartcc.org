@@ -462,6 +462,12 @@ input:checked ~ .radio-label {
 .toggle input[type="checkbox"] {
     margin: 0;
 }
+optgroup {
+    font: 15px Gilroy-Bold, Helvetica, sans-serif;
+}
+optgroup option {
+    font: 14px Gilroy-Regular, Helvetica, sans-serif;
+}
 input[type="checkbox"] {
     margin-bottom: 10px;
 }

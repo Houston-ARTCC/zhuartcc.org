@@ -39,3 +39,7 @@ class CurrentAtis(models.Model):
     airport_conditions = models.TextField()
     notams = models.TextField()
     updated = models.DateTimeField(auto_now=True)
+
+class TMUNotice(models.Model):
+    info = models.CharField(max_length=300)
+    time_issued = models.CharField(max_length=5)

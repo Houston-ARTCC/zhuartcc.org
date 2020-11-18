@@ -280,21 +280,20 @@
                 $(this).selectpicker('val', previous);
                 launchCustomModal(
                     'info',
-                    `Manually assign user to ${$(this).data('name')}?`,
-                    `<div class="col-12">
-                        <div class="label-group">
-                            <select name="controller">
-                                {% for controller in controllers %}
-                                    <option value="{{ controller.cid }}">{{ controller.full_name }}</option>
-                                {% endfor %}
-                            </select>
-                            <label>Controller</label>
-                            <span class="focus-border"></span>
-                        </div>
-                    </div>
+                    `Manually assigning user to ${$(this).data('name')}`,
+                    `<select name="controller" class="selectpicker" title="Select Controller" data-width="80%" data-live-search="true" data-size="8" data-dropup-auto="false">
+                        {% for controller in controllers %}
+                            <option value="{{ controller.cid }}" data-tokens="{{ controller.cid }}" data-content="<span class='text-dark'>{{ controller.full_name }} <span class='badge badge-sm
+                            {% if controller.event_score >= 90 %}badge-success
+                            {% elif controller.event_score >= 65 %}badge-warning
+                            {% elif controller.event_score < 65 %}badge-danger
+                            {% endif %}'>{{ controller.event_score }}%</span></span>">{{ controller.full_name }}</option>
+                        {% endfor %}
+                    </select>
                     <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-primary" data-action="confirm">Confirm</button>`
                 )
+                $('select[name="controller"]').selectpicker('render')
                 let $this = $(this)
                 $('#customModal [data-action="confirm"]').click(function() {
                     $.post('{% url 'manual_assign_position' position_id=0 cid=800000 %}'.replace(/0/, $this.data('position')).replace(/800000/, $('select[name="controller"]').val()))

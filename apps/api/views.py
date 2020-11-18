@@ -132,7 +132,7 @@ def post_tmu(request):
 @require_POST
 def delete_tmu(request, notice_id):
     if request.POST.get('api_key') == os.getenv('IDS_API_KEY'):
-        notice = TMUNotice.objects.filter(id=notice_id).first()
+        notice = TMUNotice.objects.filter(time_expires__gt=timezone.now()).filter(id=notice_id).first()
         if notice:
             notice.delete()
             return HttpResponse(status=200)

@@ -227,7 +227,7 @@ def view_training_requests(request):
     if request.user_obj.is_mentor or request.user_obj.is_staff:
         return render(request, 'training_requests.html', {
             'page_title': 'Training Requests',
-            'requests': TrainingRequest.objects.all().order_by('start'),
+            'requests': TrainingRequest.objects.filter(end__gt=timezone.now()).order_by('start'),
         })
     else:
         return HttpResponse(status=403)

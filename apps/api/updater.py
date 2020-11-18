@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from zhuartcc.overrides import send_mail
 from .views import return_inactive_users
-from .models import Controller, ControllerSession, CurrentAtis
+from .models import Controller, ControllerSession, CurrentAtis, TMUNotice
 from ..user.models import User
 
 
@@ -18,6 +18,7 @@ def start():
     scheduler = BackgroundScheduler()
     scheduler.add_job(pull_controllers, 'interval', minutes=1)
     scheduler.add_job(warn_inactive_users, 'cron', day=23)
+    scheduler.add_job(clean_expired_tmus, 'cron', day_of_week='sat')
     scheduler.start()
 
 
@@ -72,3 +73,7 @@ def warn_inactive_users():
             [aggregate['user_obj'].email],
             fail_silently=True,
         )
+
+
+def clean_expired_tmus():
+    TMUNotice.objects.filter(time_expires__lte=timezone.now()).delete()

@@ -39,7 +39,7 @@ def view_action_log(request):
 @require_staff
 def view_transfers(request):
     transfers = requests.get(
-        'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/transfers',
+        f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/transfers',
         params={'apikey': os.getenv('API_KEY')},
     ).json()
 

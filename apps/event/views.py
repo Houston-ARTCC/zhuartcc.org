@@ -64,6 +64,29 @@ def view_event(request, event_id):
         return HttpResponse(status=403)
 
 
+def send_event_webhook(request, event):
+        format = '%b %d, %Y @ %H%Mz'
+        url = request.build_absolute_uri(reverse("event", args=[event.id]))
+        webhook = DiscordWebhook(url=os.getenv('EVENTS_WEBHOOK_URL'))
+        embed = DiscordEmbed(
+            title=f':calendar: {event.name}',
+            description=event.description + f'\n**[Sign up for the event here!]({url})**',
+            color=2966946
+        )
+        embed.add_embed_field(
+            name='Start & End',
+            value=f'{event.start.strftime(format)} - {event.end.strftime(format)}',
+            inline=False,
+        )
+        embed.add_embed_field(
+            name='Presented by',
+            value=event.host,
+        )
+        embed.set_image(url=request.build_absolute_uri(event.banner))
+        webhook.add_embed(embed)
+        webhook.execute()
+
+
 @require_staff
 def add_event(request):
     if request.method == 'POST':
@@ -77,6 +100,8 @@ def add_event(request):
             hidden=True if 'hidden' in request.POST else False,
         )
         event.save()
+        if not event.hidden:
+            send_event_webhook(request, event)
 
         ActionLog(action=f'Event "{event.name}" created by {request.user_obj}.').save()
 
@@ -105,26 +130,7 @@ def edit_event(request, event_id):
             event.host = request.POST.get('host')
             event.description = request.POST.get('description', None)
             if event.hidden and 'hidden' not in request.POST:
-                format = '%b %d, %Y @ %H%Mz'
-                url = request.build_absolute_uri(reverse("event", args=[event.id]))
-                webhook = DiscordWebhook(url=os.getenv('EVENTS_WEBHOOK_URL'))
-                embed = DiscordEmbed(
-                    title=f':calendar: {event.name}',
-                    description=event.description + f'\n**[Sign up for the event here!]({url})**',
-                    color=2966946
-                )
-                embed.add_embed_field(
-                    name='Start & End',
-                    value=f'{event.start.strftime(format)} - {event.end.strftime(format)}',
-                    inline=False,
-                )
-                embed.add_embed_field(
-                    name='Presented by',
-                    value=event.host,
-                )
-                embed.set_image(url=request.build_absolute_uri(event.banner))
-                webhook.add_embed(embed)
-                webhook.execute()
+                send_event_webhook(request, event)
             event.hidden = True if 'hidden' in request.POST else False
             event.save()
 

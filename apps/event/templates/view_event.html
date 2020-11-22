@@ -1,4 +1,5 @@
 {% extends 'secondaryTemplate.html' %}
+{% load static %}
 {% load filters %}
 
 {% block header %}
@@ -30,7 +31,7 @@
     {% endif %}
     <div class="card">
         <div class="card-body">
-            <img class="d-lg-inline float-lg-right ml-lg-4 mb-3 mb-lg-4 event-banner" src="{{ event.banner }}" style="max-width: 50%">
+            <img class="d-lg-inline float-lg-right ml-lg-4 mb-3 mb-lg-4 event-banner" src="{% if event.banner %}{{ event.banner }}{% else %}{% static 'img/banner-placeholder.png' %}{% endif %}" style="max-width: 50%">
             <h3>Presented by {{ event.host }}</h3>
             <p>{{ event.description|linebreaks }}</p>
         </div>

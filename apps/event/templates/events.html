@@ -1,4 +1,5 @@
 {% extends 'mainTemplate.html' %}
+{% load static %}
 
 {% block body %}
     {% if request.user_obj.is_staff %}
@@ -17,7 +18,7 @@
                                 <h2>{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
                             </div>
                             <div class="card-body p-0">
-                                <img src="{{ event.banner }}" style="width: 100%">
+                                <img src="{% if event.banner %}{{ event.banner }}{% else %}{% static 'img/banner-placeholder.png' %}{% endif %}" style="width: 100%">
                             </div>
                         </div>
                     </a>

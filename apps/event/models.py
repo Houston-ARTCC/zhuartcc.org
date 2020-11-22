@@ -9,7 +9,7 @@ from ..user.models import User
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    banner = models.URLField()
+    banner = models.URLField(null=True, blank=True)
     start = models.DateTimeField()
     end = models.DateTimeField()
     host = models.CharField(max_length=16)

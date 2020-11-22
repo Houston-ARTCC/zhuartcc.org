@@ -76,7 +76,7 @@
                             <div class="card-header"><i class="far fa-calendar"></i> Events</div>
                             <div class="card-body">
                                 {% for event in events %}
-                                    <a href="{% url 'event' event_id=event.id %}"><img src="{{ event.banner }}" width="100%"></a>
+                                    <a href="{% url 'event' event_id=event.id %}"><img src="{% if event.banner %}{{ event.banner }}{% else %}{% static 'img/banner-placeholder.png' %}{% endif %}" width="100%"></a>
                                 {% empty %}
                                     No events were found...
                                 {% endfor %}

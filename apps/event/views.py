@@ -4,7 +4,7 @@ from datetime import datetime
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -45,7 +45,7 @@ def view_archived_events(request):
 
 
 def view_event(request, event_id):
-    event = Event.objects.get(id=event_id)
+    event = get_object_or_404(Event, id=event_id)
     user = request.user_obj
     if event.hidden and user.is_staff or not event.hidden:
         positions = {'center': [], 'tracon': [], 'cab': []}
@@ -65,26 +65,26 @@ def view_event(request, event_id):
 
 
 def send_event_webhook(request, event):
-        format = '%b %d, %Y @ %H%Mz'
-        url = request.build_absolute_uri(reverse("event", args=[event.id]))
-        webhook = DiscordWebhook(url=os.getenv('EVENTS_WEBHOOK_URL'))
-        embed = DiscordEmbed(
-            title=f':calendar: {event.name}',
-            description=event.description + f'\n**[Sign up for the event here!]({url})**',
-            color=2966946
-        )
-        embed.add_embed_field(
-            name='Start & End',
-            value=f'{event.start.strftime(format)} - {event.end.strftime(format)}',
-            inline=False,
-        )
-        embed.add_embed_field(
-            name='Presented by',
-            value=event.host,
-        )
-        embed.set_image(url=request.build_absolute_uri(event.banner))
-        webhook.add_embed(embed)
-        webhook.execute()
+    format = '%b %d, %Y @ %H%Mz'
+    url = request.build_absolute_uri(reverse("event", args=[event.id]))
+    webhook = DiscordWebhook(url=os.getenv('EVENTS_WEBHOOK_URL'))
+    embed = DiscordEmbed(
+        title=f':calendar: {event.name}',
+        description=event.description + f'\n**[Sign up for the event here!]({url})**',
+        color=2966946
+    )
+    embed.add_embed_field(
+        name='Start & End',
+        value=f'{event.start.strftime(format)} - {event.end.strftime(format)}',
+        inline=False,
+    )
+    embed.add_embed_field(
+        name='Presented by',
+        value=event.host,
+    )
+    embed.set_image(url=request.build_absolute_uri(event.banner))
+    webhook.add_embed(embed)
+    webhook.execute()
 
 
 @require_staff
@@ -120,7 +120,7 @@ def add_event(request):
 
 @require_staff
 def edit_event(request, event_id):
-    event = Event.objects.get(id=event_id)
+    event = get_object_or_404(Event, id=event_id)
     if event.end >= timezone.now():
         if request.method == 'POST':
             event.name = request.POST.get('name')
@@ -154,7 +154,7 @@ def edit_event(request, event_id):
 @require_staff
 @require_POST
 def delete_event(request, event_id):
-    event = Event.objects.get(id=event_id)
+    event = get_object_or_404(Event, id=event_id)
 
     ActionLog(action=f'Event "{event.name}" deleted by {request.user_obj}.').save()
 
@@ -167,7 +167,7 @@ def delete_event(request, event_id):
 @require_POST
 def add_position(request, event_id):
     EventPosition(
-        event=Event.objects.get(id=event_id),
+        event=get_object_or_404(Event, id=event_id),
         name=request.POST.get('position'),
     ).save()
 
@@ -177,7 +177,7 @@ def add_position(request, event_id):
 @require_staff
 @require_POST
 def delete_position(request, position_id):
-    EventPosition.objects.get(id=position_id).delete()
+    get_object_or_404(EventPosition, id=position_id).delete()
 
     return HttpResponse(status=200)
 
@@ -186,7 +186,7 @@ def delete_position(request, position_id):
 @require_POST
 @csrf_exempt
 def request_position(request, position_id):
-    position = EventPosition.objects.get(id=position_id)
+    position = get_object_or_404(EventPosition, id=position_id)
 
     if request.user_obj.prevent_event_signup:
         return HttpResponse('You are not allowed to sign up for events!', status=403)
@@ -209,7 +209,7 @@ def request_position(request, position_id):
 @require_POST
 @csrf_exempt
 def unrequest_position(request, request_id):
-    position_request = EventPositionRequest.objects.get(id=request_id)
+    position_request = get_object_or_404(EventPositionRequest, id=request_id)
     if position_request.user.id == request.user_obj.id:
         position_request.delete()
         return HttpResponse(status=200)
@@ -220,7 +220,7 @@ def unrequest_position(request, request_id):
 @require_staff
 @require_POST
 def assign_position(request, request_id):
-    position_request = EventPositionRequest.objects.get(id=request_id)
+    position_request = get_object_or_404(EventPositionRequest, id=request_id)
     if position_request.position.user != position_request.user:
         if position_request.position.user is not None:
             send_mail(
@@ -247,7 +247,7 @@ def assign_position(request, request_id):
 @require_staff
 @require_POST
 def unassign_position(request, position_id):
-    position = EventPosition.objects.get(id=position_id)
+    position = get_object_or_404(EventPosition, id=position_id)
 
     send_mail(
         'Event Position Unassigned',
@@ -265,8 +265,8 @@ def unassign_position(request, position_id):
 @require_staff
 @require_POST
 def manual_assign(request, position_id, cid):
-    position = EventPosition.objects.get(id=position_id)
-    controller = User.objects.get(cid=cid)
+    position = get_object_or_404(EventPosition, id=position_id)
+    controller = get_object_or_404(User, cid=cid)
 
     if position.user != controller:
         if position.user is not None:
@@ -294,7 +294,7 @@ def manual_assign(request, position_id, cid):
 @require_staff
 @require_POST
 def embed_positions(request, event_id):
-    event = Event.objects.get(id=event_id)
+    event = get_object_or_404(Event, id=event_id)
     url = request.build_absolute_uri(reverse("event", args=[event.id]))
     webhook = DiscordWebhook(url=os.getenv('EVENTS_WEBHOOK_URL'))
     embed = DiscordEmbed(
@@ -340,7 +340,7 @@ def add_preset(request):
 @require_staff
 @require_POST
 def edit_preset(request, preset_id):
-    preset = PositionPreset.objects.get(id=preset_id)
+    preset = get_object_or_404(PositionPreset, id=preset_id)
     preset.positions_json = request.POST.get('positions')
     preset.save()
 
@@ -352,7 +352,7 @@ def edit_preset(request, preset_id):
 @require_staff
 @require_POST
 def delete_preset(request, preset_id):
-    preset = PositionPreset.objects.get(id=preset_id)
+    preset = get_object_or_404(PositionPreset, id=preset_id)
 
     ActionLog(action=f'Position preset "{preset}" deleted by {request.user_obj}.').save()
 

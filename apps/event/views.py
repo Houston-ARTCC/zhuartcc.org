@@ -1,3 +1,4 @@
+import json
 import os
 import pytz
 from datetime import datetime
@@ -31,16 +32,34 @@ def view_event_score(request, cid=None):
 
 
 def view_all_events(request):
+    events = Event.objects.filter(end__gte=timezone.now()).order_by('start')
+    json_events = json.dumps({
+        event.id: {
+            'start': event.start.isoformat(),
+            'end': event.end.isoformat()
+        }
+        for event in events
+    })
     return render(request, 'events.html', {
         'page_title': 'Events',
-        'events': Event.objects.filter(end__gte=timezone.now()).order_by('start'),
+        'events': events,
+        'events_json': json_events,
     })
 
 
 def view_archived_events(request):
+    events = Event.objects.filter(start__lte=timezone.now()).order_by('-start')
+    json_events = json.dumps({
+        event.id: {
+            'start': event.start.isoformat(),
+            'end': event.end.isoformat()
+        }
+        for event in events
+    })
     return render(request, 'archived_events.html', {
         'page_title': 'Archived Events',
-        'events': Event.objects.filter(start__lte=timezone.now()).order_by('-start'),
+        'events': events,
+        'events_json': json_events,
     })
 
 

@@ -1,4 +1,5 @@
 {% extends 'mainTemplate.html' %}
+{% load filters %}
 {% load static %}
 
 {% block body %}
@@ -7,9 +8,13 @@
             <div class="col-12 col-lg-6">
                 <a href="{% url 'event' event_id=event.id %}">
                     <div class="card">
-                        <div class="card-header bg-secondary">
+                        <div class="card-header bg-secondary" id="{{ event.id }}">
                             <h4 style="font-size: 40px">{{ event.name }}</h4>
-                            <h2>{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
+                            <h2 style="font-size: 27px"><i class="far fa-calendar-alt"></i> <span id="date"></span> <span id="zulu-date">({{ event.start|date:'M d, Y' }})</span></h2>
+                            <h2 style="font-size: 27px">
+                                <i class="far fa-clock"></i> <span id="start"></span> <i class="far fa-xs fa-long-arrow-right"></i> <span id="end"></span>
+                                ({{ event.start|date:'Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ event.end|date:'Hi\z' }})
+                            </h2>
                         </div>
                         <div class="card-body p-0">
                             <img src="{% if event.banner %}{{ event.banner }}{% else %}{% static 'img/banner-placeholder.png' %}{% endif %}" style="width: 100%">
@@ -19,4 +24,23 @@
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+    <script>
+        let tz = moment.tz.guess()
+        const events = {{ events_json|safe }}
+        for (let id in events) {
+            let start = moment.utc(events[id].start, 'YYYY-MM-DDThh:mm:ss')
+            let end = moment.utc(events[id].end, 'YYYY-MM-DDTHH:mm:ss')
+            $(`#${id} span#date`).text(start.tz(tz).format('MMM D, Y'))
+            if (start.tz(tz).month() + 1 == events[id].start.slice(5, 7)) {
+                $(`#${id} span#zulu-date`).remove()
+            }
+            $(`#${id} span#start`).text(start.tz(tz).format('HHmm z'))
+            $(`#${id} span#end`).text(end.tz(tz).format('HHmm z'))
+        }
+    </script>
 {% endblock %}

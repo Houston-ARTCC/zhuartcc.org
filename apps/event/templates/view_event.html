@@ -4,11 +4,15 @@
 
 {% block header %}
     <div class="text-left text-lg-right float-none float-lg-right ml-lg-5">
-        <h1 style="font-size: 65px" id="countdown">N/A</h1>
-        <h2 style="font-size: 40px" id="countdown-sub">Until Event</h2>
+        <h1 style="font-size: 60px" id="countdown">N/A</h1>
+        <h2 style="font-size: 30px" id="countdown-sub">Until Event</h2>
     </div>
-    <h1 style="font-size: 65px">{{ event.name }}</h1>
-    <h2 style="font-size: 40px">{{ event.start|date:'M d, Y | Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ event.end|date:'Hi\z' }}</h2>
+    <h1 style="font-size: 60px">{{ event.name }}</h1>
+    <h2 style="font-size: 30px"><i class="far fa-calendar-alt"></i> <span id="date"></span> <span id="zulu-date">({{ event.start|date:'M d, Y' }})</span></h2>
+    <h2 style="font-size: 30px">
+        <i class="far fa-clock"></i> <span id="start"></span> <i class="far fa-xs fa-long-arrow-right"></i> <span id="end"></span>
+        ({{ event.start|date:'Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ event.end|date:'Hi\z' }})
+    </h2>
 {% endblock %}
 
 {% block body %}
@@ -149,6 +153,8 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
     <script>
         function updateTimer() {
             let event_end = new Date("{{ event.end|date:'M d, Y H:i \U\T\C' }}")
@@ -173,6 +179,16 @@
         }
         updateTimer()
         setInterval(function() { updateTimer() }, 1000)
+
+        let tz = moment.tz.guess()
+        let start = moment.utc("{{ event.start|to_iso_format }}", 'YYYY-MM-DDThh:mm:ss')
+        let end = moment.utc("{{ event.end|to_iso_format }}", 'YYYY-MM-DDTHH:mm:ss')
+        $('span#date').text(start.tz(tz).format('MMM D, Y'))
+        if (start.tz(tz).month() + 1 == "{{ event.start|date:'m' }}") {
+            $('span#zulu-date').remove()
+        }
+        $('span#start').text(start.tz(tz).format('HHmm z'))
+        $('span#end').text(end.tz(tz).format('HHmm z'))
 
         {% if allowed_to_signup %}
             $('[data-action="request"]').click(function() {

@@ -53,9 +53,9 @@ def login(request):
             return HttpResponse('Something was wrong with the token we got from VATUSA!', status=500)
     else:
         if os.getenv('DEV_ENV') == 'True':
-            return redirect('https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1')
-        else:
             return redirect('https://login.vatusa.net/uls/v2/login?fac=ZHU&url=3')
+        else:
+            return redirect('https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1')
 
     return redirect(reverse('home'))
 

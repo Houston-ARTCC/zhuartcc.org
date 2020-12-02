@@ -51,6 +51,10 @@ def login(request):
                     ActionLog(action=f'User {new_user.full_name} was created by system.').save()
         else:
             return HttpResponse('Something was wrong with the token we got from VATUSA!', status=500)
+    else:
+        return redirect(
+            'https://login.vatusa.net/uls/v2/login?fac=ZHU&url=' + '3' if os.getenv('DEV_ENV') == "True" else '1'
+        )
 
     return redirect(reverse('home'))
 

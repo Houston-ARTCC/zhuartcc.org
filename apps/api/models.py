@@ -10,6 +10,14 @@ class Controller(models.Model):
     online_since = models.DateTimeField()
     last_update = models.DateTimeField()
 
+    def convert_to_session(self):
+        ControllerSession(
+            user=self.user,
+            callsign=self.callsign,
+            start=self.online_since,
+            duration=self.duration,
+        ).save()
+
     @property
     def duration(self):
         return self.last_update - self.online_since

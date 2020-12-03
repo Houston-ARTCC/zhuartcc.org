@@ -17,6 +17,7 @@
                         <a href="{% url 'roster_tidy' %}"><button class="btn btn-secondary">Roster Tidy</button></a>
                         <a href="{% url 'visit_requests' %}"><button class="btn btn-secondary">Visiting Requests</button> {% if notifications.visit %}<div class="notification">{{ notifications.visit }}</div>{% endif %}</a>
                         <a href="{% url 'transfer_requests' %}"><button class="btn btn-secondary">Transfer Requests</button></a>
+                        <a data-action="find-user" data-redirect="event"><button class="btn btn-secondary">Event Score</button></a>
                     </div>
                 </div>
             </div>
@@ -75,6 +76,8 @@
                     location.href = '{% url 'student_profile' cid=0 %}'.replace(/0/, cid)
                 } else if (redirect === 'profile') {
                     location.href = '{% url 'view_user' cid=0 %}'.replace(/0/, cid)
+                } else if (redirect === 'event') {
+                    location.href = '{% url 'event_score_cid' cid=0 %}'.replace(/0/, cid)
                 }
             })
         })

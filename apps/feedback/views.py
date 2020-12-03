@@ -49,7 +49,7 @@ def add_feedback(request):
     else:
         return render(request, 'add_feedback.html', {
             'page_title': 'Submit Feedback',
-            'controllers': User.objects.filter(status=0),
+            'controllers': User.objects.exclude(status=2).order_by('first_name'),
             'events': Event.objects.filter(start__gte=timezone.now() - timedelta(days=30))
                       .filter(start__lte=timezone.now()).filter(hidden=False),
         })

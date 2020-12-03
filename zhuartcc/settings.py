@@ -19,18 +19,19 @@ from dotenv import load_dotenv
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Loads environment variables from .env file
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Initialize Sentry.io SDK for error handling
 if os.getenv('DEV_ENV', '') == 'False' and os.getenv('SENTRY_DSN'):
     sentry_sdk.init(
         dsn=os.getenv('SENTRY_DSN'),
         integrations=[DjangoIntegration()],
         traces_sample_rate=1.0,
     )
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Loads environment variables from .env file
-load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -107,38 +108,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'zhuartcc.wsgi.application'
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s'
-        },
-    },
-    'handlers': {
-        'logfile': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
-            'maxBytes': 1024 * 1024 * 1,
-            'backupCount': 2,
-            'formatter': 'standard',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['logfile'],
-            'propagate': True,
-            'level': 'ERROR'
-        },
-        '': {
-            'handlers': ['logfile'],
-            'propagate': True,
-            'level': 'ERROR'
-        },
-    },
-}
-
 
 
 # Database

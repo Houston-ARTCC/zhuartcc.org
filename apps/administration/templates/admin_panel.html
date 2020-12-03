@@ -17,7 +17,7 @@
                         <a href="{% url 'roster_tidy' %}"><button class="btn btn-secondary">Roster Tidy</button></a>
                         <a href="{% url 'visit_requests' %}"><button class="btn btn-secondary">Visiting Requests</button> {% if notifications.visit %}<div class="notification">{{ notifications.visit }}</div>{% endif %}</a>
                         <a href="{% url 'transfer_requests' %}"><button class="btn btn-secondary">Transfer Requests</button></a>
-                        <a data-action="find-user" data-redirect="event"><button class="btn btn-secondary">Find Event Score</button></a>
+                        <a data-action="find-user" data-redirect="event"><button class="btn btn-secondary">Event Score</button></a>
                     </div>
                 </div>
             </div>

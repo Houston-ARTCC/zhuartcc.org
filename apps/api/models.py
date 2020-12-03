@@ -10,6 +10,14 @@ class Controller(models.Model):
     online_since = models.DateTimeField()
     last_update = models.DateTimeField()
 
+    def convert_to_session(self):
+        ControllerSession(
+            user=self.user,
+            callsign=self.callsign,
+            start=self.online_since,
+            duration=self.duration,
+        ).save()
+
     @property
     def duration(self):
         return self.last_update - self.online_since
@@ -39,3 +47,9 @@ class CurrentAtis(models.Model):
     airport_conditions = models.TextField()
     notams = models.TextField()
     updated = models.DateTimeField(auto_now=True)
+
+
+class TMUNotice(models.Model):
+    info = models.TextField()
+    time_issued = models.DateTimeField(auto_now_add=True)
+    time_expires = models.DateTimeField()

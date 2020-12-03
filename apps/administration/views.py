@@ -5,7 +5,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.html import strip_tags
 
 from zhuartcc.overrides import send_mass_mail
 from zhuartcc.decorators import require_staff, require_staff_or_mentor
@@ -20,6 +19,7 @@ from ..visit.models import Visit
 def view_admin_panel(request):
     return render(request, 'admin_panel.html', {
         'page_title': 'Admin Panel',
+        'controllers': User.objects.all().order_by('first_name'),
         'notifications': {
             'visit': Visit.objects.count(),
             'training': TrainingRequest.objects.count(),
@@ -39,7 +39,7 @@ def view_action_log(request):
 @require_staff
 def view_transfers(request):
     transfers = requests.get(
-        'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/transfers',
+        f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/transfers',
         params={'apikey': os.getenv('API_KEY')},
     ).json()
 

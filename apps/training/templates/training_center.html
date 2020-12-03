@@ -141,7 +141,11 @@
                         <tbody>
                             {% for session in user.student_sessions.all %}
                                 <tr data-type="href" data-session="{{ session.id }}">
-                                    <td class="text-center"><span class="d-none">{{ session.start|date:'m/d/Y Hi' }}</span>{{ session.start|date:'M j, Y @ Hi\z' }}</td>
+                                    <td class="text-center" id="{{ session.id }}">
+                                        <span class="d-none">{{ session.start|date:'m/d/Y Hi' }}</span>
+                                        <span id="date"></span><br>
+                                        <span class="text-black-50">({{ session.start|date:'M j, Y @ Hi\z' }})</span>
+                                    </td>
                                     <td class="text-center">{{ session.get_level_display }}</td>
                                     <td class="text-center">{{ session.get_type_display }}</td>
                                     <td class="text-center">{{ session.instructor.full_name }}</td>
@@ -165,7 +169,16 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
     <script>
+        let tz = moment.tz.guess()
+        const sessions = {{ sessions_json|safe }}
+        for (let id in sessions) {
+            let start = moment.utc(sessions[id], 'YYYY-MM-DDThh:mm:ss')
+            let end = moment.utc(sessions[id], 'YYYY-MM-DDTHH:mm:ss')
+            $(`#${id} span#date`).text(start.tz(tz).format('MMM D, Y @ HHmm z'))
+        }
         $(function() {
             $('#sessions').DataTable({
                 pageLength: 4,

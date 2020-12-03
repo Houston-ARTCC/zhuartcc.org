@@ -6,6 +6,9 @@
     <head>
         <title>Welcome to Houston ARTCC!</title>
         {% include 'partials/head.html' %}
+        <!-- Yes theres an entire CSS file for the snow effect, no I didn't make it myself -->
+        <!-- https://codepen.io/alphardex/pen/dyPorwJ -->
+        <link rel="stylesheet" href="{% static 'css/snow.css' %}">
     </head>
     <body>
         <div class="home-wrapper">
@@ -13,9 +16,14 @@
 
 
             <!-- START Page Content -->
+            <div class="snow-div">
+                {% for i in 150|as_range %}
+                    <div class="snow"></div>
+                {% endfor %}
+            </div>
             <div class="home-title-block">
                 <h1 class="home-title">Welcome to<br>Houston</h1>
-                <h2 class="home-subtitle">From longhorns to space ships, we've got it all!</h2>
+                <h2 class="home-subtitle">It's beginning to look a lot like Christmas! 🎄</h2>
                 <p class="scroll-arrow"><i class="far fa-sm fa-arrow-left"></i>&nbsp; Scroll</p>
             </div>
             <div class="page-container">
@@ -76,7 +84,7 @@
                             <div class="card-header"><i class="far fa-calendar"></i> Events</div>
                             <div class="card-body">
                                 {% for event in events %}
-                                    <a href="{% url 'event' event_id=event.id %}"><img src="{{ event.banner }}" width="100%"></a>
+                                    <a href="{% url 'event' event_id=event.id %}"><img src="{% if event.banner %}{{ event.banner }}{% else %}{% static 'img/banner-placeholder.png' %}{% endif %}" width="100%"></a>
                                 {% empty %}
                                     No events were found...
                                 {% endfor %}
@@ -101,6 +109,7 @@
                                     <thead>
                                         <tr>
                                             <th>Callsign</th>
+                                            <th>Frequency</th>
                                             <th>Controller</th>
                                             <th>Duration</th>
                                         </tr>
@@ -109,12 +118,13 @@
                                         {% for controller in online %}
                                             <tr>
                                                 <td class="py-2">{{ controller.callsign }}</td>
+                                                <td class="py-2">{{ controller.frequency }}</td>
                                                 <td class="py-2">{{ controller.user.full_name }}</td>
                                                 <td class="py-2">{{ controller.duration|duration }}</td>
                                             </tr>
                                         {% empty %}
                                             <tr>
-                                                <td class="py-2" colspan="3">No controllers online.</td>
+                                                <td class="py-2" colspan="4">No controllers online.</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

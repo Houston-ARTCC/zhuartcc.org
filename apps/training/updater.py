@@ -1,19 +1,20 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-
 from django.utils import timezone
 
 from .models import TrainingRequest, TrainingSession
-
-
-# Schedules a task to update event scores every hour.
 from .views import post_ctrs
 
 
+# Schedules a task to update event scores every hour.
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(remove_stale_requests, 'interval', hours=1)
-    scheduler.add_job(submit_ctrs_records, 'cron', day_of_week='sat')
+    scheduler.add_job(clean_up_training, 'cron', day_of_week='sat')
     scheduler.start()
+
+
+def clean_up_training():
+    remove_stale_requests()
+    submit_ctrs_records()
 
 
 def remove_stale_requests():

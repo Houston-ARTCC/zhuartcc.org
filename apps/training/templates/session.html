@@ -2,15 +2,15 @@
 {% load filters %}
 
 {% block header %}
-    <h1 style="font-size: 65px">{{ session.get_level_display }} Session</h1>
-    <h2 style="font-size: 40px">{{ session.start|date:'M j, Y @ Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ session.end|date:'Hi\z' }}
-    <span class="badge badge-md
-        {% if session.status == 0 %}badge-info
-        {% elif session.status == 1 %}badge-success
-        {% elif session.status == 2 %}badge-danger
-        {% elif session.status == 3 %}badge-warning
-        {% endif %}
-    ">{{ session.get_status_display }}</span></h2>
+    <h1 style="font-size: 60px">{{ session.student.first_name }}'s {{ session.get_level_display }} Session</h1>
+    <span class="mb-3 badge badge-md {% if session.status == 0 %}badge-info{% elif session.status == 1 %}badge-success{% elif session.status == 2 %}badge-danger{% elif session.status == 3 %}badge-warning{% endif %}">
+        {{ session.get_status_display }}
+    </span>
+    <h2 style="font-size: 30px"><i class="far fa-calendar-alt"></i> <span id="date"></span> <span id="zulu-date">({{ session.start|date:'M d, Y' }})</span></h2>
+    <h2 style="font-size: 30px">
+        <i class="far fa-clock"></i> <span id="start"></span> <i class="far fa-xs fa-long-arrow-right"></i> <span id="end"></span>
+        ({{ session.start|date:'Hi\z' }} <i class="far fa-xs fa-long-arrow-right"></i> {{ session.end|date:'Hi\z' }})
+    </h2>
 {% endblock %}
 
 {% block body %}
@@ -44,4 +44,21 @@
             <p>{{ session.notes|safe|default:'No notes provided.' }}</p>
         </div>
     </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+    <script>
+        let tz = moment.tz.guess()
+        let start = moment.utc("{{ session.start|to_iso_format }}", 'YYYY-MM-DDThh:mm:ss')
+        let end = moment.utc("{{ session.end|to_iso_format }}", 'YYYY-MM-DDTHH:mm:ss')
+        $('span#date').text(start.tz(tz).format('MMM D, Y'))
+        if (start.tz(tz).month() + 1 == "{{ session.start|date:'m' }}") {
+            $('span#zulu-date').remove()
+        }
+        $('span#start').text(start.tz(tz).format('HHmm z'))
+        $('span#end').text(end.tz(tz).format('HHmm z'))
+    </script>
 {% endblock %}

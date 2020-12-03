@@ -29,6 +29,8 @@ urlpatterns = [
     path('statistics/', api.view_statistics, name='statistics'),
     path('api/vatis/', api.update_atis, name='update_atis'),
     path('api/vatis/<str:icao>/', api.get_atis, name='get_atis'),
+    path('api/tmu/', api.post_tmu, name='post_tmu'),
+    path('api/tmu/<int:notice_id>/delete/', api.delete_tmu, name='delete_tmu'),
 
     # Event
     path('events/', event.view_all_events, name='events'),
@@ -40,6 +42,7 @@ urlpatterns = [
     path('events/<int:event_id>/edit/', event.edit_event, name='edit_event'),
     path('events/<int:event_id>/delete/', event.delete_event, name='delete_event'),
     path('events/<int:event_id>/add/', event.add_position, name='add_position'),
+    path('events/<int:event_id>/embedpositions/', event.embed_positions, name='embed_positions'),
     path('events/position/<int:position_id>/request/', event.request_position, name='request_position'),
     path('events/position/<int:request_id>/unrequest/', event.unrequest_position, name='unrequest_position'),
     path('events/position/<int:request_id>/assign/', event.assign_position, name='assign_position'),

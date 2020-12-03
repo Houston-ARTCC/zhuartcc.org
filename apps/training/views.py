@@ -1,3 +1,4 @@
+import json
 import os
 import pytz
 import requests
@@ -26,6 +27,7 @@ def view_training_center(request):
         'page_title': 'Training Center',
         'user': request.user_obj,
         'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
+        'sessions_json': json.dumps({session.id: session.start.isoformat() for session in sessions}),
     })
 
 
@@ -205,9 +207,11 @@ def view_mentor_history(request):
 
 @require_staff_or_mentor
 def view_scheduled_sessions(request):
+    sessions = TrainingSession.objects.filter(status=0)
     return render(request, 'scheduled_sessions.html', {
         'page_title': 'Scheduled Sessions',
-        'sessions': TrainingSession.objects.filter(status=0),
+        'sessions': sessions,
+        'sessions_json': json.dumps({session.id: session.start.isoformat() for session in sessions}),
     })
 
 
@@ -216,9 +220,10 @@ def view_student_profile(request, cid):
     student = User.objects.get(cid=cid)
     sessions = student.student_sessions.all()
     return render(request, 'student_profile.html', {
-        'page_title': 'Student Profile',
+        'page_title': student.full_name,
         'student': student,
         'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
+        'sessions_json': json.dumps({session.id: session.start.isoformat() for session in sessions}),
     })
 
 
@@ -227,7 +232,7 @@ def view_training_requests(request):
     if request.user_obj.is_mentor or request.user_obj.is_staff:
         return render(request, 'training_requests.html', {
             'page_title': 'Training Requests',
-            'requests': TrainingRequest.objects.all().order_by('start'),
+            'requests': TrainingRequest.objects.filter(end__gt=timezone.now()).order_by('start'),
         })
     else:
         return HttpResponse(status=403)

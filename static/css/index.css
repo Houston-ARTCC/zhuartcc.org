@@ -212,9 +212,6 @@ a:hover {
     background-color: white!important;
     color: #2d45a2!important;
 }
-.dropdown-item.active, .dropdown-item:active {
-    background-color: rgba(45, 69, 162, 0.25);
-}
 .popover {
     font: 15px Gilroy-Regular, Helvetica, sans-serif;
     padding: 10px;
@@ -465,6 +462,12 @@ input:checked ~ .radio-label {
 .toggle input[type="checkbox"] {
     margin: 0;
 }
+optgroup {
+    font: 15px Gilroy-Bold, Helvetica, sans-serif;
+}
+optgroup option {
+    font: 14px Gilroy-Regular, Helvetica, sans-serif;
+}
 input[type="checkbox"] {
     margin-bottom: 10px;
 }
@@ -658,6 +661,9 @@ a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
 }
 .btn-secondary:focus {
     box-shadow: 0 0 0 0.2rem rgba(241, 241, 241, 0.5) !important;
+}
+.btn-light {
+    background-color: #eaeaea;
 }
 .btn-link {
     padding: 0;
@@ -1114,7 +1120,7 @@ dP     dP  `88888P' dP  dP  dP `88888P' 88Y888P' `88888P8 `8888P88 `88888P'
 */
 .home-wrapper {
     height: 100vh;
-    background: url('../img/homepage-bg.jpg') 50% 50%/cover;
+    background: url('../img/christmas-bg.jpg') 50% 50%/cover;
 }
 .home-title-block {
     height: 100vh;

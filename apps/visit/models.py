@@ -1,11 +1,13 @@
+import os
+import requests
+
 from django.db import models
 
-
-# Defines the visiting request model which is created upon request submission
 from apps.user.models import User
 from apps.user.updater import assign_oper_init
 
 
+# Defines the visiting request model which is created upon request submission
 class Visit(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
@@ -29,6 +31,12 @@ class Visit(models.Model):
         )
         new_user.save()
         new_user.assign_initial_cert()
+        req = requests.post(
+            f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster/manageVisitor/{new_user.cid}',
+            data={'apikey': os.getenv('API_KEY')}
+        )
+        if req.status_code != 200:
+            raise ConnectionError("Failed to POST visitor to VATUSA API.")
 
     @property
     def full_name(self):

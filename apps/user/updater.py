@@ -1,4 +1,3 @@
-import json
 import os
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler

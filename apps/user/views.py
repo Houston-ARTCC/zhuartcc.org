@@ -1,15 +1,10 @@
 import os
 import pytz
-import base64
 import calendar
 import requests
-from PIL import Image
-from io import BytesIO
 from datetime import datetime
 from itertools import groupby
 
-from django.core.files.base import ContentFile
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -111,26 +106,25 @@ def edit_user(request, cid):
     user = User.objects.get(cid=cid)
 
     if request.method == 'POST':
-        post = request.POST
-        user.oper_init = post['oper_init']
-        user.first_name = post['first_name']
-        user.last_name = post['last_name']
-        user.email = post['email']
-        user.main_role = post['main_role']
+        user.oper_init = request.POST.get('oper_init')
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        user.main_role = request.POST.get('main_role')
         user.home_facility = request.POST.get('home_facility', None)
         user.staff_role = request.POST.get('staff_role', None)
         user.training_role = request.POST.get('training_role', None)
         user.mentor_level = request.POST.get('mentor_level', None)
-        user.activity_exempt = True if 'activity_exempt' in post else False
-        user.prevent_event_signup = True if 'prevent_event_signup' in post else False
-        user.cic = True if 'cic' in post else False
+        user.activity_exempt = True if 'activity_exempt' in request.POST else False
+        user.prevent_event_signup = True if 'prevent_event_signup' in request.POST else False
+        user.cic = True if 'cic' in request.POST else False
         user.biography = request.POST.get('biography', None)
-        user.del_cert = int(post['del_cert'])
-        user.gnd_cert = int(post['gnd_cert'])
-        user.twr_cert = int(post['twr_cert'])
-        user.app_cert = int(post['app_cert'])
-        user.ctr_cert = int(post['ctr_cert'])
-        user.ocn_cert = int(post['ocn_cert'])
+        user.del_cert = int(request.POST.get('del_cert'))
+        user.gnd_cert = int(request.POST.get('gnd_cert'))
+        user.twr_cert = int(request.POST.get('twr_cert'))
+        user.app_cert = int(request.POST.get('app_cert'))
+        user.ctr_cert = int(request.POST.get('ctr_cert'))
+        user.ocn_cert = int(request.POST.get('ocn_cert'))
 
         user.save()
 

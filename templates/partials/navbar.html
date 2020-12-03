@@ -64,7 +64,7 @@
                     <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                 </div>
             {% else %}
-                <a class="nav-link" href="https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1">Log In</a>
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
             {% endif %}
         </li>
     </ul>

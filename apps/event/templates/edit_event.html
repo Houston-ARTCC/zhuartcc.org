@@ -44,7 +44,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="label-group">
-                                    <input name="banner" type="text" value="{{ event.banner }}" required>
+                                    <input name="banner" type="text" value="{{ event.banner }}">
                                     <label>Banner URL</label>
                                     <span class="focus-border"></span>
                                 </div>
@@ -88,6 +88,9 @@
         <button class="btn btn-primary">Save Changes</button>
     </form>
     <hr>
+    <div class="text-center mb-4">
+        <button class="btn btn-secondary" data-action="embed"><i class="fab fa-discord"></i> Embed Positions in Discord</button>
+    </div>
     <div class="row">
         <div class="col-4">
             <div class="card">
@@ -261,6 +264,11 @@
         $('[data-action="add-position"]').click(function() {
             addPosition($(this).parent().find('.position-input').val())
         })
+        $('[data-action="embed"]').click(function() {
+            $.post('{% url 'embed_positions' event_id=event.id %}')
+            .done(function() { launchSuccessModal() })
+            .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+        })
         $('select').on('shown.bs.select',function() {
             previous = $(this).val()
         }).change(function() {
@@ -272,21 +280,20 @@
                 $(this).selectpicker('val', previous);
                 launchCustomModal(
                     'info',
-                    `Manually assign user to ${$(this).data('name')}?`,
-                    `<div class="col-12">
-                        <div class="label-group">
-                            <select name="controller">
-                                {% for controller in controllers %}
-                                    <option value="{{ controller.cid }}">{{ controller.full_name }}</option>
-                                {% endfor %}
-                            </select>
-                            <label>Controller</label>
-                            <span class="focus-border"></span>
-                        </div>
-                    </div>
+                    `Manually assigning user to ${$(this).data('name')}`,
+                    `<select name="controller" class="selectpicker" title="Select Controller" data-width="80%" data-live-search="true" data-size="8" data-dropup-auto="false">
+                        {% for controller in controllers %}
+                            <option value="{{ controller.cid }}" data-tokens="{{ controller.cid }}" data-content="<span class='text-dark'>{{ controller.full_name }} <span class='badge badge-sm
+                            {% if controller.event_score >= 90 %}badge-success
+                            {% elif controller.event_score >= 65 %}badge-warning
+                            {% elif controller.event_score < 65 %}badge-danger
+                            {% endif %}'>{{ controller.event_score }}%</span></span>">{{ controller.full_name }}</option>
+                        {% endfor %}
+                    </select>
                     <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-primary" data-action="confirm">Confirm</button>`
                 )
+                $('select[name="controller"]').selectpicker('render')
                 let $this = $(this)
                 $('#customModal [data-action="confirm"]').click(function() {
                     $.post('{% url 'manual_assign_position' position_id=0 cid=800000 %}'.replace(/0/, $this.data('position')).replace(/800000/, $('select[name="controller"]').val()))

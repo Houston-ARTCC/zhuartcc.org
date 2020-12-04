@@ -30,7 +30,7 @@ if os.getenv('DEV_ENV', '') == 'False' and os.getenv('SENTRY_DSN'):
     sentry_sdk.init(
         dsn=os.getenv('SENTRY_DSN'),
         integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
+        traces_sample_rate=0.75,
     )
 
 # Quick-start development settings - unsuitable for production

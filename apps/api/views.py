@@ -116,17 +116,23 @@ def get_atis(request, icao):
         return HttpResponse(f'ATIS for facility {icao.upper()} was not found.', status=404)
 
 
-@require_POST
-def post_tmu(request):
-    if request.POST.get('api_key') == os.getenv('IDS_API_KEY'):
-        notice = TMUNotice(
-            info=request.POST.get('info'),
-            time_issued=request.POST.get('time_issued'),
-        )
-        notice.save()
-        return HttpResponse(JsonResponse(model_to_dict(notice)))
+def tmu(request):
+    if request.method == 'POST':
+        if request.POST.get('api_key') == os.getenv('IDS_API_KEY'):
+            notice = TMUNotice(
+                info=request.POST.get('info'),
+                time_issued=request.POST.get('time_issued'),
+            )
+            notice.save()
+            return HttpResponse(JsonResponse(model_to_dict(notice)))
+        else:
+            return HttpResponse('Invalid API key.', status=401)
+    elif request.method == 'GET':
+        TMUNotice.objects.filter(time_expires__lte=timezone.now()).delete()
+        tmus = list(TMUNotice.objects.values())
+        return JsonResponse(tmus, safe=False)
     else:
-        return HttpResponse('Invalid API key.', status=401)
+        return HttpResponse('Invalid method.', status=405)
 
 
 @require_POST

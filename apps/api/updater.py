@@ -23,12 +23,15 @@ def start():
 
 def pull_controllers():
     airports = ast.literal_eval(os.getenv('AIRPORT_IATA'))
-    data = requests.get('http://us.data.vatsim.net/vatsim-data.txt').text
-    data_array = [line.split(':') for line in data.split('\n')]
-    atc_clients = {client[0]: client for client in data_array if len(client) == 42 and client[3] == 'ATC'}
+    req = requests.get('https://data.vatsim.net/v3/vatsim-data.json')
+
+    if req.status_code == 200:
+        data = req.json()
+    else:
+        return
 
     for controller in Controller.objects.all():
-        if controller.callsign in atc_clients:
+        if next((entry for entry in data.get('controllers') if entry.get('callsign') == controller.callsign), None):
             controller.last_update = timezone.now()
             controller.save()
         else:
@@ -36,20 +39,20 @@ def pull_controllers():
             controller.delete()
 
     for atis in CurrentAtis.objects.all():
-        if atis.facility + '_ATIS' not in atc_clients:
+        if not next((entry for entry in data.get('atis') if entry.get('callsign') == atis.facility + '_ATIS'), None):
             atis.delete()
 
-    for callsign, controller in atc_clients.items():
-        if controller[1] and User.objects.filter(cid=controller[1]).exists():
-            split = callsign.split('_')
-            if split[0] in airports:
-                if split[-1] != 'ATIS' and split[-1] != 'OBS' and split[-1] != 'SUP':
-                    if not Controller.objects.filter(callsign=callsign).exists():
+    for controller in data.get('controllers'):
+        user = User.objects.filter(cid=controller.get('cid'))
+        if user.exists():
+            if controller.get('facility') != 0:
+                if controller.get('callsign').split('_')[0] in airports:
+                    if not Controller.objects.filter(callsign=controller.get('callsign')).exists():
                         Controller(
-                            user=User.objects.get(cid=int(controller[1])),
-                            callsign=callsign,
-                            frequency=controller[4],
-                            online_since=pytz.utc.localize(datetime.strptime(controller[36], '%Y%m%d%H%M%S')),
+                            user=user.first(),
+                            callsign=controller.get('callsign'),
+                            frequency=controller.get('frequency'),
+                            online_since=pytz.utc.localize(datetime.strptime(controller.get('logon_time')[:-2], '%Y-%m-%dT%H:%M:%S.%f')),
                             last_update=timezone.now(),
                         ).save()
 

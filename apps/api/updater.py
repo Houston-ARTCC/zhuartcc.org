@@ -4,6 +4,8 @@ import pytz
 import requests
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
+from discord_webhook import DiscordWebhook, DiscordEmbed
+from io import StringIO
 
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -24,36 +26,57 @@ def start():
 def pull_controllers():
     airports = ast.literal_eval(os.getenv('AIRPORT_IATA'))
     req = requests.get('https://data.vatsim.net/v3/vatsim-data.json')
-
-    if req.status_code == 200:
-        data = req.json()
-    else:
-        return
-
-    for controller in Controller.objects.all():
-        if next((entry for entry in data.get('controllers') if entry.get('callsign') == controller.callsign), None):
-            controller.last_update = timezone.now()
-            controller.save()
+    try:
+        if req.status_code == 200:
+            data = req.json()
         else:
-            controller.convert_to_session()
-            controller.delete()
+            return
 
-    for atis in CurrentAtis.objects.all():
-        if not next((entry for entry in data.get('atis') if entry.get('callsign') == atis.facility + '_ATIS'), None):
-            atis.delete()
+        for controller in Controller.objects.all():
+            if next((entry for entry in data.get('controllers') if entry.get('callsign') == controller.callsign), None):
+                controller.last_update = timezone.now()
+                controller.save()
+            else:
+                controller.convert_to_session()
+                controller.delete()
 
-    for controller in data.get('controllers'):
-        user = User.objects.filter(cid=controller.get('cid'))
-        if not user.exists():
-            if controller.get('facility') != 0:
-                if controller.get('callsign').split('_')[0] in airports:
-                    if not Controller.objects.filter(callsign=controller.get('callsign')).exists():
-                        Controller(
-                            user=user.first(),
-                            callsign=controller.get('callsign'),
-                            online_since=pytz.utc.localize(datetime.strptime(controller.get('logon_time')[:-2], '%Y-%m-%dT%H:%M:%S.%f')),
-                            last_update=timezone.now(),
-                        ).save()
+        for atis in CurrentAtis.objects.all():
+            if not next((entry for entry in data.get('atis') if entry.get('callsign') == atis.facility + '_ATIS'), None):
+                atis.delete()
+
+        for controller in data.get('controllers'):
+            user = User.objects.filter(cid=controller.get('cid'))
+            if not user.exists():
+                if controller.get('facility') != 0:
+                    if controller.get('callsign').split('_')[0] in airports:
+                        if not Controller.objects.filter(callsign=controller.get('callsign')).exists():
+                            Controller(
+                                user=user.first(),
+                                callsign=controller.get('callsign'),
+                                online_since=pytz.utc.localize(datetime.strptime(controller.get('logon_time')[:-2], '%Y-%m-%dT%H:%M:%S.%f')),
+                                last_update=timezone.now(),
+                            ).save()
+    except Exception as e:
+        webhook = DiscordWebhook(url=os.getenv('LOGGING_WEBHOOK_URL'))
+        embed = DiscordEmbed(
+            title='VATSIM Data Error',
+            description=e,
+            color=2966946,
+        )
+        embed.add_embed_field(
+            name=':clock1: Time',
+            value=timezone.now().isoformat(),
+            inline=False,
+        )
+        embed.add_embed_field(
+            name=':warning: HTTP Status',
+            value=req.status_code,
+            inline=False,
+        )
+        webhook.add_embed(embed)
+        with StringIO(req.text) as f:
+            webhook.add_file(file=f.read(), filename='vatsim_response.txt')
+        webhook.execute()
 
 
 def warn_inactive_users():

@@ -109,7 +109,6 @@
                                     <thead>
                                         <tr>
                                             <th>Callsign</th>
-                                            <th>Frequency</th>
                                             <th>Controller</th>
                                             <th>Duration</th>
                                         </tr>
@@ -118,13 +117,12 @@
                                         {% for controller in online %}
                                             <tr>
                                                 <td class="py-2">{{ controller.callsign }}</td>
-                                                <td class="py-2">{{ controller.frequency }}</td>
                                                 <td class="py-2">{{ controller.user.full_name }}</td>
                                                 <td class="py-2">{{ controller.duration|duration }}</td>
                                             </tr>
                                         {% empty %}
                                             <tr>
-                                                <td class="py-2" colspan="4">No controllers online.</td>
+                                                <td class="py-2" colspan="3">No controllers online.</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

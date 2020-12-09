@@ -44,14 +44,13 @@ def pull_controllers():
 
     for controller in data.get('controllers'):
         user = User.objects.filter(cid=controller.get('cid'))
-        if user.exists():
+        if not user.exists():
             if controller.get('facility') != 0:
                 if controller.get('callsign').split('_')[0] in airports:
                     if not Controller.objects.filter(callsign=controller.get('callsign')).exists():
                         Controller(
                             user=user.first(),
                             callsign=controller.get('callsign'),
-                            frequency=controller.get('frequency'),
                             online_since=pytz.utc.localize(datetime.strptime(controller.get('logon_time')[:-2], '%Y-%m-%dT%H:%M:%S.%f')),
                             last_update=timezone.now(),
                         ).save()

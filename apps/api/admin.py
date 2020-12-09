@@ -4,7 +4,7 @@ from .models import Controller, ControllerSession, CurrentAtis, TMUNotice
 
 @admin.register(Controller)
 class ControllerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'callsign', 'frequency', 'online_since', 'last_update', 'duration')
+    list_display = ('user', 'callsign', 'online_since', 'last_update', 'duration')
 
 
 @admin.register(ControllerSession)

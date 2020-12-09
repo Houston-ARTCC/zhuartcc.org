@@ -6,7 +6,6 @@ from ..user.models import User
 class Controller(models.Model):
     user = models.ForeignKey(User, models.CASCADE, related_name='controller_online')
     callsign = models.CharField(max_length=16)
-    frequency = models.FloatField()
     online_since = models.DateTimeField()
     last_update = models.DateTimeField()
 

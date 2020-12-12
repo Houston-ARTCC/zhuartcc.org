@@ -46,7 +46,7 @@ def pull_controllers():
 
         for controller in data.get('controllers'):
             user = User.objects.filter(cid=controller.get('cid'))
-            if not user.exists():
+            if user.exists():
                 if controller.get('facility') != 0:
                     if controller.get('callsign').split('_')[0] in airports:
                         if not Controller.objects.filter(callsign=controller.get('callsign')).exists():

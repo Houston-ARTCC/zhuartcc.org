@@ -60,7 +60,7 @@ def pull_controllers():
         webhook = DiscordWebhook(url=os.getenv('LOGGING_WEBHOOK_URL'))
         embed = DiscordEmbed(
             title='VATSIM Data Error',
-            description=e,
+            description=e.__class__.__name__,
             color=2966946,
         )
         embed.add_embed_field(

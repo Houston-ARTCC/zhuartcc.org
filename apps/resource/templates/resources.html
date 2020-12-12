@@ -33,7 +33,7 @@
                                                 <td><a class="link-secondary" data-action="edit-resource" data-id="{{ resource.id }}" data-name="{{ resource.name }}" data-category="{{ resource.category }}" data-description="{{ resource.description }}"><i class="fas fa-pencil-ruler"></i></a></td>
                                             {% endif %}
                                             <td>{{ resource.updated|date:'Y-m-d' }}</td>
-                                            <td><a href="{{ resource.path.url }}" target="_blank">{{ resource.name }}</a></td>
+                                            <td><a href="{{ resource.path.url }}" target="_blank" download>{{ resource.name }}</a></td>
                                         </tr>
                                     {% empty %}
                                         <td class="text-center" colspan="3">No resources found!</td>

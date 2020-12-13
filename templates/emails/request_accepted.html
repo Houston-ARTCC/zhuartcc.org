@@ -6,7 +6,7 @@
     <p>Training Session:</p>
     <ul>
         <li><b>Instructor:</b> {{ session.instructor.full_name }} ({{ session.instructor.cid }})</li>
-        <li><b>Availability:</b> {{ session.start|date:'M j, Y @ Hi\z' }} - {{ session.end|date:'M j, Y @ Hi\z' }}</li>
+        <li><b>Time:</b> {{ session.start|date:'M j, Y @ Hi\z' }} - {{ session.end|date:'Hi\z' }}</li>
         <li><b>Level:</b> {{ session.get_level_display }}</li>
         <li><b>Type:</b> {{ session.get_type_display }}</li>
     </ul>

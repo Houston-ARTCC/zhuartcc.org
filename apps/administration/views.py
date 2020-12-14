@@ -1,5 +1,6 @@
 import os
 import requests
+import timezone
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -22,7 +23,7 @@ def view_admin_panel(request):
         'controllers': User.objects.all().order_by('first_name'),
         'notifications': {
             'visit': Visit.objects.count(),
-            'training': TrainingRequest.objects.filter(end__gte=timezone.now()).count(),
+            'training': TrainingRequest.objects.filter(end__gt=timezone.now()).count(),
             'feedback': Feedback.objects.filter(approved=False).count(),
         }
     })

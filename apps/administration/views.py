@@ -22,7 +22,7 @@ def view_admin_panel(request):
         'controllers': User.objects.all().order_by('first_name'),
         'notifications': {
             'visit': Visit.objects.count(),
-            'training': TrainingRequest.objects.count(),
+            'training': TrainingRequest.objects.filter(end__gte=timezone.now()).count(),
             'feedback': Feedback.objects.filter(approved=False).count(),
         }
     })

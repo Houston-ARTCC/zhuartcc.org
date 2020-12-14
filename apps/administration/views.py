@@ -1,10 +1,10 @@
 import os
 import requests
-import timezone
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.urls import reverse
 
 from zhuartcc.overrides import send_mass_mail

@@ -90,25 +90,32 @@ def return_sorted_hours():
 
 
 @csrf_exempt
-@require_POST
-def update_atis(request):
-    try:
-        data = json.loads(request.body)
-        CurrentAtis.objects.filter(facility=data.get('facility')).delete()
-        CurrentAtis(
-            facility=data.get('facility'),
-            config_profile=data.get('config_profile'),
-            atis_letter=data.get('atis_letter'),
-            airport_conditions=data.get('airport_conditions'),
-            notams=data.get('notams'),
-        ).save()
-    except:
-        return HttpResponse(status=400)
-    return HttpResponse(status=200)
+def atis(request):
+    print(request.method)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            CurrentAtis.objects.filter(facility=data.get('facility')).delete()
+            CurrentAtis(
+                facility=data.get('facility'),
+                config_profile=data.get('config_profile'),
+                atis_letter=data.get('atis_letter'),
+                airport_conditions=data.get('airport_conditions'),
+                notams=data.get('notams'),
+            ).save()
+        except:
+            return HttpResponse(status=400)
+        return HttpResponse(status=200)
+    elif request.method == 'GET':
+        all_atis = list(CurrentAtis.objects.values())
+        return JsonResponse(all_atis, safe=False)
+    else:
+        return HttpResponse('Invalid method.', status=405)
 
 
+@csrf_exempt
 @require_GET
-def get_atis(request, icao):
+def atis_icao(request, icao):
     atis = CurrentAtis.objects.filter(facility=icao.upper()).first()
     if atis:
         return JsonResponse(model_to_dict(atis))
@@ -116,6 +123,7 @@ def get_atis(request, icao):
         return HttpResponse(f'ATIS for facility {icao.upper()} was not found.', status=404)
 
 
+@csrf_exempt
 def tmu(request):
     if request.method == 'POST':
         if request.POST.get('api_key') == os.getenv('IDS_API_KEY'):
@@ -135,6 +143,7 @@ def tmu(request):
         return HttpResponse('Invalid method.', status=405)
 
 
+@csrf_exempt
 @require_POST
 def delete_tmu(request, notice_id):
     if request.POST.get('api_key') == os.getenv('IDS_API_KEY'):

@@ -1120,7 +1120,7 @@ dP     dP  `88888P' dP  dP  dP `88888P' 88Y888P' `88888P8 `8888P88 `88888P'
 */
 .home-wrapper {
     height: 100vh;
-    background: url('../img/christmas-bg.jpg') 50% 50%/cover;
+    background: url('../img/homepage-bg.jpg') 50% 50%/cover;
 }
 .home-title-block {
     height: 100vh;

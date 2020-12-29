@@ -22,7 +22,7 @@ def view_statistics(request):
         year=Sum('duration', filter=Q(start__year=now.year)),
         total=Sum('duration'),
     )
-    main_users = [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC').order_by('first_name')]
+    main_users = [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC').exclude(status=2).order_by('first_name')]
     months = [calendar.month_name[now.month - 2], calendar.month_name[now.month - 1], calendar.month_name[now.month]]
 
     return render(request, 'statistics.html', {
@@ -63,7 +63,7 @@ def return_hour_aggregate(user):
 
 def return_inactive_users():
     inactive_users = []
-    for user_status in [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC')]:
+    for user_status in [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC').exclude(status=2)]:
         if 'current_status' in user_status and not user_status['current_status']:
             inactive_users.append(user_status)
 

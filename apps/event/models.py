@@ -98,7 +98,7 @@ class EventPosition(models.Model):
 
     @property
     def is_cic(self):
-        return self.name.split('_')[1] == 'T'
+        return self.name.split('_')[1] == 'T' or self.name.split('_')[1] == 'GM'
 
     def __str__(self):
         return f'{self.event.name} | {self.name}'

@@ -46,6 +46,11 @@ def to_iso_format(dt):
 
 
 @register.filter
+def timestamp(dt):
+    return dt.timestamp()
+
+
+@register.filter
 def is_cic_eligible(position, user):
     if isinstance(position, EventPosition) and isinstance(user, User):
         return position.is_cic_eligible(user)

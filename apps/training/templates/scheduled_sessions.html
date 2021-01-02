@@ -19,7 +19,7 @@
                     {% for session in sessions %}
                         <tr data-type="href" data-session="{{ session.id }}">
                             <td class="text-center" id="{{ session.id }}">
-                                <span class="d-none">{{ session.start|date:'m/d/Y Hi' }}</span>
+                                <span class="d-none">{{ session.start|timestamp }}</span>
                                 <span id="date"></span><br>
                                 <span class="text-black-50">({{ session.start|date:'M j, Y @ Hi\z' }})</span>
                             </td>

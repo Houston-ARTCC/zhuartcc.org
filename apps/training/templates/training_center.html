@@ -103,7 +103,7 @@
                         <tbody>
                             {% for request in user.training_requests.all %}
                                 <tr>
-                                    <td class="text-center"><span class="d-none">{{ request.start|date:'m/d/Y Hi' }}</span>{{ request.start|date:'M j, Y @ Hi\z' }}<br><i class="far fa-long-arrow-down my-1"></i><br>{{ request.end|date:'M j, Y @ Hi\z' }}</td>
+                                    <td class="text-center"><span class="d-none">{{ request.start|timestamp }}</span>{{ request.start|date:'M j, Y @ Hi\z' }}<br><i class="far fa-long-arrow-down my-1"></i><br>{{ request.end|date:'M j, Y @ Hi\z' }}</td>
                                     <td class="text-center">{{ request.get_level_display }}</td>
                                     <td class="text-center">{{ request.get_type_display }}</td>
                                     <td class="text-center text-danger"><a data-action="cancel" data-id="{{ request.id }}"><i class="far fa-lg fa-times"></i></a></td>
@@ -142,7 +142,7 @@
                             {% for session in user.student_sessions.all %}
                                 <tr data-type="href" data-session="{{ session.id }}">
                                     <td class="text-center" id="{{ session.id }}">
-                                        <span class="d-none">{{ session.start|date:'m/d/Y Hi' }}</span>
+                                        <span class="d-none">{{ session.start|timestamp }}</span>
                                         <span id="date"></span><br>
                                         <span class="text-black-50">({{ session.start|date:'M j, Y @ Hi\z' }})</span>
                                     </td>

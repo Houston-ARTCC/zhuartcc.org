@@ -23,7 +23,11 @@ def view_statistics(request):
         total=Sum('duration'),
     )
     main_users = [return_hour_aggregate(user) for user in User.objects.exclude(main_role='MC').exclude(status=2).order_by('first_name')]
-    months = [calendar.month_name[now.month - 2], calendar.month_name[now.month - 1], calendar.month_name[now.month]]
+    months = [
+        calendar.month_name[now.month - 2 if now.month > 2 else 12 if now.month > 1 else 11],
+        calendar.month_name[now.month - 1 if now.month > 1 else 12],
+        calendar.month_name[now.month]
+    ]
 
     return render(request, 'statistics.html', {
         'page_title': 'Statistics',

@@ -70,7 +70,7 @@ def view_announcement(request):
 @require_staff
 def view_broadcast(request):
     if request.method == 'POST':
-        recipients = User.objects.filter(rating__in=request.POST)
+        recipients = User.objects.exclude(status=2).filter(rating__in=request.POST)
 
         if request.POST.get('main_role') != 'AC':
             recipients = recipients.filter(main_role=request.POST.get('main_role'))

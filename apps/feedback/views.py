@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from zhuartcc.decorators import require_staff, require_session
+from zhuartcc.decorators import require_staff
 from zhuartcc.overrides import send_mail
 from .models import Feedback
 from ..administration.models import ActionLog
@@ -16,16 +16,8 @@ from ..event.models import Event
 from ..user.models import User
 
 
-def view_all_feedback(request):
-    return render(request, 'all_feedback.html', {
-        'page_title': 'Feedback',
-        'all_feedback': Feedback.objects.filter(approved=True),
-    })
-
-
-@require_session
 def add_feedback(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.session.get('vatsim_data'):
         feedback = Feedback(
             controller=User.objects.get(cid=request.POST.get('controller')),
             controller_callsign=request.POST.get('controller_callsign'),
@@ -47,12 +39,17 @@ def add_feedback(request):
 
         return redirect(reverse('feedback'))
     else:
-        return render(request, 'add_feedback.html', {
-            'page_title': 'Submit Feedback',
-            'controllers': User.objects.exclude(status=2).order_by('first_name'),
-            'events': Event.objects.filter(start__gte=timezone.now() - timedelta(days=30))
-                      .filter(start__lte=timezone.now()).filter(hidden=False),
-        })
+        if request.session.get('vatsim_data'):
+            return render(request, 'add_feedback.html', {
+                'page_title': 'Submit Feedback',
+                'controllers': User.objects.exclude(status=2).order_by('first_name'),
+                'events': Event.objects.filter(start__gte=timezone.now() - timedelta(days=30))
+                          .filter(start__lte=timezone.now()).filter(hidden=False),
+            })
+        else:
+            res = redirect('login')
+            res.set_cookie('redirect-from', '/feedback/')
+            return res
 
 
 @require_staff

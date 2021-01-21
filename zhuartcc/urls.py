@@ -55,8 +55,7 @@ urlpatterns = [
     path('events/presets/delete/<int:preset_id>/', event.delete_preset, name='delete_preset'),
 
     # Feedback
-    path('feedback/', feedback.view_all_feedback, name='feedback'),
-    path('feedback/new/', feedback.add_feedback, name='new_feedback'),
+    path('feedback/', feedback.add_feedback, name='feedback'),
     path('feedback/approval/', feedback.view_feedback_approval, name='feedback_approval'),
     path('feedback/<int:feedback_id>/approve/', feedback.approve_feedback, name='accept_feedback'),
     path('feedback/<int:feedback_id>/reject/', feedback.reject_feedback, name='reject_feedback'),

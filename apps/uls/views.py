@@ -57,6 +57,11 @@ def login(request):
         else:
             return redirect('https://login.vatusa.net/uls/v2/login?fac=ZHU&url=1')
 
+    redirect_from = request.COOKIES.get('redirect-from')
+    if redirect_from:
+        res = redirect(redirect_from)
+        res.delete_cookie('redirect-from')
+        return res
     return redirect(reverse('home'))
 
 

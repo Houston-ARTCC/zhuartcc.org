@@ -77,6 +77,27 @@
 <div class="nav d-block d-lg-none">
     <div class="mobile-nav-content">
         <ul class="mobile-nav-list">
+            <li class="mobile-nav-list-item"><a href="/events">Events</a></li>
+            <li class="mobile-nav-list-item"><a href="/roster">Roster</a></li>
+            <li class="mobile-nav-list-item"><a href="/events">Events</a></li>
+            {% if request.session.vatsim_data %}
+                <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
+                <div class="dropdown-menu mt-3">
+                    {% if request.user_obj %}
+                        <a class="dropdown-item" href="{% url 'view_user' cid=request.user_obj.cid %}">My Profile</a>
+                        <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
+                        {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
+                            <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
+                    {% endif %}
+                    <div class="dropdown-divider"></div>
+                <li class="mobile-nav-list-item"><a href="{% url 'logout' %}">Log Out</a></li>
+                </div>
+            {% else %}
+                <li class="mobile-nav-list-item"><a href="{% url 'login' %}">Log In</a></li>
+            {% endif %}
         </ul>
     </div>
 </div>

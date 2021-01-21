@@ -44,6 +44,21 @@
     <div class="row">
         <div class="col-12 col-lg-6 col-xl-4">
             <div class="card">
+                <div class="card-header">
+                    Biography
+                    {% if user == request.user_obj %}
+                        <a class="float-right" onclick="editBio()">
+                            <i class="fas fa-pencil-ruler"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {{ user.biography|default:'No biography set' }}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 col-xl-4">
+            <div class="card">
                 <div class="card-header">User Details</div>
                 <div class="card-body px-5 d-block d-lg-flex justify-content-between">
                     <div class="text-center">
@@ -58,21 +73,6 @@
                         <h2 style="font-size: 25px">Rating</h2>
                         <h1 style="font-size: 35px">{{ user.rating }}</h1>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-6 col-xl-4">
-            <div class="card">
-                <div class="card-header">
-                    Biography
-                    {% if user == request.user_obj %}
-                        <a class="float-right" onclick="editBio()">
-                            <i class="fas fa-pencil-ruler"></i>
-                        </a>
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    {{ user.biography|default:'No biography set' }}
                 </div>
             </div>
         </div>
@@ -187,6 +187,39 @@
                 </div>
             </div>
         </div>
+        {% if user_feedback %}
+            <div class="col-12 col-xl-6 mx-auto">
+                <div class="card">
+                    <div class="card-header">Controller Feedback</div>
+                    <div class="card-body text-center pt-1">
+                        <table class="table table-striped" id="feedback">
+                            <thead>
+                                <tr>
+                                    <th class="border-0 text-center">Date / Time</th>
+                                    <th class="border-0 text-center">Callsign</th>
+                                    <th class="border-0 text-center">Rating</th>
+                                    <th class="border-0 text-center">Info</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for feedback in user_feedback %}
+                                    <tr>
+                                        <td class="text-center"><span class="d-none">{{ feedback.submitted|timestamp }}</span>{{ feedback.submitted|date:'M j, Y @ Hi\z' }}</td>
+                                        <td class="text-center">{{ feedback.controller_callsign }}</td>
+                                        <td class="text-center text-warning">{% for i in feedback.rating|as_range %}<i class="fas fa-star mr-1"></i>{% endfor %}</td>
+                                        <td class="text-center"><a data-action="info" data-comments="{{ feedback.comments }}" data-callsign="{{ feedback.flight_callsign|default:'' }}" data-event="{{ feedback.event.name }}"><i class="far fa-lg fa-eye text-dark"></i></a></td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center"><i>No feedback found...</i></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -199,6 +232,18 @@
                 pageLength: 5,
                 lengthChange: false,
                 order: [[ 0, "desc" ]]
+            })
+            $('#feedback').DataTable({
+                pageLength: 20,
+                lengthChange: false,
+                order: [[ 0, 'desc' ]],
+                'columns': [
+                    null,
+                    null,
+                    null,
+                    null,
+                    { 'orderable': false },
+                ]
             })
         })
         {% if request.user_obj.is_staff %}
@@ -279,5 +324,18 @@
                 })
             }
         {% endif %}
+        $('[data-action="info"]').click(function() {
+            let callsign = $(this).data('callsign')
+            let event = $(this).data('event')
+            let comments = $(this).data('comments')
+            launchCustomModal(
+                'info',
+                'Info',
+                (callsign ? '<h5>Pilot Callsign</h5><p>' : '') + callsign + (callsign ? '</p>' : '') +
+                (event ? '<h5>Event</h5><p>' : '') + event + (event ? '</p>' : '') +
+                '<h5>Comments</h5><p>' + comments + '</p>' +
+                '<div class="mt-3"><button class="btn btn-secondary" data-dismiss="modal">Close</button></div>'
+            )
+        })
     </script>
 {% endblock %}

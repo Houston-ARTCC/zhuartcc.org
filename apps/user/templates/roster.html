@@ -22,7 +22,7 @@
                                     <img class="rounded-circle mb-2" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="60px">
                                     <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
                                     {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
-                                        <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
+                                        <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a>
                                     {% endif %}
                                 </div>
                                 <div class="card-body">

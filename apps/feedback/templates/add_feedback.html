@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<form action="{% url 'new_feedback' %}" method="POST">
+<form action="{% url 'feedback' %}" method="POST">
     {% csrf_token %}
     <div class="row">
         <div class="col-md-12 col-xl-5 d-flex align-content-stretch">

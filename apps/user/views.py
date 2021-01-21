@@ -19,6 +19,7 @@ from .models import User
 from ..administration.models import ActionLog
 from ..api.models import ControllerSession
 from ..api.views import return_inactive_users
+from ..feedback.models import Feedback
 
 
 # Gets all staff members from local database and serves 'staff.html' file
@@ -92,12 +93,17 @@ def view_profile(request, cid):
         total=Sum('duration'),
     )
 
-    return render(request, 'profile.html', {
+    context = {
         'page_title': user.full_name,
         'user': user,
         'stats': stats,
         'connections': connections,
-    })
+    }
+
+    if request.user_obj and (request.user_obj.is_staff or request.user_obj.is_mentor or request.user_obj == user):
+        context['user_feedback'] = Feedback.objects.filter(controller=user).filter(approved=True)
+
+    return render(request, 'profile.html', context)
 
 
 # Gets specified user from local database and serves 'editUser.html' file. Overrides user info with form data on POST

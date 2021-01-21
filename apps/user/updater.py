@@ -64,7 +64,7 @@ def update_roster():
             ActionLog(action=f'User {user.full_name} was set as inactive by system.').save()
 
     # Cycles through visiting controllers separately since they are not on main roster
-    for edit_user in User.objects.filter(main_role='VC'):
+    for edit_user in User.objects.exclude(main_role='HC').exclude(status=2):
         user_details = requests.get(
             f'https://api.vatusa.net/v2/user/{edit_user.cid}',
             params={'apikey': os.getenv('API_KEY')},

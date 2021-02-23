@@ -55,14 +55,14 @@ def modify_session(session, request):
     session.position = request.POST.get('position')
     session.type = request.POST.get('type')
     session.level = request.POST.get('level')
-    session.status = 1
+    session.status = request.POST.get('status')
     session.ots_status = request.POST.get('ots_status')
     session.notes = request.POST.get('notes')
     session.solo_granted = request.POST.get('solo_grated', False)
     session.save()
 
     # Visitors and oceanic sessions don't get training records posted to VATUSA CTRS
-    if session.student.main_role == 'HC' and session.level != 7:
+    if session.student.main_role == 'HC' and session.level != 7 and session.status == 1:
         post_ctrs(session)
 
 

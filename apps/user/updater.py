@@ -22,9 +22,8 @@ def update_roster():
         f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster',
         params={'apikey': os.getenv('API_KEY')},
     ).json()
-    del roster['testing']
 
-    for user in roster:
+    for user in roster.get('data'):
         user_details = roster[user]
         if not User.objects.filter(cid=user_details['cid']).exists():
             new_user = User(
@@ -73,7 +72,7 @@ def update_roster():
         if user_details.get('status') == 'error':
             continue
         
-        edit_user.rating = user_details['rating_short']
+        edit_user.rating = user_details.get('data').get('rating_short')
         edit_user.save()
 
 

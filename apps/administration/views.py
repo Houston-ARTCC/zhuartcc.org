@@ -42,7 +42,7 @@ def view_transfers(request):
     transfers = requests.get(
         f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/transfers',
         params={'apikey': os.getenv('API_KEY')},
-    ).json()
+    ).json().get('data')
 
     return render(request, 'transfers.html', {
         'page_title': 'Transfer Requests',

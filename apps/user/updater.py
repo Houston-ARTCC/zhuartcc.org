@@ -54,7 +54,7 @@ def update_roster():
             edit_user.save()
 
     # Removes people if they are no longer on the VATUSA roster
-    cids = [roster[user]['cid'] for user in roster]
+    cids = [user['cid'] for user in roster.get('data')]
     for user in User.objects.filter(main_role='HC').exclude(status=2):
         if user.cid not in cids:
             user.status = 2

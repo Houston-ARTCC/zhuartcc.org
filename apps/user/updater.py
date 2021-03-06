@@ -24,29 +24,28 @@ def update_roster():
     ).json()
 
     for user in roster.get('data'):
-        user_details = roster[user]
-        if not User.objects.filter(cid=user_details['cid']).exists():
+        if not User.objects.filter(cid=user['cid']).exists():
             new_user = User(
-                first_name=user_details['fname'].capitalize(),
-                last_name=user_details['lname'].capitalize(),
-                cid=int(user_details['cid']),
-                email=user_details['email'],
-                oper_init=assign_oper_init(user_details['fname'][0], user_details['lname'][0]),
-                rating=user_details['rating_short'],
+                first_name=user['fname'].capitalize(),
+                last_name=user['lname'].capitalize(),
+                cid=int(user['cid']),
+                email=user['email'],
+                oper_init=assign_oper_init(user['fname'][0], user['lname'][0]),
+                rating=user['rating_short'],
                 main_role='HC',
             )
             new_user.save()
             new_user.assign_initial_cert()
             ActionLog(action=f'User {new_user.full_name} was created by system.').save()
         else:
-            edit_user = User.objects.get(cid=user_details['cid'])
-            edit_user.rating = user_details['rating_short']
+            edit_user = User.objects.get(cid=user['cid'])
+            edit_user.rating = user['rating_short']
 
             # If user is rejoining the ARTCC after being marked inactive
             if edit_user.status == 2:
                 edit_user.status = 0
-                edit_user.email = user_details['email']
-                edit_user.oper_init = assign_oper_init(user_details['fname'][0], user_details['lname'][0], edit_user)
+                edit_user.email = user['email']
+                edit_user.oper_init = assign_oper_init(user['fname'][0], user['lname'][0], edit_user)
                 edit_user.main_role = 'HC'
                 edit_user.save()
                 edit_user.assign_initial_cert()

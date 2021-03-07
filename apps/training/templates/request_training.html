@@ -95,6 +95,11 @@
                         id: '2',
                         name: 'Training',
                         color: '#ffffff',
+                    },
+                    {
+                        id: '3',
+                        name: 'Training Requests',
+                        color: '#ffffff',
                     }
                 ]
             })
@@ -196,6 +201,20 @@
                         borderColor: '#c6720b',
                         start: '{{ session.start|to_iso_format }}+00:00',
                         end: '{{ session.end|to_iso_format }}+00:00',
+                    },
+                {% endfor %}
+                {% for training_request in training_requests %}
+                    {
+                        id: '{{ training_request.id }}',
+                        calendarId: '3',
+                        title: 'Training Request (Pending)',
+                        category: 'time',
+                        isReadOnly: true,
+                        isPending: true,
+                        bgColor: '#949494',
+                        borderColor: '#858585',
+                        start: '{{ training_request.start|to_iso_format }}+00:00',
+                        end: '{{ training_request.end|to_iso_format }}+00:00',
                     },
                 {% endfor %}
             ])

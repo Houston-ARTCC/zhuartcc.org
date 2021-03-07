@@ -188,6 +188,7 @@ def request_training(request):
             'page_title': 'Request Training',
             'events': Event.objects.all().filter(hidden=False),
             'sessions': TrainingSession.objects.all(),
+            'training_requests': request.user_obj.training_requests.all(),
             'types': TrainingRequest._meta.get_field('type').choices,
             'levels': TrainingRequest._meta.get_field('level').choices,
         })

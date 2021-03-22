@@ -1,6 +1,6 @@
 APScheduler==3.6.3
 asgiref==3.3.1
-certifi==2020.11.8
+certifi==2020.12.5
 chardet==4.0.0
 discord-webhook==0.11.0
 Django==3.1.6

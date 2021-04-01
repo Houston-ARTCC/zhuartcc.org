@@ -2,30 +2,45 @@
 {% load filters %}
 
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="es">
     <head>
         <title>Welcome to Houston ARTCC!</title>
         {% include 'partials/head.html' %}
     </head>
     <body>
         <div class="home-wrapper">
-            {% include 'partials/navbar.html' with dark=False %}
+            {% include 'partials/navbar.html' with dark=True %}
 
 
             <!-- START Page Content -->
             <div class="home-title-block">
-                <h1 class="home-title">Welcome to<br>Houston</h1>
-                <h2 class="home-subtitle">From longhorns to space ships, we've got it all!</h2>
-                <p class="scroll-arrow"><i class="far fa-sm fa-arrow-left"></i>&nbsp; Scroll</p>
+                <h1 class="home-title">Bienvenido a<br>Houston</h1>
+                <h2 class="home-subtitle">Desde cuernos largos hasta naves espaciales, ¡lo tenemos todo!</h2>
+                <p class="scroll-arrow"><i class="far fa-sm fa-arrow-left"></i>&nbsp;<b>Desplazas</b></p>
             </div>
             <div class="page-container">
+                <div class="alert alert-danger" role="alert">
+                    <h3 class="mt-1">Important Announcement</h3>
+                    <p>As of today, April 1<sup>st</sup> 2021, VATSIM Mexico (VATMEX) will be taking over full and complete ownership of Houston ARTCC. All operations and assets belonging to Houston ARTCC will be transferred to VATSIM Mexico effective immediately and all controllers will be automatically switched over to the VATMEX division. Mandatory Spanish proficiency exams will be assigned within the next week, more information will follow soon.</p>
+                    <blockquote class="blockquote">
+                        <p class="mb-0"><i>"Since we didn’t get into Cross the pond, it is only fitting that we join a region that accepts us as a valued member of their community."</i></p>
+                        <footer class="blockquote-footer p-0">Marcus Miller, ex Houston Air Traffic Manager</footer>
+                    </blockquote>
+                    <hr class="my-4">
+                    <h3 class="mt-1">Anuncio Importante</h3>
+                    <p>A partir de hoy, 1 de abril de 2021, VATSIM México (VATMEX) asumirá la propiedad total y completa de Houston ARTCC. Todas las operaciones y activos pertenecientes a Houston ARTCC serán transferidos a VATSIM México con vigencia inmediata y todos los controladores serán automáticamente transferidos a la división VATMEX. Los exámenes obligatorios de dominio del español se asignarán dentro de la próxima semana; pronto habrá más información.</p>
+                    <blockquote class="blockquote">
+                        <p class="mb-0"><i>"Como no llegamos a Cross the Pond, es lógico que nos unamos a una región que nos acepta como un miembro valioso de su comunidad."</i></p>
+                        <footer class="blockquote-footer p-0">Marcus Miller, ex Gerente de Tráfico Aéreo de Houston</footer>
+                    </blockquote>
+                </div>
                 <div class="row">
                     <div class="col-12 col-lg-8 mt-4 mt-md-2">
                         <div class="row">
                             <div class="col-12 col-md-4">
                                 <div class="card text-center">
                                     <div class="card-body bg-gold">
-                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy-alt"></i> First Place</h2>
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy-alt"></i> Primer Lugar</h2>
                                         <div class="card-footer">
                                             <h3>{{ top_controllers.0.user.full_name }}</h3>
                                             <h5 class="mb-0">{{ top_controllers.0.hours|duration }}</h5>
@@ -36,7 +51,7 @@
                             <div class="col-12 col-md-4">
                                 <div class="card text-center">
                                     <div class="card-body bg-silver">
-                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Second Place</h2>
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Segundo Lugar</h2>
                                         <div class="card-footer">
                                             <h3>{{ top_controllers.1.user.full_name }}</h3>
                                             <h5 class="mb-0">{{ top_controllers.1.hours|duration }}</h5>
@@ -47,7 +62,7 @@
                             <div class="col-12 col-md-4">
                                 <div class="card text-center">
                                     <div class="card-body bg-bronze">
-                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Third Place</h2>
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Tercer Lugar</h2>
                                         <div class="card-footer">
                                             <h3>{{ top_controllers.2.user.full_name }}</h3>
                                             <h5 class="mb-0">{{ top_controllers.2.hours|duration }}</h5>
@@ -57,7 +72,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header"><i class="far fa-newspaper"></i> Recent Announcements</div>
+                            <div class="card-header"><i class="far fa-newspaper"></i> Anuncio Reciente</div>
                             <div class="card-body">
                                 <ul class="list-unstyled mb-0">
                                     {% for announcement in announcements %}
@@ -73,12 +88,12 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header"><i class="far fa-calendar"></i> Events</div>
+                            <div class="card-header"><i class="far fa-calendar"></i> Eventos</div>
                             <div class="card-body">
                                 {% for event in events %}
                                     <a href="{% url 'event' event_id=event.id %}"><img src="{% if event.banner %}{{ event.banner }}{% else %}{% static 'img/banner-placeholder.png' %}{% endif %}" width="100%"></a>
                                 {% empty %}
-                                    No events were found...
+                                    No hay eventos...
                                 {% endfor %}
                             </div>
                         </div>
@@ -95,14 +110,14 @@
                             </div>
                         </a>
                         <div class="card">
-                            <div class="card-header"><i class="far fa-user"></i> Online Controllers</div>
+                            <div class="card-header"><i class="far fa-user"></i> Controladores en Línea</div>
                             <div class="card-body">
                                 <table class="table text-center">
                                     <thead>
                                         <tr>
-                                            <th>Callsign</th>
-                                            <th>Controller</th>
-                                            <th>Duration</th>
+                                            <th>Indicativo</th>
+                                            <th>Controlador</th>
+                                            <th>Duración</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -114,7 +129,7 @@
                                             </tr>
                                         {% empty %}
                                             <tr>
-                                                <td class="py-2" colspan="3">No controllers online.</td>
+                                                <td class="py-2" colspan="3">Sin controladores en línea.</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -122,7 +137,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header"><i class="far fa-plane"></i> Pilots within Houston</div>
+                            <div class="card-header"><i class="far fa-plane"></i> Pilotos Dentro de Houston</div>
                             <div class="card-body">
                                 <div class="text-center" id="pilots-loader">
                                     <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
@@ -130,9 +145,9 @@
                                 <table class="table text-center" id="pilots">
                                     <thead>
                                         <tr>
-                                            <th>Callsign</th>
-                                            <th>Departure</th>
-                                            <th>Arrival</th>
+                                            <th>Indicativo</th>
+                                            <th>Salida</th>
+                                            <th>Llegada</th>
                                         </tr>
                                     </thead>
                                     <tbody id="flights">
@@ -141,7 +156,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header"><i class="far fa-cloud-sun"></i> Weather</div>
+                            <div class="card-header"><i class="far fa-cloud-sun"></i> Tiempo</div>
                             <div class="card-body">
                                 <div class="text-center" id="weather-loader">
                                     <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
@@ -149,8 +164,8 @@
                                 <table class="table text-center" id="weather">
                                     <thead>
                                         <tr>
-                                            <th>Station</th>
-                                            <th>Condition</th>
+                                            <th>Estación</th>
+                                            <th>Condición</th>
                                         </tr>
                                     </thead>
                                     <tbody id="metars">

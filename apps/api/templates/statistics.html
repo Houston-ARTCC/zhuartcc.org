@@ -6,7 +6,7 @@
         <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <h2 style="font-size: 25px">{% now 'F' %} Hours</h2>
+                    <h2 style="font-size: 25px">{% now 'F' %} Horas</h2>
                     <h1 style="font-size: 50px" class="text-primary">{{ main_stats.month|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
                 </div>
             </div>
@@ -14,7 +14,7 @@
         <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <h2 style="font-size: 25px">{% now 'Y' %} Hours</h2>
+                    <h2 style="font-size: 25px">{% now 'Y' %} Horas</h2>
                     <h1 style="font-size: 50px" class="text-primary">{{ main_stats.year|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
                 </div>
             </div>
@@ -22,7 +22,7 @@
         <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <h2 style="font-size: 25px">Total Hours</h2>
+                    <h2 style="font-size: 25px">Horas Totales</h2>
                     <h1 style="font-size: 50px" class="text-primary">{{ main_stats.total|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
                 </div>
             </div>
@@ -32,14 +32,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body p-5">
-                    <h3>Activity Requirements</h3>
+                    <h3>Requisitos de Actividad</h3>
                     <ul>
-                        <li>Any person holding a staff position shall complete at least 5 hours of controlling or instruction time each calendar month.</li>
-                        <li>Any controller with at least one endorsement within the ARTCC shall complete at least 2 hours of controlling time each calendar month.</li>
-                        <li>Any controller who does not hold a S2 or greater, or an S1 without any endorsements to control within the ARTCC shall complete at least 1 hour of training time each calendar month.</li>
-                        <li>Any controller from an ARTCC participating in the Mutual Automatic Visiting Privileges (MAVP) agreement is exempt from the non-MAVP activity requirement.</li>
+                        <li>Cualquier persona que ocupe un puesto de personal deberá completar al menos 5 horas de control o tiempo de instrucción cada mes calendario.</li>
+                        <li>Cualquier controlador con al menos un endoso dentro de ARTCC deberá completar al menos 2 horas de tiempo de control cada mes calendario.</li>
+                        <li>Cualquier controlador que no tenga un S2 o más, o un S1 sin ningún endoso para controlar dentro del ARTCC deberá completar al menos 1 hora de tiempo de capacitación cada mes calendario.</li>
+                        <li>Cualquier controlador de un ARTCC que participe en el acuerdo de Privilegios de Visita Automática Mutua (MAVP) está exento del requisito de actividad no MAVP.</li>
                     </ul>
-                    <p><b>Note:</b> An exempt status does not exempt you from monthly activity requirements, rather it prevents you from being automatically put up for removal from the roster.</p>
+                    <p><b>Nota:</b> Un estado de exención no lo exime de los requisitos de actividad mensual, sino que evita que se lo ponga automáticamente para ser eliminado de la lista.</p>
                     <table class="table table-striped">
                         <colgroup>
                             <col style="width: 15%">
@@ -55,19 +55,19 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="border-0">Name</th>
+                                <th class="border-0">Nombre</th>
                                 <th class="border-0 text-center">CID</th>
                                 <th class="border-0 text-center">Rating</th>
                                 {% for month in months %}
-                                    <th class="border-0 text-center" colspan="2">{{ month }} Hours</th>
+                                    <th class="border-0 text-center" colspan="2">{{ month }} Horas</th>
                                 {% endfor %}
-                                <th class="border-0 text-center">Exempt</th>
+                                <th class="border-0 text-center">Exento</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for user in main_users %}
                                 <tr>
-                                    <td>{{ user.user_obj.full_name }} {% if user.user_obj.main_role == 'VC' %}<span class="badge badge-sm badge-info">Visitor from {{ user.user_obj.home_facility }}</span>{% endif %}</td>
+                                    <td>{{ user.user_obj.full_name }} {% if user.user_obj.main_role == 'VC' %}<span class="badge badge-sm badge-info">Visitante de {{ user.user_obj.home_facility }}</span>{% endif %}</td>
                                     <td class="text-center">{{ user.user_obj.cid }}</td>
                                     <td class="text-center">{{ user.user_obj.rating }}</td>
                                     <td class="text-right pr-0 border-left" style="width: 2%">
@@ -84,9 +84,9 @@
                                     <td>{{ user.hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
                                     <td class="border-left">
                                         {% if user.user_obj.is_staff %}
-                                            <i class="far fa-lg fa-check text-success"></i>&nbsp; Staff
+                                            <i class="far fa-lg fa-check text-success"></i>&nbsp; Personal
                                         {% elif user.user_obj.activity_exempt %}
-                                            <i class="far fa-lg fa-check text-success"></i>&nbsp; Exempt
+                                            <i class="far fa-lg fa-check text-success"></i>&nbsp; Exento
                                         {% elif user.user_obj.status == 1 or user.user_obj.loa_last_month %}
                                             <i class="far fa-lg fa-check text-success"></i>&nbsp; LOA
                                         {% endif %}

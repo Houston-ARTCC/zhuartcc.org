@@ -24,7 +24,7 @@ from ..user.models import User
 def view_training_center(request):
     sessions = request.user_obj.student_sessions.all()
     return render(request, 'training_center.html', {
-        'page_title': 'Training Center',
+        'page_title': 'Centro de Entrenamiento',
         'user': request.user_obj,
         'training_time': sum([session.duration for session in sessions.filter(status=1)], timedelta()),
         'sessions_json': json.dumps({session.id: session.start.isoformat() for session in sessions}),

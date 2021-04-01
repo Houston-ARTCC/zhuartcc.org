@@ -41,7 +41,7 @@ def view_all_events(request):
         for event in events
     })
     return render(request, 'events.html', {
-        'page_title': 'Events',
+        'page_title': 'Eventos',
         'events': events,
         'events_json': json_events,
     })
@@ -57,7 +57,7 @@ def view_archived_events(request):
         for event in events
     })
     return render(request, 'archived_events.html', {
-        'page_title': 'Archived Events',
+        'page_title': 'Eventos Archivados',
         'events': events,
         'events_json': json_events,
     })
@@ -241,22 +241,7 @@ def unrequest_position(request, request_id):
 def assign_position(request, request_id):
     position_request = get_object_or_404(EventPositionRequest, id=request_id)
     if position_request.position.user != position_request.user:
-        if position_request.position.user is not None:
-            send_mail(
-                'Event Position Unassigned',
-                render_to_string('emails/position_unassigned.html', {'position': position_request.position}),
-                os.getenv('NO_REPLY'),
-                [position_request.position.user.email],
-            )
         position_request.assign()
-
-        send_mail(
-            'Event Position Assigned!',
-            render_to_string('emails/position_assigned.html', {'position': position_request.position}),
-            os.getenv('NO_REPLY'),
-            [position_request.user.email],
-        )
-
         position_request.user.event_requests.filter(position__event=position_request.position.event).delete()
 
         return HttpResponse(status=200)
@@ -328,6 +313,14 @@ def embed_positions(request, event_id):
             name=position.name,
             value=position.user.full_name if position.user is not None else 'Unassigned',
         )
+        if position.user is not None:
+            send_mail(
+                'Event Position Assigned!',
+                render_to_string('emails/position_assigned.html', {'position': position}),
+                os.getenv('NO_REPLY'),
+                [position.user.email],
+            )
+
     embed.set_image(url=request.build_absolute_uri(event.banner))
     webhook.add_embed(embed)
     webhook.execute()

@@ -9,18 +9,18 @@
             {% if user == request.user_obj %}
                 <input type="file" class="upload-avatar">
                 <input type="hidden">
-                <div class="change-avatar"><h5 class="pt-2">Change Avatar</h5></div>
+                <div class="change-avatar"><h5 class="pt-2">Cambiar Avatar</h5></div>
             {% endif %}
         </div>
         <div class="ml-lg-4">
             <h1 style="font-size: 65px">{{ user.full_name }}</h1>
             <h2 style="font-size: 40px">
                 {% if user.main_role == 'HC' %}
-                    Home Controller
+                    Controlador Doméstico
                 {% elif user.main_role == 'MC' %}
-                    MVAP Controller from {{ user.home_facility }}
+                    Controlador MVAP de {{ user.home_facility }}
                 {% else %}
-                    Visiting Controller from {{ user.home_facility }}
+                    Controlador Visitante de {{ user.home_facility }}
                 {% endif %}
             </h2>
         </div>
@@ -31,21 +31,21 @@
     {% if request.user_obj.is_staff %}
         {% if user.staff_comment %}
             <div class="alert alert-primary">
-                <a href="#" class="alert-link" data-action="remove-comment"><div class="float-right">Remove <i class="far fa-times"></i></div></a>
-                <h4 class="alert-heading">Staff Comment</h4>
+                <a href="#" class="alert-link" data-action="remove-comment"><div class="float-right">Eliminar <i class="far fa-times"></i></div></a>
+                <h4 class="alert-heading">Comentario del Personal</h4>
                 <p class="mb-0">{{ user.staff_comment }}</p>
                 <div class="blockquote-footer">{{ user.staff_comment_author.full_name }}</div>
             </div>
         {% endif %}
         <div class="text-center text-lg-left mb-4">
-            <a href="{% url 'edit_user' cid=user.cid %}"><button class="btn btn-secondary">Edit User</button></a><button class="btn btn-secondary" onclick="addComment()">Add Staff Comment</button>
+            <a href="{% url 'edit_user' cid=user.cid %}"><button class="btn btn-secondary">Editar Usuario</button></a><button class="btn btn-secondary" onclick="addComment()">Add Staff Comment</button>
         </div>
     {% endif %}
     <div class="row">
         <div class="col-12 col-lg-6 col-xl-4">
             <div class="card">
                 <div class="card-header">
-                    Biography
+                    Biografía
                     {% if user == request.user_obj %}
                         <a class="float-right" onclick="editBio()">
                             <i class="fas fa-pencil-ruler"></i>
@@ -59,14 +59,14 @@
         </div>
         <div class="col-12 col-lg-6 col-xl-4">
             <div class="card">
-                <div class="card-header">User Details</div>
+                <div class="card-header">Detalles de Usuario</div>
                 <div class="card-body px-5 d-block d-lg-flex justify-content-between">
                     <div class="text-center">
                         <h2 style="font-size: 25px">CID</h2>
                         <h1 style="font-size: 35px">{{ user.cid }}</h1>
                     </div>
                     <div class="text-center">
-                        <h2 style="font-size: 25px">Initials</h2>
+                        <h2 style="font-size: 25px">Iniciales</h2>
                         <h1 style="font-size: 35px">{{ user.oper_init }}</h1>
                     </div>
                     <div class="text-center">
@@ -78,7 +78,7 @@
         </div>
         <div class="col-12 col-xl-4">
             <div class="card">
-                <div class="card-header">Endorsements</div>
+                <div class="card-header">Endosos</div>
                 <div class="card-body">
                     <table class="table">
                         <tr>
@@ -141,18 +141,18 @@
     <div class="row">
         <div class="col-12 col-xl-6">
             <div class="card">
-                <div class="card-header">Statistics</div>
+                <div class="card-header">Estadísticas</div>
                 <div class="card-body px-5 d-block d-lg-flex justify-content-between">
                     <div class="text-center">
-                        <h2 style="font-size: 25px">{% now 'F' %} Hours</h2>
+                        <h2 style="font-size: 25px">{% now 'F' %} Horas</h2>
                         <h1 style="font-size: 35px">{{ stats.month|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
                     </div>
                     <div class="text-center">
-                        <h2 style="font-size: 25px">{% now 'Y' %} Hours</h2>
+                        <h2 style="font-size: 25px">{% now 'Y' %} Horas</h2>
                         <h1 style="font-size: 35px">{{ stats.year|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
                     </div>
                     <div class="text-center">
-                        <h2 style="font-size: 25px">Total Hours</h2>
+                        <h2 style="font-size: 25px">Horas Totales</h2>
                         <h1 style="font-size: 35px">{{ stats.total|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
                     </div>
                 </div>
@@ -160,14 +160,14 @@
         </div>
         <div class="col-12 col-xl-6">
             <div class="card">
-                <div class="card-header">Controller Connections</div>
+                <div class="card-header">Conexiones del Controlador</div>
                 <div class="card-body text-center pt-1">
                     <table class="table table-striped" id="connections">
                         <thead>
                             <tr>
-                                <th class="border-0" style="width: 33.3%">Date / Time</th>
-                                <th class="border-0" style="width: 33.3%">Callsign</th>
-                                <th class="border-0" style="width: 33.3%">Duration</th>
+                                <th class="border-0" style="width: 33.3%">Fecha / hora</th>
+                                <th class="border-0" style="width: 33.3%">Indicativo</th>
+                                <th class="border-0" style="width: 33.3%">Duración</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -179,7 +179,7 @@
                                 </tr>
                             {% empty %}
                                 <tr>
-                                    <td colspan="3"><i>No connections found...</i></td>
+                                    <td colspan="3"><i>No se encontraron conexiones...</i></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -190,15 +190,15 @@
         {% if user_feedback %}
             <div class="col-12 col-xl-6 mx-auto">
                 <div class="card">
-                    <div class="card-header">Controller Feedback</div>
+                    <div class="card-header">Comentarios del Controlador</div>
                     <div class="card-body text-center pt-1">
                         <table class="table table-striped" id="feedback">
                             <thead>
                                 <tr>
-                                    <th class="border-0 text-center">Date / Time</th>
-                                    <th class="border-0 text-center">Callsign</th>
-                                    <th class="border-0 text-center">Rating</th>
-                                    <th class="border-0 text-center">Info</th>
+                                    <th class="border-0 text-center">Fecha / hora</th>
+                                    <th class="border-0 text-center">Indicativo</th>
+                                    <th class="border-0 text-center">Valuación</th>
+                                    <th class="border-0 text-center">Información</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -211,7 +211,7 @@
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="4" class="text-center"><i>No feedback found...</i></td>
+                                        <td colspan="4" class="text-center"><i>No se encontraron comentarios...</i></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

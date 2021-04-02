@@ -4,7 +4,7 @@
 {% block body %}
     {% if request.user_obj.is_staff %}
         <div class="text-center mb-4">
-            <button class="btn btn-lg btn-primary" data-action="add-resource"><i class="far fa-plus"></i> Agregar Recurso</button>
+            <button class="btn btn-lg btn-primary" data-action="add-resource"><i class="far fa-plus"></i> Add Resource</button>
         </div>
     {% endif %}
     <div class="row">
@@ -14,7 +14,7 @@
                     <div class="card-header bg-secondary">
                         <a class="float-right mt-3" data-toggle="collapse" href="#collapse-{{ category.0 }}"><i class="far fa-lg fa-plus"></i></a>
                         <h5 class="mb-0">{{ category.0 }}</h5>
-                        <p class="mb-0">{{ resources|get_value_from_dict:category.0|length }} Recurso{{ resources|get_value_from_dict:category.0|length|pluralize }}</p>
+                        <p class="mb-0">{{ resources|get_value_from_dict:category.0|length }} Resource{{ resources|get_value_from_dict:category.0|length|pluralize }}</p>
                     </div>
                     <div class="collapse" id="collapse-{{ category.0 }}">
                         <div class="card-body">
@@ -23,8 +23,8 @@
                                     {% if request.user_obj.is_staff %}
                                         <th style="width: 7%"></th>
                                     {% endif %}
-                                    <th style="width: 23%">Actualizado</th>
-                                    <th style="width: 70%">Archivo</th>
+                                    <th style="width: 23%">Updated</th>
+                                    <th style="width: 70%">File</th>
                                 </thead>
                                 <tbody>
                                     {% for resource in resources|get_value_from_dict:category.0 %}
@@ -36,7 +36,7 @@
                                             <td><a href="{{ resource.path.url }}" target="_blank" download>{{ resource.name }}</a></td>
                                         </tr>
                                     {% empty %}
-                                        <td class="text-center" colspan="3">¡No se encontraron recursos!</td>
+                                        <td class="text-center" colspan="3">No resources found!</td>
                                     {% endfor %}
                                 </tbody>
                             </table>

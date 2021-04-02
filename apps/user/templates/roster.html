@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block tabs %}
-    <a class="tab active" data-target="#home">Doméstico</a>
-    <a class="tab" data-target="#visiting">Visitando</a>
+    <a class="tab active" data-target="#home">Home</a>
+    <a class="tab" data-target="#visiting">Visiting</a>
     <a class="tab" data-target="#mavp">MAVP</a>
 {% endblock %}
 
@@ -114,7 +114,7 @@
                                 <div class="card-header bg-secondary text-center">
                                     <img class="rounded-circle mb-2" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="60px">
                                     <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
-                                    <p>de {{ user.home_facility }}</p>
+                                    <p>from {{ user.home_facility }}</p>
                                     {% if request.user_obj.is_staff %}
                                         <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
                                     {% endif %}
@@ -208,7 +208,7 @@
                                 <div class="card-header bg-secondary text-center">
                                     <img class="rounded-circle mb-2" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}" height="60px">
                                     <h5><a href="{% url 'view_user' cid=user.cid %}">{{ user.full_name }} ({{ user.oper_init }})</a> {% if user.status == 1 %}<span class="badge bg-primary">LOA</span>{% endif %}</h5>
-                                    <p>de {{ user.home_facility }}</p>
+                                    <p>from {{ user.home_facility }}</p>
                                     {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
                                         <a href="{% url 'edit_user' cid=user.cid %}"><i class="far fa-pencil-ruler"></i></a> &nbsp; &nbsp; <a href=""><i class="far fa-envelope"></i></a>
                                     {% endif %}

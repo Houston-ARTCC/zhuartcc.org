@@ -19,7 +19,7 @@ from ..visit.models import Visit
 @require_staff_or_mentor
 def view_admin_panel(request):
     return render(request, 'admin_panel.html', {
-        'page_title': 'Panel de Administrador',
+        'page_title': 'Admin Panel',
         'controllers': User.objects.all().order_by('first_name'),
         'notifications': {
             'visit': Visit.objects.count(),

@@ -15,7 +15,7 @@ def view_resources(request):
     resources_sorted = {k: list(g) for k, g in groupby(resources, key=lambda resource: resource.category)}
     categories = Resource._meta.get_field('category').choices
     return render(request, 'resources.html', {
-        'page_title': 'Recursos',
+        'page_title': 'Resources',
         'resources': resources_sorted,
         'categories': categories
     })

@@ -39,7 +39,7 @@ def view_staff(request):
         'MTR': User.objects.filter(training_role='MTR'),
     }
 
-    return render(request, 'staff.html', {'page_title': 'Personal', 'staff': staff})
+    return render(request, 'staff.html', {'page_title': 'Staff', 'staff': staff})
 
 
 # Gets all controllers by membership status from local database and serves 'roster.html' file
@@ -50,7 +50,7 @@ def view_roster(request):
     mavp_controllers = active_controllers.filter(main_role='MC').order_by('first_name')
 
     return render(request, 'roster.html', {
-        'page_title': 'Lista',
+        'page_title': 'Roster',
         'home': sort_controllers(home_controllers),
         'visiting': sort_controllers(visiting_controllers),
         'mavp': sort_controllers(mavp_controllers),

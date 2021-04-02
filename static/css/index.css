@@ -1133,7 +1133,8 @@ dP     dP  `88888P' dP  dP  dP `88888P' 88Y888P' `88888P8 `8888P88 `88888P'
     height: 100vh;
 }
 .home-title, .home-subtitle, .scroll-arrow {
-    color: #000000;
+    color: #dbdbdb;
+    mix-blend-mode: screen;
 }
 .home-title, .home-subtitle {
     padding-left: 10%;

@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-6">
             <div class="card">
-                <div class="card-header">Endosos</div>
+                <div class="card-header">Endorsements</div>
                 <div class="card-body">
                     <table class="table">
                         <tr>
@@ -66,14 +66,14 @@
         </div>
         <div class="col-6">
             <div class="card">
-                <div class="card-header">Estadísticas</div>
+                <div class="card-header">Statistics</div>
                 <div class="card-body px-5 d-flex justify-content-around">
                     <div class="text-center">
-                        <h2 style="font-size: 25px">Sesiones</h2>
+                        <h2 style="font-size: 25px">Sessions</h2>
                         <h1 style="font-size: 35px">{{ user.student_sessions.all|length|default:'<span class="text-muted">N/A</span>' }}</h1>
                     </div>
                     <div class="text-center">
-                        <h2 style="font-size: 25px">Tiempo Total</h2>
+                        <h2 style="font-size: 25px">Total Training Time</h2>
                         <h1 style="font-size: 35px">{{ training_time|duration|default:'<span class="text-muted">N/A</span>' }}</h1>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
     <div class="row">
         <div class="col-5">
             <div class="card">
-                <div class="card-header">Solicitudes de Formación</div>
+                <div class="card-header">Training Requests</div>
                 <div class="card-body text-center">
                     <table class="table table-hover">
                         <colgroup>
@@ -94,10 +94,10 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="text-center">Disponibilidad</th>
-                                <th class="text-center">Nivel</th>
-                                <th class="text-center">Tipo</th>
-                                <th class="text-center">Cancelar</th>
+                                <th class="text-center">Availability</th>
+                                <th class="text-center">Level</th>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Cancel</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,17 +109,17 @@
                                     <td class="text-center text-danger"><a data-action="cancel" data-id="{{ request.id }}"><i class="far fa-lg fa-times"></i></a></td>
                                 </tr>
                             {% empty %}
-                                <td class="text-center" colspan="5"><i>No tienes ninguna solicitud de formación pendiente.</i></td>
+                                <td class="text-center" colspan="5"><i>You do not have any pending training requests.</i></td>
                             {% endfor %}
                         </tbody>
                     </table>
-                    <a href="{% url 'request_training' %}"><button class="btn btn-primary" type="submit">Solicitar Formación</button></a>
+                    <a href="{% url 'request_training' %}"><button class="btn btn-primary" type="submit">Request Training</button></a>
                 </div>
             </div>
         </div>
         <div class="col-7">
             <div class="card card-nav-tabs">
-                <div class="card-header card-header-warning">Historial de Sesiones</div>
+                <div class="card-header card-header-warning">Session History</div>
                 <div class="card-body text-center">
                     <table id="sessions" class="table table-hover">
                         <colgroup>
@@ -131,11 +131,11 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="text-center">Fecha / hora</th>
-                                <th class="text-center">Nivel</th>
-                                <th class="text-center">Tipo</th>
+                                <th class="text-center">Date / Time</th>
+                                <th class="text-center">Level</th>
+                                <th class="text-center">Type</th>
                                 <th class="text-center">Instructor</th>
-                                <th class="text-center">Estado</th>
+                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -158,7 +158,7 @@
                                     ">{{ session.get_status_display }}</span></td>
                                 </tr>
                             {% empty %}
-                                <td class="text-center" colspan="5"><i>Aún no ha tenido una sesión, ¿por qué no programar una?</i></td>
+                                <td class="text-center" colspan="5"><i>You have not had a session yet, why not schedule one?</i></td>
                             {% endfor %}
                         </tbody>
                     </table>

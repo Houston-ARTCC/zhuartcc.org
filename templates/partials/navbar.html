@@ -2,48 +2,49 @@
 
 <nav class="navbar navbar-expand-md navbar-shrink {% if dark %}navbar-dark{% endif %} fixed-top">
     <a class="navbar-brand" href="{% url 'home' %}">
-        <img class="navbar-logo-gray" src="{% static 'img/zhulogo.png' %}">
+        <img class="navbar-logo-gray" src="{% if dark %}{% static 'img/zhulogo-dark.png' %}{% else %}{% static 'img/zhulogo-light.png' %}{% endif %}">
         <img class="navbar-logo-color d-none" src="{% static 'img/zhulogo.png' %}">
+        <span class="navbar-brand-text">Houston ARTCC</span>
     </a>
     <ul class="navbar-nav ml-auto d-none d-lg-flex">
         <li class="nav-item ml-5">
-            <a class="nav-link" href="{% url 'calendar' %}">Calendario</a>
+            <a class="nav-link" href="{% url 'calendar' %}">Calendar</a>
         </li>
         <li class="nav-item dropdown ml-5">
-            <a class="nav-link" href="#" data-toggle="dropdown">Eventos</a>
+            <a class="nav-link" href="#" data-toggle="dropdown">Events</a>
             <div class="dropdown-menu mt-3">
-                <a class="dropdown-item" href="{% url 'events' %}">Eventos</a>
-                <a class="dropdown-item" href="{% url 'archived_events' %}">Eventos Archivados</a>
+                <a class="dropdown-item" href="{% url 'events' %}">Events</a>
+                <a class="dropdown-item" href="{% url 'archived_events' %}">Archived Events</a>
                 {% if request.user_obj %}
-                    <a class="dropdown-item" href="{% url 'event_score' %}">Puntuación del Evento</a>
+                    <a class="dropdown-item" href="{% url 'event_score' %}">Event Score</a>
                 {% endif %}
                 {% if request.user_obj.is_staff %}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'new_event' %}">Nuevo Evento</a>
-                    <a class="dropdown-item" href="{% url 'presets' %}">Posición Preestablecida</a>
+                    <a class="dropdown-item" href="{% url 'new_event' %}">New Event</a>
+                    <a class="dropdown-item" href="{% url 'presets' %}">Position Presets</a>
                 {% endif %}
             </div>
         </li>
         <li class="nav-item dropdown ml-5">
-            <a class="nav-link" href="#" data-toggle="dropdown">Pilotos</a>
+            <a class="nav-link" href="#" data-toggle="dropdown">Pilots</a>
             <div class="dropdown-menu mt-3">
-                <a class="dropdown-item" href="{% url 'map' %}">Mapa de ARTCC</a>
-                <a class="dropdown-item" href="https://simcharts.info/" target="_blank">Gráficos</a>
-                <a class="dropdown-item" href="http://www.flightaware.com/statistics/ifr-route/" target="_blank">Enrutamiento</a>
-                <a class="dropdown-item" href="{% url 'scenery' %}">Paisaje</a>
+                <a class="dropdown-item" href="{% url 'map' %}">ARTCC Map</a>
+                <a class="dropdown-item" href="https://simcharts.info/" target="_blank">Charts</a>
+                <a class="dropdown-item" href="http://www.flightaware.com/statistics/ifr-route/" target="_blank">Routing</a>
+                <a class="dropdown-item" href="{% url 'scenery' %}">Scenery</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'feedback' %}">Realimentación</a>
+                <a class="dropdown-item" href="{% url 'feedback' %}">Feedback</a>
             </div>
         </li>
         <li class="nav-item dropdown ml-5">
-            <a class="nav-link" href="#" data-toggle="dropdown">Controladores</a>
+            <a class="nav-link" href="#" data-toggle="dropdown">Controllers</a>
             <div class="dropdown-menu mt-3">
-                <a class="dropdown-item" href="{% url 'roster' %}">Lista</a>
-                <a class="dropdown-item" href="{% url 'staff' %}">Personal</a>
+                <a class="dropdown-item" href="{% url 'roster' %}">Roster</a>
+                <a class="dropdown-item" href="{% url 'staff' %}">Staff</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="https://vzhuids.net">Houston IDS</a>
-                <a class="dropdown-item" href="{% url 'resources' %}">Recursos</a>
-                <a class="dropdown-item" href="{% url 'statistics' %}">Estadísticas</a>
+                <a class="dropdown-item" href="{% url 'resources' %}">Resources</a>
+                <a class="dropdown-item" href="{% url 'statistics' %}">Statistics</a>
             </div>
         </li>
         <li class="nav-item dropdown ml-5">
@@ -51,13 +52,13 @@
                 <a class="nav-link" href="#" data-toggle="dropdown">{{ request.session.vatsim_data.firstname }} {{ request.session.vatsim_data.lastname }}</a>
                 <div class="dropdown-menu mt-3">
                     {% if request.user_obj %}
-                        <a class="dropdown-item" href="{% url 'view_user' cid=request.user_obj.cid %}">Mi Perfil</a>
-                        <a class="dropdown-item" href="{% url 'training' %}">Centro de Entrenamiento</a>
+                        <a class="dropdown-item" href="{% url 'view_user' cid=request.user_obj.cid %}">My Profile</a>
+                        <a class="dropdown-item" href="{% url 'training' %}">Training Center</a>
                         {% if request.user_obj.is_staff or request.user_obj.is_mentor %}
-                            <a class="dropdown-item" href="{% url 'admin' %}">Panel de Administración</a>
+                            <a class="dropdown-item" href="{% url 'admin' %}">Administration Panel</a>
                         {% endif %}
                     {% else %}
-                        <a class="dropdown-item" href="{% url 'visit' %}">Conviértete en Visitante</a>
+                        <a class="dropdown-item" href="{% url 'visit' %}">Become a Visitor</a>
                     {% endif %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>

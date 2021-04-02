@@ -30,7 +30,7 @@ def view_statistics(request):
     ]
 
     return render(request, 'statistics.html', {
-        'page_title': 'Estadísticas',
+        'page_title': 'Statistics',
         'main_stats': main_stats,
         'main_users': main_users,
         'months': months,

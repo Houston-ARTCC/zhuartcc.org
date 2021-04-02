@@ -19,7 +19,7 @@ def view_scenery(request):
     scenery_sorted = {k: list(g) for k, g in groupby(sceneries, key=lambda scenery: scenery.get_simulator_display())}
     simulators = Scenery._meta.get_field('simulator').choices
     return render(request, 'scenery.html', {
-        'page_title': 'Paisaje',
+        'page_title': 'Scenery',
         'sceneries': scenery_sorted,
         'simulators': simulators
     })

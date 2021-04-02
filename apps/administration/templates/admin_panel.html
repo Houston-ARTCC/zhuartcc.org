@@ -10,14 +10,14 @@
             <div class="col-12 col-lg-6 col-xl-4 mx-auto">
                 <div class="card">
                     <div class="card-header bg-secondary">
-                        <h5 class="mb-0">Gestión de Usuarios</h5>
+                        <h5 class="mb-0">User Management</h5>
                     </div>
                     <div class="card-body text-center">
-                        <a data-action="find-user" data-redirect="profile"><button class="btn btn-secondary">Encontrar Usuario</button></a>
-                        <a href="{% url 'roster_tidy' %}"><button class="btn btn-secondary">Lista Ordenada</button></a>
-                        <a href="{% url 'visit_requests' %}"><button class="btn btn-secondary">Solicitudes de Visita</button> {% if notifications.visit %}<div class="notification">{{ notifications.visit }}</div>{% endif %}</a>
-                        <a href="{% url 'transfer_requests' %}"><button class="btn btn-secondary">Solicitudes de Transferencia</button></a>
-                        <a data-action="find-user" data-redirect="event"><button class="btn btn-secondary">Puntuación del Evento</button></a>
+                        <a data-action="find-user" data-redirect="profile"><button class="btn btn-secondary">Find User</button></a>
+                        <a href="{% url 'roster_tidy' %}"><button class="btn btn-secondary">Roster Tidy</button></a>
+                        <a href="{% url 'visit_requests' %}"><button class="btn btn-secondary">Visiting Requests</button> {% if notifications.visit %}<div class="notification">{{ notifications.visit }}</div>{% endif %}</a>
+                        <a href="{% url 'transfer_requests' %}"><button class="btn btn-secondary">Transfer Requests</button></a>
+                        <a data-action="find-user" data-redirect="event"><button class="btn btn-secondary">Event Score</button></a>
                     </div>
                 </div>
             </div>
@@ -25,13 +25,13 @@
         <div class="col-12 col-lg-6 col-xl-4 mx-auto">
             <div class="card">
                 <div class="card-header bg-secondary">
-                    <h5 class="mb-0">Gestión de Formación</h5>
+                    <h5 class="mb-0">Training Management</h5>
                 </div>
                 <div class="card-body text-center">
-                    <a href="{% url 'training_requests' %}"><button class="btn btn-secondary">Solicitudes de Formación</button> {% if notifications.training %}<div class="notification">{{ notifications.training }}</div>{% endif %}</a>
-                    <a href="{% url 'mentor_history' %}"><button class="btn btn-secondary">Historia del Mentor</button></a>
-                    <a data-action="find-user" data-redirect="training"><button class="btn btn-secondary">Perfil de Estudiante</button></a>
-                    <a href="{% url 'scheduled_sessions' %}"><button class="btn btn-secondary">Sesiones Programadas</button></a>
+                    <a href="{% url 'training_requests' %}"><button class="btn btn-secondary">Training Requests</button> {% if notifications.training %}<div class="notification">{{ notifications.training }}</div>{% endif %}</a>
+                    <a href="{% url 'mentor_history' %}"><button class="btn btn-secondary">Mentor History</button></a>
+                    <a data-action="find-user" data-redirect="training"><button class="btn btn-secondary">Student Profile</button></a>
+                    <a href="{% url 'scheduled_sessions' %}"><button class="btn btn-secondary">Scheduled Sessions</button></a>
                 </div>
             </div>
         </div>
@@ -39,13 +39,13 @@
             <div class="col-12 col-lg-6 col-xl-4 mx-auto">
                 <div class="card">
                     <div class="card-header bg-secondary">
-                        <h5 class="mb-0">Gestión de Sitios Web</h5>
+                        <h5 class="mb-0">Website Management</h5>
                     </div>
                     <div class="card-body text-center">
-                        <a href="{% url 'broadcast' %}"><button class="btn btn-secondary">Correo Electrónico de Difusión</button></a>
-                        <a href="{% url 'log' %}"><button class="btn btn-secondary">Registro de Acción</button></a>
-                        <a href="{% url 'announcement' %}"><button class="btn btn-secondary">Crear Anuncio</button></a>
-                        <a href="{% url 'feedback_approval' %}"><button class="btn btn-secondary">Aprobación de Comentarios</button> {% if notifications.feedback %}<div class="notification">{{ notifications.feedback }}</div>{% endif %}</a>
+                        <a href="{% url 'broadcast' %}"><button class="btn btn-secondary">Broadcast Email</button></a>
+                        <a href="{% url 'log' %}"><button class="btn btn-secondary">Action Log</button></a>
+                        <a href="{% url 'announcement' %}"><button class="btn btn-secondary">Create Announcement</button></a>
+                        <a href="{% url 'feedback_approval' %}"><button class="btn btn-secondary">Feedback Approval</button> {% if notifications.feedback %}<div class="notification">{{ notifications.feedback }}</div>{% endif %}</a>
                     </div>
                 </div>
             </div>

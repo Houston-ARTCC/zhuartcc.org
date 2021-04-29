@@ -88,8 +88,8 @@ def post_ctrs(session):
     else:
         response = requests.post(f'https://api.vatusa.net/v2/user/{session.student.cid}/training/record', data=data)
 
-        if response.json()['status'] == 'OK':
-            session.ctrs_id = response.json()['id']
+        if response.json().get('data').get('status') == 'OK':
+            session.ctrs_id = response.json().get('data').get('id')
             session.save()
 
 

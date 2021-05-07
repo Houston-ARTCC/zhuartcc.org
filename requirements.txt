@@ -9,7 +9,7 @@ Pillow==8.1.1
 python-dotenv==0.15.0
 pytz==2020.4
 requests==2.25.1
-sentry-sdk==0.19.4
+sentry-sdk==1.1.0
 six==1.15.0
 sqlparse==0.4.1
 tzlocal==2.1
